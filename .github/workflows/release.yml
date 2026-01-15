@@ -25,7 +25,9 @@ jobs:
       contents: write
       id-token: write  # Required for npm provenance and OIDC
     
-    environment: npm-publish  # Optional: adds manual approval gate
+    # Note: If you want manual approval gates, create an environment named 'npm-publish'
+    # in GitHub Settings > Environments and add NPM_TOKEN as an environment secret
+    # environment: npm-publish
     
     steps:
       - name: Checkout repository
