@@ -1,0 +1,25 @@
+#!/bin/bash
+# quick-publish.sh - Simplified publish commands
+# Run these commands one by one
+
+echo "📦 seu-claude v1.0.0 Quick Publish Guide"
+echo "========================================="
+echo ""
+echo "Step 1: Login to npm (interactive)"
+echo "   npm login"
+echo ""
+echo "Step 2: Publish package"
+echo "   npm publish"
+echo ""
+echo "Step 3: Create git tag and push"
+echo "   git tag -a v1.0.0 -m 'Release v1.0.0'"
+echo "   git push origin main"
+echo "   git push origin v1.0.0"
+echo ""
+echo "Step 4: Create GitHub release"
+echo "   Open: https://github.com/jardhel/seu-claude/releases/new"
+echo "   Select tag: v1.0.0"
+echo "   Copy release notes from CHANGELOG.md"
+echo ""
+echo "========================================="
+echo "Run each step manually in your terminal"
