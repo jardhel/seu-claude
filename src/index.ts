@@ -9,7 +9,7 @@ async function main(): Promise<void> {
   const server = new SeuClaudeServer();
 
   // Graceful shutdown handlers
-  const shutdown = async (signal: string) => {
+  const shutdown = async (signal: string): Promise<void> => {
     log.info(`Received ${signal}, shutting down...`);
     try {
       await server.stop();

@@ -28,10 +28,12 @@ export class GitTracker {
 
   async initialize(): Promise<boolean> {
     try {
-      execSync('git rev-parse --is-inside-work-tree', {
-        cwd: this.projectRoot,
-        stdio: 'pipe',
-      });
+      await Promise.resolve(
+        execSync('git rev-parse --is-inside-work-tree', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+        })
+      );
       this.isGitRepo = true;
       this.log.info('Git repository detected');
       return true;
@@ -50,9 +52,11 @@ export class GitTracker {
 
     try {
       const sinceStr = since.toISOString().split('T')[0];
-      const output = execSync(
-        `git log --since="${sinceStr}" --name-only --pretty=format: | sort -u | grep -v '^$'`,
-        { cwd: this.projectRoot, stdio: 'pipe', encoding: 'utf-8' }
+      const output = await Promise.resolve(
+        execSync(
+          `git log --since="${sinceStr}" --name-only --pretty=format: | sort -u | grep -v '^$'`,
+          { cwd: this.projectRoot, stdio: 'pipe', encoding: 'utf-8' }
+        )
       );
       return output.trim().split('\n').filter(Boolean);
     } catch {
@@ -67,11 +71,13 @@ export class GitTracker {
     if (!this.isGitRepo) return [];
 
     try {
-      const output = execSync('git status --porcelain', {
-        cwd: this.projectRoot,
-        stdio: 'pipe',
-        encoding: 'utf-8',
-      });
+      const output = await Promise.resolve(
+        execSync('git status --porcelain', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
 
       return output
         .trim()
@@ -92,9 +98,12 @@ export class GitTracker {
 
     try {
       // Get files with their last commit info
-      const output = execSync(
-        `git log --all --name-only --pretty=format:"%H|%aI|%an" -n ${limit * 2}`,
-        { cwd: this.projectRoot, stdio: 'pipe', encoding: 'utf-8' }
+      const output = await Promise.resolve(
+        execSync(`git log --all --name-only --pretty=format:"%H|%aI|%an" -n ${limit * 2}`, {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
       );
 
       const fileMap = new Map<string, GitFileInfo>();
@@ -143,11 +152,13 @@ export class GitTracker {
     if (!this.isGitRepo) return null;
 
     try {
-      const output = execSync(`git hash-object "${relativePath}"`, {
-        cwd: this.projectRoot,
-        stdio: 'pipe',
-        encoding: 'utf-8',
-      });
+      const output = await Promise.resolve(
+        execSync(`git hash-object "${relativePath}"`, {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
       return output.trim();
     } catch {
       return null;
@@ -161,11 +172,13 @@ export class GitTracker {
     if (!this.isGitRepo) return false;
 
     try {
-      const output = execSync(`git status --porcelain "${relativePath}"`, {
-        cwd: this.projectRoot,
-        stdio: 'pipe',
-        encoding: 'utf-8',
-      });
+      const output = await Promise.resolve(
+        execSync(`git status --porcelain "${relativePath}"`, {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
       return output.trim().length > 0;
     } catch {
       return false;
@@ -179,11 +192,13 @@ export class GitTracker {
     if (!this.isGitRepo) return 'unknown';
 
     try {
-      const output = execSync('git branch --show-current', {
-        cwd: this.projectRoot,
-        stdio: 'pipe',
-        encoding: 'utf-8',
-      });
+      const output = await Promise.resolve(
+        execSync('git branch --show-current', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
       return output.trim() || 'HEAD';
     } catch {
       return 'unknown';

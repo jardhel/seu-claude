@@ -2,6 +2,8 @@
  * Input validation utilities for production hardening
  */
 
+import { resolve } from 'path';
+
 export interface ValidationResult {
   valid: boolean;
   error?: string;
@@ -24,8 +26,8 @@ export function validateFilePath(filePath: string, allowedRoot?: string): Valida
 
   // Check for absolute paths outside allowed root
   if (allowedRoot) {
-    const resolved = require('path').resolve(filePath);
-    const resolvedRoot = require('path').resolve(allowedRoot);
+    const resolved = resolve(filePath);
+    const resolvedRoot = resolve(allowedRoot);
     if (!resolved.startsWith(resolvedRoot)) {
       return { valid: false, error: 'Path outside allowed root' };
     }
