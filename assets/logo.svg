@@ -1,0 +1,52 @@
+<svg 
+  width="200" 
+  height="200" 
+  viewBox="0 0 200 200" 
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Outer glow ring -->
+  <circle cx="100" cy="100" r="98" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="0.5" />
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="92" fill="#161b22" />
+  
+  <!-- Fractal face structure -->
+  <g opacity="1">
+    <!-- Right diamond half -->
+    <path d="M100 40 L160 110 L100 175 Z" fill="#24283b" stroke="#ffffff" stroke-opacity="0.1" />
+    <!-- Left diamond half -->
+    <path d="M100 40 L40 110 L100 175 Z" fill="#24283b" fill-opacity="0.85" stroke="#ffffff" stroke-opacity="0.1" />
+    <!-- Purple accent (bottom left) -->
+    <path d="M40 110 L100 110 L70 150 Z" fill="#bd93f9" fill-opacity="0.15" />
+    <!-- Cyan accent (bottom right) -->
+    <path d="M160 110 L100 110 L130 150 Z" fill="#7dcfff" fill-opacity="0.1" />
+    <!-- Top highlight -->
+    <path d="M100 40 L70 80 L130 80 Z" fill="#ffffff" fill-opacity="0.03" />
+  </g>
+
+  <!-- Terminal visor (eyes) -->
+  <g>
+    <rect x="62" y="98" width="76" height="30" rx="4" fill="#0a0b10" stroke="#7dcfff" stroke-width="1.5" />
+    <!-- Center divider -->
+    <line x1="100" y1="98" x2="100" y2="128" stroke="#ffffff" stroke-opacity="0.1" />
+    <!-- Terminal prompt > -->
+    <g stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M72 107L78 113L72 119" stroke="#50fa7b" />
+      <!-- Cursor _ -->
+      <line x1="114" y1="119" x2="124" y2="119" stroke="#ff79c6" />
+    </g>
+    
+    <!-- Mustache (code braces style) -->
+    <g stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M75 145C75 132 88 130 95 138" />
+      <path d="M125 145C125 132 112 130 105 138" />
+    </g>
+    
+    <!-- Nose accent -->
+    <circle cx="100" cy="138" r="3" fill="#ff79c6" />
+  </g>
+  
+  <!-- Status indicator (top right) -->
+  <circle cx="165" cy="65" r="4" fill="#50fa7b" />
+</svg>
