@@ -23,11 +23,7 @@ jobs:
     
     permissions:
       contents: write
-      id-token: write  # Required for npm provenance and OIDC
-    
-    # Note: If you want manual approval gates, create an environment named 'npm-publish'
-    # in GitHub Settings > Environments and add NPM_TOKEN as an environment secret
-    # environment: npm-publish
+      id-token: write  # Required for npm OIDC trusted publishing
     
     steps:
       - name: Checkout repository
@@ -78,14 +74,12 @@ jobs:
       - name: Publish to npm (dry run)
         if: ${{ inputs.dry_run == true }}
         run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - name: Publish to npm with provenance
+      # Uses OIDC trusted publishing - no token needed!
+      # Configure trusted publisher at: https://www.npmjs.com/package/seu-claude/access
+      - name: Publish to npm
         if: ${{ inputs.dry_run != true }}
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
       
       - name: Create git tag (manual trigger only)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run != true }}
