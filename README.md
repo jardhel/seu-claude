@@ -108,7 +108,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 
 ### First Run
 
-Once configured, Claude will have access to three new tools:
+Once configured, Claude will have access to four powerful tools:
 
 1. **Index your codebase** (run once, then incremental):
    > "Index this codebase for semantic search"
@@ -120,6 +120,10 @@ Once configured, Claude will have access to three new tools:
 
 3. **Read with context**:
    > "Read the AuthService.login method with its surrounding context"
+
+4. **Search cross-references** (find callers/callees):
+   > "Who calls the validateUser function?"
+   > "What functions does processOrder call?"
 
 ## How It Works
 
@@ -206,6 +210,23 @@ Read code with AST-aware context.
   context_lines?: number; // Lines of context (default: 5)
 }
 ```
+
+### `search_xrefs`
+
+Find callers and callees of functions/methods. Understand code dependencies and call graphs.
+
+```typescript
+{
+  symbol: string;           // Function/method name to search for
+  direction?: string;       // "callers" | "callees" | "both" (default)
+  max_results?: number;     // Max results (default: 20)
+}
+```
+
+**Example prompts:**
+> "Who calls the authenticate function?"
+> "What does processPayment call?"
+> "Show me the cross-references for handleRequest"
 
 ## Configuration
 

@@ -12,6 +12,7 @@ import { VectorStore } from './vector/store.js';
 import { IndexCodebase } from './tools/index-codebase.js';
 import { SearchCodebase } from './tools/search-codebase.js';
 import { ReadSemanticContext } from './tools/read-context.js';
+import { SearchXrefs } from './tools/search-xrefs.js';
 
 export class SeuClaudeServer {
   private server: Server;
@@ -21,6 +22,7 @@ export class SeuClaudeServer {
   private indexTool: IndexCodebase;
   private searchTool: SearchCodebase;
   private contextTool: ReadSemanticContext;
+  private xrefsTool: SearchXrefs;
   private log = logger.child('server');
   private initialized = false;
 
@@ -31,6 +33,7 @@ export class SeuClaudeServer {
     this.indexTool = new IndexCodebase(this.config, this.embedder, this.store);
     this.searchTool = new SearchCodebase(this.embedder, this.store);
     this.contextTool = new ReadSemanticContext(this.store);
+    this.xrefsTool = new SearchXrefs(this.config);
 
     this.server = new Server(
       {
@@ -69,6 +72,8 @@ export class SeuClaudeServer {
             return await this.handleSearchCodebase(args);
           case 'read_semantic_context':
             return await this.handleReadContext(args);
+          case 'search_xrefs':
+            return await this.handleSearchXrefs(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -173,6 +178,32 @@ export class SeuClaudeServer {
           required: ['file_path'],
         },
       },
+      {
+        name: 'search_xrefs',
+        description:
+          'Search cross-references to find callers and callees of a function or method. Use this to understand how functions are connected, who calls what, and the dependency graph of the codebase.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            symbol: {
+              type: 'string',
+              description:
+                'The function or method name to search for. Example: "handleRequest" or "processPayment"',
+            },
+            direction: {
+              type: 'string',
+              enum: ['callers', 'callees', 'both'],
+              description:
+                'Direction to search: "callers" (who calls this), "callees" (what this calls), or "both". Default: "both"',
+            },
+            max_results: {
+              type: 'number',
+              description: 'Maximum number of results to return. Default: 20.',
+            },
+          },
+          required: ['symbol'],
+        },
+      },
     ];
   }
 
@@ -250,6 +281,26 @@ export class SeuClaudeServer {
 
     return {
       content: [{ type: 'text', text }],
+    };
+  }
+
+  private async handleSearchXrefs(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    if (!args?.symbol) {
+      throw new Error('symbol parameter is required');
+    }
+
+    await this.xrefsTool.initialize();
+
+    const result = await this.xrefsTool.execute({
+      symbol: args.symbol as string,
+      direction: (args.direction as 'callers' | 'callees' | 'both') ?? 'both',
+      maxResults: (args.max_results as number) ?? 20,
+    });
+
+    return {
+      content: [{ type: 'text', text: result }],
     };
   }
 

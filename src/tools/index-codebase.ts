@@ -4,7 +4,8 @@ import { EmbeddingEngine } from '../vector/embed.js';
 import { VectorStore, StoredChunk } from '../vector/store.js';
 import { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile, mkdir } from 'fs/promises';
+import { join, dirname } from 'path';
 
 export interface IndexResult {
   success: boolean;
@@ -95,6 +96,10 @@ export class IndexCodebase {
         chunksCreated += allChunks.length;
       }
 
+      // Finalize cross-references and save the graph
+      this.chunker.finalizeXrefs();
+      await this.saveXrefGraph();
+
       const durationMs = Date.now() - startTime;
 
       this.log.info(
@@ -139,5 +144,24 @@ export class IndexCodebase {
     await this.store.upsert(storedChunks);
 
     this.log.debug(`Embedded and stored ${chunks.length} chunks`);
+  }
+
+  private async saveXrefGraph(): Promise<void> {
+    const xrefTracker = this.chunker.getXrefTracker();
+    const graph = xrefTracker.getGraph();
+
+    // Serialize the graph
+    const data = {
+      definitions: Object.fromEntries(graph.definitions),
+      callSites: Object.fromEntries(graph.callSites),
+    };
+
+    const xrefPath = join(this.config.dataDir, 'xref-graph.json');
+
+    // Ensure data directory exists
+    await mkdir(dirname(xrefPath), { recursive: true });
+
+    await writeFile(xrefPath, JSON.stringify(data, null, 2));
+    this.log.info(`Saved cross-reference graph: ${graph.definitions.size} definitions`);
   }
 }

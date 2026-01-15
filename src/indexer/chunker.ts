@@ -1,4 +1,5 @@
 import { ASTParser, ParsedNode } from './parser.js';
+import { CrossReferenceTracker } from './xref-tracker.js';
 import { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
 import { createHash } from 'crypto';
@@ -16,16 +17,22 @@ export interface CodeChunk {
   scope: string;
   docstring: string | null;
   tokenEstimate: number;
+  /** Functions/methods this chunk calls */
+  calls?: string[];
+  /** Functions/methods that call code in this chunk */
+  calledBy?: string[];
 }
 
 export class SemanticChunker {
   private parser: ASTParser;
+  private xrefTracker: CrossReferenceTracker;
   private config: Config;
   private log = logger.child('chunker');
 
   constructor(config: Config, languagesDir?: string) {
     this.config = config;
     this.parser = new ASTParser(languagesDir);
+    this.xrefTracker = new CrossReferenceTracker();
   }
 
   async initialize(): Promise<void> {
@@ -48,6 +55,10 @@ export class SemanticChunker {
     const nodes = this.parser.extractNodes(tree, language);
     const chunks: CodeChunk[] = [];
 
+    // Extract cross-references for this file
+    const { definitions, calls } = this.xrefTracker.extractReferences(tree, filePath, language);
+    this.xrefTracker.addToGraph(filePath, definitions, calls);
+
     if (nodes.length === 0) {
       // No extractable nodes, use fallback
       return this.fallbackChunk(filePath, relativePath, content, language);
@@ -55,6 +66,15 @@ export class SemanticChunker {
 
     for (const node of nodes) {
       const chunk = this.nodeToChunk(node, filePath, relativePath, language);
+
+      // Enrich chunk with cross-reference data
+      const matchingDef = definitions.find(
+        d => d.startLine === node.startLine && d.name === node.name
+      );
+      if (matchingDef) {
+        chunk.calls = matchingDef.calls;
+        chunk.calledBy = matchingDef.calledBy;
+      }
 
       // Check if chunk is too large and needs splitting
       if (chunk.tokenEstimate > this.config.maxChunkTokens) {
@@ -73,6 +93,20 @@ export class SemanticChunker {
 
     this.log.debug(`Created ${chunks.length} chunks from ${relativePath}`);
     return chunks;
+  }
+
+  /**
+   * Build reverse references after all files are processed
+   */
+  finalizeXrefs(): void {
+    this.xrefTracker.buildReverseReferences();
+  }
+
+  /**
+   * Get the cross-reference tracker for serialization
+   */
+  getXrefTracker(): CrossReferenceTracker {
+    return this.xrefTracker;
   }
 
   private nodeToChunk(
