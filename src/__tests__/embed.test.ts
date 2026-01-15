@@ -112,10 +112,10 @@ describe('EmbeddingEngine Integration', () => {
   }, 120000); // 2 minute timeout for model download
 
   // Helper to skip tests if embedding doesn't work
-  const skipIfNotWorking = () => !initialized || !embedWorks;
+  const skipIfNotWorking = (): boolean => !initialized || !embedWorks;
 
   describe('initialize', () => {
-    it('should initialize successfully', async () => {
+    it('should initialize successfully', () => {
       if (skipIfNotWorking()) {
         return; // Skip if initialization failed
       }

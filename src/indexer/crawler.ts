@@ -5,6 +5,7 @@ import fastGlob from 'fast-glob';
 import { createHash } from 'crypto';
 import { Config, getLanguageFromExtension } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
+import { GitTracker } from './git-tracker.js';
 
 // Use createRequire for CJS module compatibility
 const require = createRequire(import.meta.url);
@@ -18,6 +19,8 @@ export interface FileInfo {
   hash: string;
   size: number;
   modifiedAt: Date;
+  gitPriority?: number; // Higher = more recently modified in git
+  hasUncommittedChanges?: boolean;
 }
 
 export interface CrawlResult {
@@ -25,12 +28,16 @@ export interface CrawlResult {
   totalFiles: number;
   totalSize: number;
   languages: Record<string, number>;
+  gitAware: boolean;
 }
 
 export class Crawler {
   private config: Config;
   private ignorer: Ignore;
   private log = logger.child('crawler');
+  private gitTracker: GitTracker | null = null;
+  private gitRecentFiles: Map<string, number> = new Map();
+  private gitUncommitted: Set<string> = new Set();
 
   constructor(config: Config) {
     this.config = config;
@@ -63,8 +70,42 @@ export class Crawler {
     }
   }
 
+  /**
+   * Initialize git-aware tracking for prioritizing recently modified files
+   */
+  async initializeGitTracking(): Promise<boolean> {
+    this.gitTracker = new GitTracker(this.config.projectRoot);
+    const isGit = await this.gitTracker.initialize();
+    
+    if (!isGit) {
+      this.gitTracker = null;
+      return false;
+    }
+
+    // Get recently modified files with priority scores
+    const recentFiles = await this.gitTracker.getRecentlyModifiedFiles(100);
+    recentFiles.forEach((file, index) => {
+      // Higher priority for more recently modified files
+      this.gitRecentFiles.set(file.relativePath, 100 - index);
+    });
+
+    // Get uncommitted changes (highest priority)
+    const uncommitted = await this.gitTracker.getUncommittedChanges();
+    uncommitted.forEach(file => {
+      this.gitUncommitted.add(file);
+      // Uncommitted files get highest priority
+      this.gitRecentFiles.set(file, 200);
+    });
+
+    this.log.info(`Git tracking enabled: ${recentFiles.length} recent files, ${uncommitted.length} uncommitted`);
+    return true;
+  }
+
   async crawl(): Promise<CrawlResult> {
     await this.loadGitignore();
+    
+    // Initialize git tracking for smart prioritization
+    const gitAware = await this.initializeGitTracking();
 
     const supportedExtensions = Object.keys(
       await import('../utils/config.js').then(m => m.LANGUAGE_EXTENSIONS)
@@ -105,6 +146,10 @@ export class Crawler {
         const content = await readFile(filePath, 'utf-8');
         const hash = this.hashContent(content);
 
+        // Get git priority (higher = more recently modified)
+        const gitPriority = this.gitRecentFiles.get(relativePath) ?? 0;
+        const hasUncommittedChanges = this.gitUncommitted.has(relativePath);
+
         const fileInfo: FileInfo = {
           path: filePath,
           relativePath,
@@ -112,6 +157,8 @@ export class Crawler {
           hash,
           size: stats.size,
           modifiedAt: stats.mtime,
+          gitPriority,
+          hasUncommittedChanges,
         };
 
         files.push(fileInfo);
@@ -122,13 +169,24 @@ export class Crawler {
       }
     }
 
+    // Sort files by git priority (uncommitted first, then recently modified)
+    if (gitAware) {
+      files.sort((a, b) => (b.gitPriority ?? 0) - (a.gitPriority ?? 0));
+    }
+
     this.log.info(`Found ${files.length} files across ${Object.keys(languages).length} languages`);
+    if (gitAware) {
+      const uncommittedCount = files.filter(f => f.hasUncommittedChanges).length;
+      const prioritizedCount = files.filter(f => (f.gitPriority ?? 0) > 0).length;
+      this.log.info(`Git-aware: ${uncommittedCount} uncommitted, ${prioritizedCount} recently modified`);
+    }
 
     return {
       files,
       totalFiles: files.length,
       totalSize,
       languages,
+      gitAware,
     };
   }
 

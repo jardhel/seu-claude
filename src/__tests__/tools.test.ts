@@ -570,19 +570,19 @@ describe('SearchCodebase - Integration', () => {
 
   // Mock embedder that doesn't require HuggingFace model download
   const mockEmbedder = {
-    embed: async (text: string) => {
+    embed: (text: string): Promise<number[]> => {
       // Simple hash-based mock embedding
       const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
       // Normalize
       const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
-      return vector.map(v => v / magnitude);
+      return Promise.resolve(vector.map(v => v / magnitude));
     },
-    embedQuery: async (text: string) => {
+    embedQuery: (text: string): Promise<number[]> => {
       const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
       const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
-      return vector.map(v => v / magnitude);
+      return Promise.resolve(vector.map(v => v / magnitude));
     },
     embedBatch: async (texts: string[]) => {
       return Promise.all(texts.map(t => mockEmbedder.embed(t)));

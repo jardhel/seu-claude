@@ -8,7 +8,7 @@
 import { readFile } from 'fs/promises';
 import { homedir } from 'os';
 import { join, dirname } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { execSync } from 'child_process';
 
 interface CheckResult {
@@ -35,7 +35,7 @@ function printCheck(result: CheckResult): void {
   }
 }
 
-async function checkNodeVersion(): Promise<CheckResult> {
+function checkNodeVersion(): CheckResult {
   const version = process.version;
   const major = parseInt(version.slice(1).split('.')[0], 10);
   
@@ -55,7 +55,7 @@ async function checkNodeVersion(): Promise<CheckResult> {
   };
 }
 
-async function checkGitRepo(): Promise<CheckResult> {
+function checkGitRepo(): CheckResult {
   try {
     execSync('git rev-parse --show-toplevel', { 
       stdio: 'pipe',
@@ -166,7 +166,7 @@ async function checkClaudeDesktopConfig(): Promise<CheckResult> {
   }
 }
 
-async function checkDataDirectory(): Promise<CheckResult> {
+function checkDataDirectory(): CheckResult {
   const dataDir = process.env.DATA_DIR ?? join(homedir(), '.seu-claude');
   
   if (existsSync(dataDir)) {
@@ -194,7 +194,7 @@ async function checkDataDirectory(): Promise<CheckResult> {
   };
 }
 
-async function checkProjectRoot(): Promise<CheckResult> {
+function checkProjectRoot(): CheckResult {
   const projectRoot = process.env.PROJECT_ROOT;
   
   if (!projectRoot) {
@@ -221,7 +221,7 @@ async function checkProjectRoot(): Promise<CheckResult> {
   };
 }
 
-async function checkEmbeddingModel(): Promise<CheckResult> {
+function checkEmbeddingModel(): CheckResult {
   const model = process.env.EMBEDDING_MODEL ?? 'Xenova/all-MiniLM-L6-v2';
   const cacheDir = join(homedir(), '.cache', 'huggingface');
   
@@ -242,11 +242,11 @@ async function checkEmbeddingModel(): Promise<CheckResult> {
   };
 }
 
-async function checkTreeSitterGrammars(): Promise<CheckResult> {
+function checkTreeSitterGrammars(): CheckResult {
   const languagesDir = join(dirname(new URL(import.meta.url).pathname), '..', 'languages');
   
   if (existsSync(languagesDir)) {
-    const files = await import('fs').then(fs => fs.readdirSync(languagesDir));
+    const files = readdirSync(languagesDir);
     const wasmFiles = files.filter((f: string) => f.endsWith('.wasm'));
     
     if (wasmFiles.length > 0) {
@@ -271,14 +271,14 @@ export async function runDoctor(): Promise<void> {
   console.log('Checking installation and configuration...\n');
   
   const checks = [
-    await checkNodeVersion(),
-    await checkGitRepo(),
-    await checkProjectRoot(),
+    checkNodeVersion(),
+    checkGitRepo(),
+    checkProjectRoot(),
     await checkClaudeCodeConfig(),
     await checkClaudeDesktopConfig(),
-    await checkDataDirectory(),
-    await checkEmbeddingModel(),
-    await checkTreeSitterGrammars(),
+    checkDataDirectory(),
+    checkEmbeddingModel(),
+    checkTreeSitterGrammars(),
   ];
   
   console.log('─'.repeat(50));

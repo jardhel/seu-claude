@@ -68,7 +68,7 @@ export async function runIndex(pathArg?: string): Promise<void> {
     }
     
     // Cleanup
-    await store.close();
+    store.close();
     
     console.log('\n🎉 Indexing complete!\n');
     console.log('📚 Next steps:');
