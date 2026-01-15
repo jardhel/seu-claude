@@ -30,10 +30,7 @@ describe('Crawler', () => {
     );
 
     // JavaScript file
-    await writeFile(
-      join(testDir, 'lib', 'helper.js'),
-      'module.exports = { help: () => "help" };'
-    );
+    await writeFile(join(testDir, 'lib', 'helper.js'), 'module.exports = { help: () => "help" };');
 
     // Python file
     await writeFile(
@@ -42,10 +39,7 @@ describe('Crawler', () => {
     );
 
     // File in node_modules (should be ignored)
-    await writeFile(
-      join(testDir, 'node_modules', 'dep', 'index.js'),
-      'module.exports = {};'
-    );
+    await writeFile(join(testDir, 'node_modules', 'dep', 'index.js'), 'module.exports = {};');
 
     // Create .gitignore
     await writeFile(join(testDir, '.gitignore'), '*.log\ntmp/\n');
@@ -136,9 +130,7 @@ describe('Crawler', () => {
     it('should throw for non-existent files', async () => {
       const crawler = new Crawler(config);
 
-      await expect(
-        crawler.getFileContent(join(testDir, 'nonexistent.ts'))
-      ).rejects.toThrow();
+      await expect(crawler.getFileContent(join(testDir, 'nonexistent.ts'))).rejects.toThrow();
     });
   });
 
@@ -188,9 +180,7 @@ describe('Crawler', () => {
       const crawler = new Crawler(config);
       const result = await crawler.crawl();
 
-      const nodeModulesFiles = result.files.filter(f =>
-        f.path.includes('node_modules')
-      );
+      const nodeModulesFiles = result.files.filter(f => f.path.includes('node_modules'));
       expect(nodeModulesFiles).toHaveLength(0);
     });
 

@@ -38,7 +38,7 @@ function printCheck(result: CheckResult): void {
 function checkNodeVersion(): CheckResult {
   const version = process.version;
   const major = parseInt(version.slice(1).split('.')[0], 10);
-  
+
   if (major >= 20) {
     return {
       name: 'Node.js Version',
@@ -46,7 +46,7 @@ function checkNodeVersion(): CheckResult {
       message: `${version} (>= 20 required)`,
     };
   }
-  
+
   return {
     name: 'Node.js Version',
     status: 'fail',
@@ -57,9 +57,9 @@ function checkNodeVersion(): CheckResult {
 
 function checkGitRepo(): CheckResult {
   try {
-    execSync('git rev-parse --show-toplevel', { 
+    execSync('git rev-parse --show-toplevel', {
       stdio: 'pipe',
-      encoding: 'utf-8' 
+      encoding: 'utf-8',
     });
     return {
       name: 'Git Repository',
@@ -79,7 +79,7 @@ function checkGitRepo(): CheckResult {
 async function checkClaudeCodeConfig(): Promise<CheckResult> {
   const cwd = process.cwd();
   const configPath = join(cwd, CLAUDE_CODE_CONFIG);
-  
+
   if (!existsSync(configPath)) {
     return {
       name: 'Claude Code Config',
@@ -88,11 +88,11 @@ async function checkClaudeCodeConfig(): Promise<CheckResult> {
       fix: 'Run: seu-claude setup',
     };
   }
-  
+
   try {
     const content = await readFile(configPath, 'utf-8');
     const config = JSON.parse(content) as { mcpServers?: Record<string, unknown> };
-    
+
     if (config.mcpServers?.['seu-claude']) {
       return {
         name: 'Claude Code Config',
@@ -100,7 +100,7 @@ async function checkClaudeCodeConfig(): Promise<CheckResult> {
         message: 'seu-claude MCP server configured',
       };
     }
-    
+
     return {
       name: 'Claude Code Config',
       status: 'warn',
@@ -120,7 +120,7 @@ async function checkClaudeCodeConfig(): Promise<CheckResult> {
 async function checkClaudeDesktopConfig(): Promise<CheckResult> {
   const platform = process.platform as keyof typeof CLAUDE_DESKTOP_CONFIG;
   const configPath = CLAUDE_DESKTOP_CONFIG[platform];
-  
+
   if (!configPath) {
     return {
       name: 'Claude Desktop Config',
@@ -128,7 +128,7 @@ async function checkClaudeDesktopConfig(): Promise<CheckResult> {
       message: `Unsupported platform: ${platform}`,
     };
   }
-  
+
   if (!existsSync(configPath)) {
     return {
       name: 'Claude Desktop Config',
@@ -137,11 +137,11 @@ async function checkClaudeDesktopConfig(): Promise<CheckResult> {
       fix: 'Run: seu-claude setup (or install Claude Desktop first)',
     };
   }
-  
+
   try {
     const content = await readFile(configPath, 'utf-8');
     const config = JSON.parse(content) as { mcpServers?: Record<string, unknown> };
-    
+
     if (config.mcpServers?.['seu-claude']) {
       return {
         name: 'Claude Desktop Config',
@@ -149,7 +149,7 @@ async function checkClaudeDesktopConfig(): Promise<CheckResult> {
         message: 'seu-claude MCP server configured',
       };
     }
-    
+
     return {
       name: 'Claude Desktop Config',
       status: 'warn',
@@ -168,7 +168,7 @@ async function checkClaudeDesktopConfig(): Promise<CheckResult> {
 
 function checkDataDirectory(): CheckResult {
   const dataDir = process.env.DATA_DIR ?? join(homedir(), '.seu-claude');
-  
+
   if (existsSync(dataDir)) {
     const indexPath = join(dataDir, 'index.lance');
     if (existsSync(indexPath)) {
@@ -185,7 +185,7 @@ function checkDataDirectory(): CheckResult {
       fix: 'Run: "Index this codebase" in Claude',
     };
   }
-  
+
   return {
     name: 'Data Directory',
     status: 'warn',
@@ -196,7 +196,7 @@ function checkDataDirectory(): CheckResult {
 
 function checkProjectRoot(): CheckResult {
   const projectRoot = process.env.PROJECT_ROOT;
-  
+
   if (!projectRoot) {
     return {
       name: 'PROJECT_ROOT',
@@ -204,7 +204,7 @@ function checkProjectRoot(): CheckResult {
       message: 'Not set (will use current directory)',
     };
   }
-  
+
   if (existsSync(projectRoot)) {
     return {
       name: 'PROJECT_ROOT',
@@ -212,7 +212,7 @@ function checkProjectRoot(): CheckResult {
       message: projectRoot,
     };
   }
-  
+
   return {
     name: 'PROJECT_ROOT',
     status: 'fail',
@@ -224,7 +224,7 @@ function checkProjectRoot(): CheckResult {
 function checkEmbeddingModel(): CheckResult {
   const model = process.env.EMBEDDING_MODEL ?? 'Xenova/all-MiniLM-L6-v2';
   const cacheDir = join(homedir(), '.cache', 'huggingface');
-  
+
   // Check if model might be cached
   if (existsSync(cacheDir)) {
     return {
@@ -233,7 +233,7 @@ function checkEmbeddingModel(): CheckResult {
       message: `${model} (HuggingFace cache exists)`,
     };
   }
-  
+
   return {
     name: 'Embedding Model',
     status: 'warn',
@@ -244,11 +244,11 @@ function checkEmbeddingModel(): CheckResult {
 
 function checkTreeSitterGrammars(): CheckResult {
   const languagesDir = join(dirname(new URL(import.meta.url).pathname), '..', 'languages');
-  
+
   if (existsSync(languagesDir)) {
     const files = readdirSync(languagesDir);
     const wasmFiles = files.filter((f: string) => f.endsWith('.wasm'));
-    
+
     if (wasmFiles.length > 0) {
       return {
         name: 'Tree-sitter Grammars',
@@ -257,7 +257,7 @@ function checkTreeSitterGrammars(): CheckResult {
       };
     }
   }
-  
+
   return {
     name: 'Tree-sitter Grammars',
     status: 'warn',
@@ -269,7 +269,7 @@ function checkTreeSitterGrammars(): CheckResult {
 export async function runDoctor(): Promise<void> {
   console.log('\n🩺 seu-claude Doctor\n');
   console.log('Checking installation and configuration...\n');
-  
+
   const checks = [
     checkNodeVersion(),
     checkGitRepo(),
@@ -280,21 +280,21 @@ export async function runDoctor(): Promise<void> {
     checkEmbeddingModel(),
     checkTreeSitterGrammars(),
   ];
-  
+
   console.log('─'.repeat(50));
-  
+
   for (const check of checks) {
     printCheck(check);
   }
-  
+
   console.log('─'.repeat(50));
-  
+
   const passed = checks.filter(c => c.status === 'pass').length;
   const warnings = checks.filter(c => c.status === 'warn').length;
   const failed = checks.filter(c => c.status === 'fail').length;
-  
+
   console.log(`\n📊 Summary: ${passed} passed, ${warnings} warnings, ${failed} failed`);
-  
+
   if (failed > 0) {
     console.log('\n❌ Some checks failed. Please fix the issues above.');
     process.exit(1);
@@ -304,7 +304,7 @@ export async function runDoctor(): Promise<void> {
   } else {
     console.log('\n✅ All checks passed! seu-claude is ready to use.');
   }
-  
+
   console.log('\n📚 Next steps:');
   console.log('   1. In Claude: "Index this codebase for semantic search"');
   console.log('   2. Then ask: "Where is the authentication logic?"');

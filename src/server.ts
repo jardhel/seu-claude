@@ -171,8 +171,7 @@ export class SeuClaudeServer {
             },
             context_lines: {
               type: 'number',
-              description:
-                'Number of lines of context to include before and after. Default: 5.',
+              description: 'Number of lines of context to include before and after. Default: 5.',
             },
           },
           required: ['file_path'],
@@ -233,7 +232,11 @@ export class SeuClaudeServer {
     const result = await this.indexTool.execute(force);
 
     const text = result.success
-      ? `Successfully indexed ${result.filesProcessed} files with ${result.chunksCreated} code chunks in ${(result.durationMs / 1000).toFixed(1)}s.\n\nLanguages: ${Object.entries(result.languages).map(([lang, count]) => `${lang}: ${count}`).join(', ')}`
+      ? `Successfully indexed ${result.filesProcessed} files with ${result.chunksCreated} code chunks in ${(result.durationMs / 1000).toFixed(1)}s.\n\nLanguages: ${Object.entries(
+          result.languages
+        )
+          .map(([lang, count]) => `${lang}: ${count}`)
+          .join(', ')}`
       : `Indexing failed: ${result.error}`;
 
     return {

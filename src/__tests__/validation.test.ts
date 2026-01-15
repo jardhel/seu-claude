@@ -168,10 +168,10 @@ describe('RateLimiter', () => {
 
   it('should report remaining calls correctly', () => {
     expect(limiter.getRemainingCalls()).toBe(5);
-    
+
     limiter.canProceed();
     expect(limiter.getRemainingCalls()).toBe(4);
-    
+
     limiter.canProceed();
     limiter.canProceed();
     expect(limiter.getRemainingCalls()).toBe(2);
@@ -191,7 +191,9 @@ describe('RateLimiter', () => {
     expect(shortLimiter.canProceed()).toBe(false);
 
     // Wait for window to expire
-    await new Promise(resolve => { setTimeout(resolve, 60); });
+    await new Promise(resolve => {
+      setTimeout(resolve, 60);
+    });
     expect(shortLimiter.canProceed()).toBe(true);
   });
 

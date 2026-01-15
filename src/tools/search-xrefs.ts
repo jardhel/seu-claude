@@ -16,11 +16,7 @@ export const SearchXrefsArgsSchema = z.object({
     .optional()
     .default('both')
     .describe('Direction to search: callers (who calls this), callees (what this calls), or both'),
-  maxResults: z
-    .number()
-    .optional()
-    .default(20)
-    .describe('Maximum number of results to return'),
+  maxResults: z.number().optional().default(20).describe('Maximum number of results to return'),
 });
 
 export type SearchXrefsArgs = z.infer<typeof SearchXrefsArgsSchema>;
@@ -70,7 +66,9 @@ export class SearchXrefs {
       await access(xrefPath);
       const content = await readFile(xrefPath, 'utf-8');
       this.xrefGraph = JSON.parse(content) as StoredXrefGraph;
-      this.log.info(`Loaded cross-reference graph with ${Object.keys(this.xrefGraph.definitions).length} definitions`);
+      this.log.info(
+        `Loaded cross-reference graph with ${Object.keys(this.xrefGraph.definitions).length} definitions`
+      );
     } catch {
       this.log.warn('No cross-reference graph found. Run indexing first.');
       this.xrefGraph = null;
@@ -86,7 +84,8 @@ export class SearchXrefs {
       if (!this.xrefGraph) {
         return JSON.stringify({
           error: 'Cross-reference graph not available. Please run indexing first.',
-          suggestion: 'Use the index_codebase tool to index your codebase with cross-references enabled.',
+          suggestion:
+            'Use the index_codebase tool to index your codebase with cross-references enabled.',
         });
       }
     }

@@ -44,12 +44,7 @@ function world() {
 }
 `.trim();
 
-      const chunks = await chunker.chunkFile(
-        '/test/file.ts',
-        'file.ts',
-        content,
-        'typescript'
-      );
+      const chunks = await chunker.chunkFile('/test/file.ts', 'file.ts', content, 'typescript');
 
       expect(chunks.length).toBeGreaterThan(0);
       expect(chunks[0].type).toBe('block');
@@ -58,12 +53,7 @@ function world() {
     it('should create chunks with correct structure', async () => {
       const content = 'const x = 1;\nconst y = 2;\nconst z = 3;';
 
-      const chunks = await chunker.chunkFile(
-        '/test/simple.ts',
-        'simple.ts',
-        content,
-        'typescript'
-      );
+      const chunks = await chunker.chunkFile('/test/simple.ts', 'simple.ts', content, 'typescript');
 
       expect(chunks.length).toBeGreaterThan(0);
 
@@ -110,12 +100,7 @@ function world() {
     it('should estimate tokens based on content length', async () => {
       const content = 'a'.repeat(100); // 100 characters
 
-      const chunks = await chunker.chunkFile(
-        '/test/tokens.ts',
-        'tokens.ts',
-        content,
-        'typescript'
-      );
+      const chunks = await chunker.chunkFile('/test/tokens.ts', 'tokens.ts', content, 'typescript');
 
       if (chunks.length > 0) {
         // ~4 chars per token, so 100 chars ≈ 25 tokens
@@ -127,12 +112,7 @@ function world() {
     it('should set correct line numbers', async () => {
       const content = 'line1\nline2\nline3\nline4\nline5';
 
-      const chunks = await chunker.chunkFile(
-        '/test/lines.ts',
-        'lines.ts',
-        content,
-        'typescript'
-      );
+      const chunks = await chunker.chunkFile('/test/lines.ts', 'lines.ts', content, 'typescript');
 
       if (chunks.length > 0) {
         expect(chunks[0].startLine).toBe(1);

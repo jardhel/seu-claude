@@ -51,9 +51,7 @@ export class ReadSemanticContext {
 
       // If symbol is specified, find its location
       if (symbol) {
-        const matchingChunk = chunks.find(
-          c => c.name === symbol || c.scope.endsWith(symbol)
-        );
+        const matchingChunk = chunks.find(c => c.name === symbol || c.scope.endsWith(symbol));
 
         if (matchingChunk) {
           targetStart = matchingChunk.startLine;

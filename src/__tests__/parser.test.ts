@@ -94,9 +94,7 @@ describe('ASTParser', () => {
     });
 
     it('should handle very long code', async () => {
-      const longCode = Array(1000)
-        .fill('const x = 1;')
-        .join('\n');
+      const longCode = Array(1000).fill('const x = 1;').join('\n');
       const tree = await parser.parse(longCode, 'typescript');
       // Should not throw
       expect(tree === null || tree !== null).toBe(true);
@@ -231,7 +229,7 @@ describe('LANGUAGE_WASM_MAP coverage', () => {
     'php',
   ];
 
-  it.each(supportedLanguages)('should have WASM mapping for %s', async (lang) => {
+  it.each(supportedLanguages)('should have WASM mapping for %s', async lang => {
     // Attempt to load - will return null if WASM not present, but no error
     const result = await parser.loadLanguage(lang);
     // Either loads successfully or returns null gracefully

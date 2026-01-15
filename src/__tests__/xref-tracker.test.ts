@@ -46,12 +46,12 @@ describe('CrossReferenceTracker', () => {
       const tree = parser.parse(code);
       const { definitions, calls } = tracker.extractReferences(tree, 'test.ts', 'typescript');
       tracker.addToGraph('test.ts', definitions, calls);
-      
+
       const callers = tracker.getCallers('bar');
       expect(callers.length).toBeGreaterThanOrEqual(0);
-      
+
       tracker.clear();
-      
+
       expect(tracker.getCallers('bar')).toEqual([]);
     });
   });
@@ -75,7 +75,7 @@ describe('CrossReferenceTracker', () => {
       const tree = parser.parse(code);
       const { definitions, calls } = tracker.extractReferences(tree, 'test.ts', 'typescript');
       tracker.addToGraph('test.ts', definitions, calls);
-      
+
       const callees = tracker.getCallees('main');
       expect(callees).toContain('helper1');
       expect(callees).toContain('helper2');
@@ -110,7 +110,7 @@ describe('CrossReferenceTracker', () => {
       const { definitions } = tracker.extractReferences(tree, 'test.ts', 'typescript');
 
       expect(definitions.length).toBeGreaterThanOrEqual(2);
-      
+
       const processData = definitions.find(d => d.name === 'processData');
       expect(processData).toBeDefined();
       expect(processData?.type).toBe('function');
@@ -196,7 +196,7 @@ describe('CrossReferenceTracker', () => {
       }
 
       parser.setLanguage(tsLanguage);
-      
+
       // File 1
       const code1 = `
         function utilityA() {
@@ -237,7 +237,7 @@ describe('CrossReferenceTracker', () => {
       }
 
       parser.setLanguage(tsLanguage);
-      
+
       const code = `
         function foo() { bar(); }
         function bar() {}
@@ -271,7 +271,7 @@ describe('CrossReferenceTracker', () => {
       }
 
       parser.setLanguage(tsLanguage);
-      
+
       const code = `
         function process() {
           console.log("test");
@@ -287,13 +287,13 @@ describe('CrossReferenceTracker', () => {
 
       const process = definitions.find(d => d.name === 'process');
       expect(process).toBeDefined();
-      
+
       // Should NOT include built-ins
       expect(process?.calls).not.toContain('log');
       expect(process?.calls).not.toContain('map');
       expect(process?.calls).not.toContain('filter');
       expect(process?.calls).not.toContain('toString');
-      
+
       // Should include custom function
       expect(process?.calls).toContain('customFunction');
     });

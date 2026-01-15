@@ -61,14 +61,15 @@ export class EmbeddingEngine {
       env.cacheDir = modelCacheDir;
       env.allowRemoteModels = true;
       env.allowLocalModels = true;
-      
+
       // Use configured model or default
       modelId = this.config.embeddingModel || DEFAULT_MODEL;
       modelSource = 'huggingface';
-      
+
       // Find dimensions for this model
       const modelInfo = SUPPORTED_MODELS.find(m => m.hfName === modelId || m.name === modelId);
-      this.actualDimensions = modelInfo?.dims || this.config.embeddingDimensions || DEFAULT_DIMENSIONS;
+      this.actualDimensions =
+        modelInfo?.dims || this.config.embeddingDimensions || DEFAULT_DIMENSIONS;
     }
 
     try {
@@ -96,10 +97,12 @@ export class EmbeddingEngine {
     }
   }
 
-  private async findBundledModel(modelsDir: string): Promise<{ name: string; dims: number } | null> {
+  private async findBundledModel(
+    modelsDir: string
+  ): Promise<{ name: string; dims: number } | null> {
     try {
       const entries = await readdir(modelsDir);
-      
+
       // Check each supported model in order of preference
       for (const model of SUPPORTED_MODELS) {
         if (entries.includes(model.name)) {
@@ -168,7 +171,9 @@ export class EmbeddingEngine {
         const batchEmbeddings = this.extractBatchEmbeddings(results, batch.length);
         embeddings.push(...batchEmbeddings);
 
-        this.log.debug(`Embedded batch ${i / batchSize + 1}/${Math.ceil(texts.length / batchSize)}`);
+        this.log.debug(
+          `Embedded batch ${i / batchSize + 1}/${Math.ceil(texts.length / batchSize)}`
+        );
       } catch (err) {
         this.log.error(`Failed to embed batch starting at index ${i}:`, err);
         throw err;

@@ -31,7 +31,7 @@ describe('SearchXrefs', () => {
     it('should return error when xref graph not available', async () => {
       const result = await tool.execute({ symbol: 'testFunction' });
       const parsed = JSON.parse(result);
-      
+
       expect(parsed.error).toBeDefined();
       expect(parsed.error).toContain('Cross-reference graph not available');
     });
@@ -49,7 +49,7 @@ describe('SearchXrefs', () => {
             calls: ['helperFunction'],
             calledBy: ['main'],
           },
-          'main': {
+          main: {
             name: 'main',
             type: 'function',
             filePath: '/test/main.ts',
@@ -60,16 +60,11 @@ describe('SearchXrefs', () => {
           },
         },
         callSites: {
-          testMethod: [
-            { file: '/test/main.ts', line: 15, caller: 'main' },
-          ],
+          testMethod: [{ file: '/test/main.ts', line: 15, caller: 'main' }],
         },
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = await tool.execute({ symbol: 'testMethod' });
@@ -83,7 +78,7 @@ describe('SearchXrefs', () => {
     it('should filter by direction callers', async () => {
       const xrefGraph = {
         definitions: {
-          'processData': {
+          processData: {
             name: 'processData',
             type: 'function',
             filePath: '/test/data.ts',
@@ -101,10 +96,7 @@ describe('SearchXrefs', () => {
         },
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = await tool.execute({
@@ -119,7 +111,7 @@ describe('SearchXrefs', () => {
     it('should filter by direction callees', async () => {
       const xrefGraph = {
         definitions: {
-          'processData': {
+          processData: {
             name: 'processData',
             type: 'function',
             filePath: '/test/data.ts',
@@ -132,10 +124,7 @@ describe('SearchXrefs', () => {
         callSites: {},
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = await tool.execute({
@@ -152,7 +141,7 @@ describe('SearchXrefs', () => {
     it('should suggest similar symbols when no exact match', async () => {
       const xrefGraph = {
         definitions: {
-          'processUserData': {
+          processUserData: {
             name: 'processUserData',
             type: 'function',
             filePath: '/test/data.ts',
@@ -165,10 +154,7 @@ describe('SearchXrefs', () => {
         callSites: {},
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = await tool.execute({ symbol: 'User' });
@@ -182,7 +168,7 @@ describe('SearchXrefs', () => {
       const callSites: Record<string, Array<{ file: string; line: number; caller: string }>> = {
         commonFunction: [],
       };
-      
+
       for (let i = 0; i < 50; i++) {
         callSites.commonFunction.push({
           file: `/test/file${i}.ts`,
@@ -196,10 +182,7 @@ describe('SearchXrefs', () => {
         callSites,
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = await tool.execute({
@@ -247,10 +230,7 @@ describe('SearchXrefs', () => {
         callSites: {},
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = await tool.getFileSymbols('/test/fileA.ts');
@@ -293,19 +273,12 @@ describe('SearchXrefs', () => {
           },
         },
         callSites: {
-          func2: [
-            { file: '/test/a.ts', line: 5, caller: 'func1' },
-          ],
-          func3: [
-            { file: '/test/a.ts', line: 6, caller: 'func1' },
-          ],
+          func2: [{ file: '/test/a.ts', line: 5, caller: 'func1' }],
+          func3: [{ file: '/test/a.ts', line: 6, caller: 'func1' }],
         },
       };
 
-      await writeFile(
-        join(tempDir, 'xref-graph.json'),
-        JSON.stringify(xrefGraph)
-      );
+      await writeFile(join(tempDir, 'xref-graph.json'), JSON.stringify(xrefGraph));
 
       await tool.initialize();
       const result = tool.getStats();

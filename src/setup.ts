@@ -46,10 +46,10 @@ function detectProjectRoot(): string | null {
   try {
     const cwd = process.cwd();
     // Check if we're in a git repo
-    execSync('git rev-parse --show-toplevel', { 
-      cwd, 
+    execSync('git rev-parse --show-toplevel', {
+      cwd,
       stdio: 'pipe',
-      encoding: 'utf-8' 
+      encoding: 'utf-8',
     });
     return cwd;
   } catch {
@@ -205,7 +205,9 @@ export async function runSetup(): Promise<void> {
     error('\nSetup failed. Please configure manually.');
     console.log('\nManual setup:');
     console.log('1. For Claude Code: Create .claude/settings.json in your project');
-    console.log('2. For Claude Desktop: Edit ~/Library/Application Support/Claude/claude_desktop_config.json');
+    console.log(
+      '2. For Claude Desktop: Edit ~/Library/Application Support/Claude/claude_desktop_config.json'
+    );
     console.log('3. Add the MCP server config - see README.md');
     process.exit(1);
   }

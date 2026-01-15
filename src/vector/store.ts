@@ -119,11 +119,7 @@ export class VectorStore {
     }
   }
 
-  async searchByType(
-    queryVector: number[],
-    type: string,
-    limit = 10
-  ): Promise<SearchResult[]> {
+  async searchByType(queryVector: number[], type: string, limit = 10): Promise<SearchResult[]> {
     return this.search(queryVector, limit, `type = '${type}'`);
   }
 
@@ -142,10 +138,7 @@ export class VectorStore {
 
     try {
       // Use query to filter by file path
-      const results = await this.table
-        .query()
-        .where(`file_path = '${filePath}'`)
-        .toArray();
+      const results = await this.table.query().where(`file_path = '${filePath}'`).toArray();
 
       return results.map((row: Record<string, unknown>) => this.rowToChunk(row));
     } catch (err) {

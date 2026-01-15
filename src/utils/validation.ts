@@ -103,13 +103,13 @@ export function validateNumber(
 export function sanitizeForLogging(input: string): string {
   // Remove potential secrets/tokens
   let sanitized = input;
-  
+
   // API keys patterns
   sanitized = sanitized.replace(/([a-zA-Z0-9_-]{20,})/g, '[REDACTED]');
-  
+
   // Email addresses
   sanitized = sanitized.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL]');
-  
+
   // IP addresses
   sanitized = sanitized.replace(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g, '[IP]');
 
@@ -131,19 +131,19 @@ export class RateLimiter {
 
   canProceed(): boolean {
     const now = Date.now();
-    this.calls = this.calls.filter((time) => now - time < this.windowMs);
-    
+    this.calls = this.calls.filter(time => now - time < this.windowMs);
+
     if (this.calls.length >= this.maxCalls) {
       return false;
     }
-    
+
     this.calls.push(now);
     return true;
   }
 
   getRemainingCalls(): number {
     const now = Date.now();
-    this.calls = this.calls.filter((time) => now - time < this.windowMs);
+    this.calls = this.calls.filter(time => now - time < this.windowMs);
     return Math.max(0, this.maxCalls - this.calls.length);
   }
 }

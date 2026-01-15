@@ -99,7 +99,7 @@ describe('EmbeddingEngine Integration', () => {
       // This may take time on first run (model download)
       await engine.initialize();
       initialized = true;
-      
+
       // Test if embedding actually works (Jest/ONNX compatibility issue)
       const testEmbed = await engine.embed('test');
       if (testEmbed && testEmbed.length > 0) {
@@ -107,7 +107,9 @@ describe('EmbeddingEngine Integration', () => {
       }
     } catch {
       // Model download failed, unavailable, or Jest/ONNX issue - skip integration tests
-      console.warn('EmbeddingEngine not available in test environment - skipping integration tests');
+      console.warn(
+        'EmbeddingEngine not available in test environment - skipping integration tests'
+      );
     }
   }, 120000); // 2 minute timeout for model download
 
@@ -379,7 +381,7 @@ describe('EmbeddingEngine Edge Cases', () => {
       // In Jest environment, ONNX may fail with Float32Array errors
       // or initialization may not have completed - either is acceptable for this test
       const errorMessage = err instanceof Error ? err.message : String(err);
-      const isExpectedError = 
+      const isExpectedError =
         errorMessage.includes('not initialized') ||
         errorMessage.includes('Float32Array') ||
         errorMessage.includes('ONNX');

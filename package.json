@@ -30,7 +30,11 @@
     "postinstall": "npm run download-grammars || true",
     "prepare": "npm run build",
     "evidence": "./scripts/collect-evidence.sh",
-    "setup": "npm run download-grammars && npm run download-model"
+    "setup": "npm run download-grammars && npm run download-model",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format:check": "prettier --check 'src/**/*.ts'",
+    "typecheck": "tsc --noEmit",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
   },
   "keywords": [
     "claude",

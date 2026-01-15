@@ -81,7 +81,10 @@ export const SymbolKind = {
 export class LSPClient {
   private process: ChildProcess | null = null;
   private messageId = 0;
-  private pendingRequests: Map<number, { resolve: (value: unknown) => void; reject: (error: Error) => void }> = new Map();
+  private pendingRequests: Map<
+    number,
+    { resolve: (value: unknown) => void; reject: (error: Error) => void }
+  > = new Map();
   private log = logger.child('lsp-client');
   private initialized = false;
   private projectRoot: string;
@@ -135,7 +138,7 @@ export class LSPClient {
         crlfDelay: Infinity,
       });
 
-      this.readline.on('line', (line) => {
+      this.readline.on('line', line => {
         this.handleMessage(line);
       });
 
@@ -143,12 +146,12 @@ export class LSPClient {
         this.log.debug('TSServer stderr:', data.toString());
       });
 
-      this.process.on('error', (err) => {
+      this.process.on('error', err => {
         this.log.error('TSServer error:', err);
         this.process = null;
       });
 
-      this.process.on('exit', (code) => {
+      this.process.on('exit', code => {
         this.log.info(`TSServer exited with code ${code}`);
         this.process = null;
         this.initialized = false;
@@ -224,10 +227,10 @@ export class LSPClient {
     if (!this.initialized) return null;
 
     try {
-      const result = await this.sendRequest('textDocument/hover', {
+      const result = (await this.sendRequest('textDocument/hover', {
         textDocument: { uri: `file://${filePath}` },
         position: { line, character },
-      }) as HoverResult | null;
+      })) as HoverResult | null;
 
       if (!result?.contents) return null;
 
@@ -243,7 +246,11 @@ export class LSPClient {
   /**
    * Get definition location for a symbol
    */
-  async getDefinition(filePath: string, line: number, character: number): Promise<DefinitionResult[] | null> {
+  async getDefinition(
+    filePath: string,
+    line: number,
+    character: number
+  ): Promise<DefinitionResult[] | null> {
     if (!this.initialized) return null;
 
     try {
@@ -320,7 +327,11 @@ export class LSPClient {
   /**
    * Get type definition
    */
-  async getTypeDefinition(filePath: string, line: number, character: number): Promise<Location[] | null> {
+  async getTypeDefinition(
+    filePath: string,
+    line: number,
+    character: number
+  ): Promise<Location[] | null> {
     if (!this.initialized) return null;
 
     try {
@@ -359,7 +370,7 @@ export class LSPClient {
 
       const content = JSON.stringify(message);
       const header = `Content-Length: ${Buffer.byteLength(content)}\r\n\r\n`;
-      
+
       this.process.stdin.write(header + content);
 
       // Timeout after 10 seconds
@@ -390,8 +401,8 @@ export class LSPClient {
 
       const content = JSON.stringify(message);
       const header = `Content-Length: ${Buffer.byteLength(content)}\r\n\r\n`;
-      
-      this.process.stdin.write(header + content, (err) => {
+
+      this.process.stdin.write(header + content, err => {
         if (err) reject(err);
         else resolve();
       });

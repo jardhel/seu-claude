@@ -479,11 +479,7 @@ export class CrossReferenceTracker {
   /**
    * Add a file's references to the graph
    */
-  addToGraph(
-    filePath: string,
-    definitions: SymbolDefinition[],
-    calls: FunctionReference[]
-  ): void {
+  addToGraph(filePath: string, definitions: SymbolDefinition[], calls: FunctionReference[]): void {
     // Add definitions
     for (const def of definitions) {
       const fqn = this.getFullyQualifiedName(def);
@@ -497,9 +493,7 @@ export class CrossReferenceTracker {
       }
 
       // Find which definition this call is inside
-      const callerDef = definitions.find(
-        d => call.line >= d.startLine && call.line <= d.endLine
-      );
+      const callerDef = definitions.find(d => call.line >= d.startLine && call.line <= d.endLine);
 
       this.graph.callSites.get(call.name)!.push({
         file: filePath,

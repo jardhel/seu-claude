@@ -57,7 +57,9 @@ describe('SeuClaudeServer - Tool Definitions', () => {
     const server = new SeuClaudeServer();
 
     // Access private method via prototype - not ideal but necessary for testing
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     const indexTool = tools.find((t: unknown) => (t as { name: string }).name === 'index_codebase');
     expect(indexTool).toBeDefined();
@@ -66,16 +68,24 @@ describe('SeuClaudeServer - Tool Definitions', () => {
 
   it('should define search_codebase tool', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
-    const searchTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_codebase');
+    const searchTool = tools.find(
+      (t: unknown) => (t as { name: string }).name === 'search_codebase'
+    );
     expect(searchTool).toBeDefined();
-    expect((searchTool as { description: string }).description).toContain('Search the indexed codebase');
+    expect((searchTool as { description: string }).description).toContain(
+      'Search the indexed codebase'
+    );
   });
 
   it('should define read_semantic_context tool', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     const contextTool = tools.find(
       (t: unknown) => (t as { name: string }).name === 'read_semantic_context'
@@ -86,7 +96,9 @@ describe('SeuClaudeServer - Tool Definitions', () => {
 
   it('should have correct input schemas', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     // index_codebase should have path and force properties
     const indexTool = tools.find((t: unknown) => (t as { name: string }).name === 'index_codebase');
@@ -184,7 +196,9 @@ describe('SeuClaudeServer - Lifecycle', () => {
 describe('SeuClaudeServer - search_xrefs Tool', () => {
   it('should define search_xrefs tool', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     const xrefsTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_xrefs');
     expect(xrefsTool).toBeDefined();
@@ -193,11 +207,15 @@ describe('SeuClaudeServer - search_xrefs Tool', () => {
 
   it('should have correct input schema for search_xrefs', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     const xrefsTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_xrefs');
-    const schema = (xrefsTool as { inputSchema: { properties: Record<string, unknown>; required: string[] } }).inputSchema;
-    
+    const schema = (
+      xrefsTool as { inputSchema: { properties: Record<string, unknown>; required: string[] } }
+    ).inputSchema;
+
     expect(schema.properties).toHaveProperty('symbol');
     expect(schema.properties).toHaveProperty('direction');
     expect(schema.properties).toHaveProperty('max_results');
@@ -206,11 +224,15 @@ describe('SeuClaudeServer - search_xrefs Tool', () => {
 
   it('should have direction enum with correct values', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     const xrefsTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_xrefs');
-    const directionProp = (xrefsTool as { inputSchema: { properties: { direction: { enum: string[] } } } }).inputSchema.properties.direction;
-    
+    const directionProp = (
+      xrefsTool as { inputSchema: { properties: { direction: { enum: string[] } } } }
+    ).inputSchema.properties.direction;
+
     expect(directionProp.enum).toContain('callers');
     expect(directionProp.enum).toContain('callees');
     expect(directionProp.enum).toContain('both');
@@ -220,10 +242,12 @@ describe('SeuClaudeServer - search_xrefs Tool', () => {
 describe('SeuClaudeServer - Tool Schema Completeness', () => {
   it('should define all four tools', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     expect(tools).toHaveLength(4);
-    
+
     const toolNames = tools.map((t: unknown) => (t as { name: string }).name);
     expect(toolNames).toContain('index_codebase');
     expect(toolNames).toContain('search_codebase');
@@ -233,7 +257,9 @@ describe('SeuClaudeServer - Tool Schema Completeness', () => {
 
   it('should have descriptions for all tools', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     for (const tool of tools) {
       const t = tool as { name: string; description: string };
@@ -244,7 +270,9 @@ describe('SeuClaudeServer - Tool Schema Completeness', () => {
 
   it('should have input schemas for all tools', () => {
     const server = new SeuClaudeServer();
-    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+    const tools = (
+      server as unknown as { getToolDefinitions: () => unknown[] }
+    ).getToolDefinitions();
 
     for (const tool of tools) {
       const t = tool as { name: string; inputSchema: { type: string } };

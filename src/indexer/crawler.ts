@@ -76,7 +76,7 @@ export class Crawler {
   async initializeGitTracking(): Promise<boolean> {
     this.gitTracker = new GitTracker(this.config.projectRoot);
     const isGit = await this.gitTracker.initialize();
-    
+
     if (!isGit) {
       this.gitTracker = null;
       return false;
@@ -97,13 +97,15 @@ export class Crawler {
       this.gitRecentFiles.set(file, 200);
     });
 
-    this.log.info(`Git tracking enabled: ${recentFiles.length} recent files, ${uncommitted.length} uncommitted`);
+    this.log.info(
+      `Git tracking enabled: ${recentFiles.length} recent files, ${uncommitted.length} uncommitted`
+    );
     return true;
   }
 
   async crawl(): Promise<CrawlResult> {
     await this.loadGitignore();
-    
+
     // Initialize git tracking for smart prioritization
     const gitAware = await this.initializeGitTracking();
 
@@ -178,7 +180,9 @@ export class Crawler {
     if (gitAware) {
       const uncommittedCount = files.filter(f => f.hasUncommittedChanges).length;
       const prioritizedCount = files.filter(f => (f.gitPriority ?? 0) > 0).length;
-      this.log.info(`Git-aware: ${uncommittedCount} uncommitted, ${prioritizedCount} recently modified`);
+      this.log.info(
+        `Git-aware: ${uncommittedCount} uncommitted, ${prioritizedCount} recently modified`
+      );
     }
 
     return {
