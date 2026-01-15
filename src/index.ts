@@ -20,13 +20,13 @@ async function main(): Promise<void> {
     }
   };
 
-  process.on('SIGINT', () => shutdown('SIGINT'));
-  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => void shutdown('SIGINT'));
+  process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
   // Handle uncaught errors
   process.on('uncaughtException', err => {
     log.error('Uncaught exception:', err);
-    shutdown('uncaughtException');
+    void shutdown('uncaughtException');
   });
 
   process.on('unhandledRejection', (reason, promise) => {

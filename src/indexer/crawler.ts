@@ -1,10 +1,15 @@
 import { readFile, stat } from 'fs/promises';
 import { join, extname, relative } from 'path';
+import { createRequire } from 'module';
 import fastGlob from 'fast-glob';
-import ignore from 'ignore';
 import { createHash } from 'crypto';
 import { Config, getLanguageFromExtension } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
+
+// Use createRequire for CJS module compatibility
+const require = createRequire(import.meta.url);
+const ignore = require('ignore') as typeof import('ignore').default;
+type Ignore = ReturnType<typeof ignore>;
 
 export interface FileInfo {
   path: string;
@@ -24,7 +29,7 @@ export interface CrawlResult {
 
 export class Crawler {
   private config: Config;
-  private ignorer: ReturnType<typeof ignore>;
+  private ignorer: Ignore;
   private log = logger.child('crawler');
 
   constructor(config: Config) {

@@ -49,7 +49,7 @@ export class SeuClaudeServer {
 
   private setupHandlers(): void {
     // List available tools
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+    this.server.setRequestHandler(ListToolsRequestSchema, () => {
       return {
         tools: this.getToolDefinitions(),
       };
@@ -260,7 +260,7 @@ export class SeuClaudeServer {
   }
 
   async stop(): Promise<void> {
-    await this.store.close();
+    this.store.close();
     await this.server.close();
     this.log.info('seu-claude MCP server stopped');
   }

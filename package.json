@@ -15,9 +15,12 @@
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src/**/*.ts",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "benchmark": "npx tsx benchmarks/performance.ts",
     "download-grammars": "npx tsx scripts/download-grammars.ts",
     "postinstall": "npm run download-grammars || true",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "evidence": "./scripts/collect-evidence.sh"
   },
   "keywords": [
     "claude",
@@ -44,7 +47,7 @@
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@anthropic-ai/tokenizer": "^0.0.4",
     "@huggingface/transformers": "^3.0.0",
-    "vectordb": "^0.4.0",
+    "@lancedb/lancedb": "^0.5.0",
     "web-tree-sitter": "^0.22.0",
     "fast-glob": "^3.3.2",
     "ignore": "^5.3.0",

@@ -194,7 +194,7 @@ export class ASTParser {
     return nodes;
   }
 
-  private extractNodeName(node: SyntaxNode, language: string): string | null {
+  private extractNodeName(node: SyntaxNode, _language: string): string | null {
     // Common patterns for finding the name node
     const nameFields = ['name', 'identifier'];
 

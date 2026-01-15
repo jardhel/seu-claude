@@ -1,5 +1,5 @@
-import * as lancedb from 'vectordb';
-import { Config } from '../utils/config.js';
+import * as lancedb from '@lancedb/lancedb';
+import type { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
 import { CodeChunk } from '../indexer/chunker.js';
 import { mkdir } from 'fs/promises';
@@ -20,12 +20,10 @@ const TABLE_NAME = 'code_chunks';
 export class VectorStore {
   private db: lancedb.Connection | null = null;
   private table: lancedb.Table | null = null;
-  private config: Config;
   private log = logger.child('store');
   private dbPath: string;
 
   constructor(config: Config) {
-    this.config = config;
     this.dbPath = join(config.dataDir, 'lancedb');
   }
 
@@ -83,10 +81,10 @@ export class VectorStore {
     try {
       if (!this.table) {
         // Create table with first batch
-        this.table = await this.db.createTable(TABLE_NAME, records, { mode: 'overwrite' });
+        this.table = await this.db.createTable(TABLE_NAME, records);
         this.log.info(`Created table with ${records.length} records`);
       } else {
-        // Add new records (LanceDB handles upsert via overwrite mode)
+        // Add new records
         await this.table.add(records);
         this.log.debug(`Added ${records.length} records to table`);
       }
@@ -109,11 +107,11 @@ export class VectorStore {
         query = query.where(filter);
       }
 
-      const results = await query.execute();
+      const results = await query.toArray();
 
-      return results.map(row => ({
+      return results.map((row: Record<string, unknown>) => ({
         chunk: this.rowToChunk(row),
-        score: row._distance as number,
+        score: (row._distance as number) ?? 0,
       }));
     } catch (err) {
       this.log.error('Search failed:', err);
@@ -143,12 +141,13 @@ export class VectorStore {
     }
 
     try {
+      // Use query to filter by file path
       const results = await this.table
-        .search([]) // Empty vector for filter-only query
+        .query()
         .where(`file_path = '${filePath}'`)
-        .execute();
+        .toArray();
 
-      return results.map(row => this.rowToChunk(row));
+      return results.map((row: Record<string, unknown>) => this.rowToChunk(row));
     } catch (err) {
       this.log.error('Failed to get chunks by file path:', err);
       return [];
@@ -225,7 +224,7 @@ export class VectorStore {
     };
   }
 
-  async close(): Promise<void> {
+  close(): void {
     // LanceDB connections are lightweight, no explicit close needed
     this.db = null;
     this.table = null;

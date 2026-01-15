@@ -117,7 +117,7 @@ export class SemanticChunker {
     };
   }
 
-  private splitLargeChunk(chunk: CodeChunk, fullContent: string): CodeChunk[] {
+  private splitLargeChunk(chunk: CodeChunk, _fullContent: string): CodeChunk[] {
     const lines = chunk.code.split('\n');
     const chunks: CodeChunk[] = [];
     const maxLines = Math.floor(this.config.maxChunkTokens / 4); // Rough estimate: 4 tokens per line

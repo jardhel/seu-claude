@@ -1,10 +1,10 @@
-import { pipeline, Pipeline, env } from '@huggingface/transformers';
+import { pipeline, FeatureExtractionPipeline, env } from '@huggingface/transformers';
 import { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
 import { join } from 'path';
 
 export class EmbeddingEngine {
-  private embedder: Pipeline | null = null;
+  private embedder: FeatureExtractionPipeline | null = null;
   private config: Config;
   private log = logger.child('embedder');
   private initialized = false;
