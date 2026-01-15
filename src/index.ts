@@ -1,11 +1,18 @@
 #!/usr/bin/env node
 
-import { SeuClaudeServer } from './server.js';
-import { logger } from './utils/logger.js';
-
-const log = logger.child('main');
-
 async function main(): Promise<void> {
+  // Check for setup command BEFORE loading heavy dependencies
+  if (process.argv[2] === 'setup') {
+    const { runSetup } = await import('./setup.js');
+    await runSetup();
+    return;
+  }
+
+  // Now load the server and its dependencies
+  const { SeuClaudeServer } = await import('./server.js');
+  const { logger } = await import('./utils/logger.js');
+  const log = logger.child('main');
+
   const server = new SeuClaudeServer();
 
   // Graceful shutdown handlers
@@ -41,7 +48,13 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch(err => {
-  log.error('Fatal error:', err);
+main().catch(async err => {
+  // Dynamic import for error logging
+  try {
+    const { logger } = await import('./utils/logger.js');
+    logger.child('main').error('Fatal error:', err);
+  } catch {
+    console.error('Fatal error:', err);
+  }
   process.exit(1);
 });

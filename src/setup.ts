@@ -14,7 +14,7 @@ import { execSync } from 'child_process';
 const CLAUDE_CODE_CONFIG = '.claude/settings.json';
 const CLAUDE_DESKTOP_CONFIG = {
   darwin: join(homedir(), 'Library/Application Support/Claude/claude_desktop_config.json'),
-  win32: join(process.env.APPDATA || '', 'Claude/claude_desktop_config.json'),
+  win32: join(process.env.APPDATA ?? '', 'Claude/claude_desktop_config.json'),
   linux: join(homedir(), '.config/Claude/claude_desktop_config.json'),
 };
 
@@ -28,6 +28,7 @@ interface MCPConfig {
   };
 }
 
+/* eslint-disable no-console */
 function log(message: string, emoji = '🔧'): void {
   console.log(`${emoji} ${message}`);
 }
@@ -39,8 +40,9 @@ function error(message: string): void {
 function success(message: string): void {
   console.log(`✅ ${message}`);
 }
+/* eslint-enable no-console */
 
-async function detectProjectRoot(): Promise<string | null> {
+function detectProjectRoot(): string | null {
   try {
     const cwd = process.cwd();
     // Check if we're in a git repo
@@ -71,7 +73,7 @@ async function configureClaudeCode(projectRoot: string): Promise<boolean> {
     // Read existing config if it exists
     if (existsSync(configPath)) {
       const content = await readFile(configPath, 'utf-8');
-      config = JSON.parse(content);
+      config = JSON.parse(content) as MCPConfig;
       log('Found existing Claude Code config');
     }
 
@@ -93,8 +95,9 @@ async function configureClaudeCode(projectRoot: string): Promise<boolean> {
     success('Claude Code configured!');
     log(`Config file: ${configPath}`);
     return true;
-  } catch (err) {
-    error(`Failed to configure Claude Code: ${err}`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    error(`Failed to configure Claude Code: ${message}`);
     return false;
   }
 }
@@ -122,7 +125,7 @@ async function configureClaudeDesktop(projectRoot: string): Promise<boolean> {
     // Read existing config if it exists
     if (existsSync(configPath)) {
       const content = await readFile(configPath, 'utf-8');
-      config = JSON.parse(content);
+      config = JSON.parse(content) as MCPConfig;
       log('Found existing Claude Desktop config');
     }
 
@@ -144,18 +147,20 @@ async function configureClaudeDesktop(projectRoot: string): Promise<boolean> {
     success('Claude Desktop configured!');
     log(`Config file: ${configPath}`);
     return true;
-  } catch (err) {
-    error(`Failed to configure Claude Desktop: ${err}`);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    error(`Failed to configure Claude Desktop: ${message}`);
     return false;
   }
 }
 
-async function main(): Promise<void> {
+/* eslint-disable no-console */
+export async function runSetup(): Promise<void> {
   console.log('\n🧠 seu-claude Setup\n');
 
   // Detect project root
   log('Detecting project...');
-  const projectRoot = await detectProjectRoot();
+  const projectRoot = detectProjectRoot();
 
   if (!projectRoot) {
     error('Not in a git repository. Run this from your project root.');
@@ -205,8 +210,13 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 }
+/* eslint-enable no-console */
 
-main().catch(err => {
-  error(`Setup failed: ${err}`);
-  process.exit(1);
-});
+// Direct execution support
+if (import.meta.url === `file://${process.argv[1]}`) {
+  runSetup().catch((err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err);
+    error(`Setup failed: ${message}`);
+    process.exit(1);
+  });
+}

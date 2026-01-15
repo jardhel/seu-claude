@@ -38,20 +38,20 @@ Current memory plugins for Claude Code suffer from "goldfish memory":
 # Install globally
 npm install -g seu-claude
 
-# Run interactive setup (automatically configures Claude)
-npx seu-claude-setup
-
 # Or use npx directly
 npx seu-claude
 ```
 
 ### Automatic Configuration
 
-The easiest way to get started:
+After installing, run the setup command:
 
 ```bash
-# From your project directory
-npx seu-claude-setup
+# If installed globally
+seu-claude-setup
+
+# Or with npx (must install first)
+npm install -g seu-claude && seu-claude-setup
 ```
 
 This will automatically:
