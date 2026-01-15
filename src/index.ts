@@ -1,10 +1,16 @@
 #!/usr/bin/env node
 
 async function main(): Promise<void> {
-  // Check for setup command BEFORE loading heavy dependencies
+  // Check for CLI commands BEFORE loading heavy dependencies
   if (process.argv[2] === 'setup') {
     const { runSetup } = await import('./setup.js');
     await runSetup();
+    return;
+  }
+
+  if (process.argv[2] === 'doctor' || process.argv[2] === 'check') {
+    const { runDoctor } = await import('./doctor.js');
+    await runDoctor();
     return;
   }
 

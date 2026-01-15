@@ -44,14 +44,14 @@ npx seu-claude
 
 ### Automatic Configuration
 
-After installing, run the setup command:
+After installing, run the setup command from your project directory:
 
 ```bash
-# If installed globally
-seu-claude-setup
+# With npx (recommended)
+npx seu-claude setup
 
-# Or with npx (must install first)
-npm install -g seu-claude && seu-claude-setup
+# Or if installed globally
+seu-claude setup
 ```
 
 This will automatically:
@@ -59,6 +59,14 @@ This will automatically:
 - Create `.claude/settings.json` for Claude Code
 - Configure `claude_desktop_config.json` for Claude Desktop
 - Set up the MCP server connection
+
+### Verify Installation
+
+Check if everything is configured correctly:
+
+```bash
+npx seu-claude doctor
+```
 
 ### Manual Configuration
 
