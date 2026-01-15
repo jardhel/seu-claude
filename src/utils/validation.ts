@@ -33,14 +33,14 @@ export function validateFilePath(filePath: string, allowedRoot?: string): Valida
     }
   }
 
-  // Check for suspicious patterns
+  // Check for suspicious patterns (Windows paths normalized to forward slashes)
   const suspiciousPatterns = [
     /^\/etc\//i,
     /^\/proc\//i,
     /^\/sys\//i,
     /^\/dev\//i,
-    /^[a-z]:\\windows/i,
-    /^[a-z]:\\system32/i,
+    /^[a-z]:\/windows/i,
+    /^[a-z]:\/system32/i,
   ];
 
   for (const pattern of suspiciousPatterns) {

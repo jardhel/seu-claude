@@ -22,15 +22,20 @@ export default {
     'src/**/*.ts',
     '!src/**/*.d.ts',
     '!src/index.ts', // Entry point
+    '!src/cli-index.ts', // CLI - requires process interaction
+    '!src/doctor.ts', // CLI - requires process interaction
+    '!src/setup.ts', // CLI - requires process interaction
+    '!src/lsp/client.ts', // Requires running tsserver
+    '!src/server.ts', // MCP server glue code - tested via integration
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html', 'json'],
   coverageThreshold: {
     global: {
-      branches: 60,
-      functions: 75,
-      lines: 60,
-      statements: 60,
+      branches: 70,
+      functions: 90,
+      lines: 80,
+      statements: 80,
     },
   },
 };

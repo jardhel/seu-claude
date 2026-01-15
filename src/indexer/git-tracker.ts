@@ -79,12 +79,13 @@ export class GitTracker {
         })
       );
 
+      // Split first, then process each line - don't trim the whole output
+      // as it would remove the leading space from status format "XY filename"
       return output
-        .trim()
         .split('\n')
-        .filter(Boolean)
-        .map(line => line.slice(3).trim())
-        .filter(f => !f.startsWith('?')); // Exclude untracked
+        .filter(line => line.length > 3)
+        .map(line => line.substring(3).trim())
+        .filter(f => f && !f.startsWith('?')); // Exclude untracked and empty
     } catch {
       return [];
     }

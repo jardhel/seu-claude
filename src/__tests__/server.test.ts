@@ -180,3 +180,76 @@ describe('SeuClaudeServer - Lifecycle', () => {
     await expect(server.stop()).resolves.toBeUndefined();
   });
 });
+
+describe('SeuClaudeServer - search_xrefs Tool', () => {
+  it('should define search_xrefs tool', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    const xrefsTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_xrefs');
+    expect(xrefsTool).toBeDefined();
+    expect((xrefsTool as { description: string }).description).toContain('cross-references');
+  });
+
+  it('should have correct input schema for search_xrefs', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    const xrefsTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_xrefs');
+    const schema = (xrefsTool as { inputSchema: { properties: Record<string, unknown>; required: string[] } }).inputSchema;
+    
+    expect(schema.properties).toHaveProperty('symbol');
+    expect(schema.properties).toHaveProperty('direction');
+    expect(schema.properties).toHaveProperty('max_results');
+    expect(schema.required).toContain('symbol');
+  });
+
+  it('should have direction enum with correct values', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    const xrefsTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_xrefs');
+    const directionProp = (xrefsTool as { inputSchema: { properties: { direction: { enum: string[] } } } }).inputSchema.properties.direction;
+    
+    expect(directionProp.enum).toContain('callers');
+    expect(directionProp.enum).toContain('callees');
+    expect(directionProp.enum).toContain('both');
+  });
+});
+
+describe('SeuClaudeServer - Tool Schema Completeness', () => {
+  it('should define all four tools', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    expect(tools).toHaveLength(4);
+    
+    const toolNames = tools.map((t: unknown) => (t as { name: string }).name);
+    expect(toolNames).toContain('index_codebase');
+    expect(toolNames).toContain('search_codebase');
+    expect(toolNames).toContain('read_semantic_context');
+    expect(toolNames).toContain('search_xrefs');
+  });
+
+  it('should have descriptions for all tools', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    for (const tool of tools) {
+      const t = tool as { name: string; description: string };
+      expect(t.description).toBeDefined();
+      expect(t.description.length).toBeGreaterThan(10);
+    }
+  });
+
+  it('should have input schemas for all tools', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    for (const tool of tools) {
+      const t = tool as { name: string; inputSchema: { type: string } };
+      expect(t.inputSchema).toBeDefined();
+      expect(t.inputSchema.type).toBe('object');
+    }
+  });
+});

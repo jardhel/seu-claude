@@ -34,6 +34,59 @@ describe('CrossReferenceTracker', () => {
     }
   });
 
+  describe('clear', () => {
+    it('should clear all definitions and call sites', async () => {
+      if (!tsLanguage) {
+        await Promise.resolve();
+        return;
+      }
+
+      parser.setLanguage(tsLanguage);
+      const code = `function foo() { bar(); } function bar() {}`;
+      const tree = parser.parse(code);
+      const { definitions, calls } = tracker.extractReferences(tree, 'test.ts', 'typescript');
+      tracker.addToGraph('test.ts', definitions, calls);
+      
+      const callers = tracker.getCallers('bar');
+      expect(callers.length).toBeGreaterThanOrEqual(0);
+      
+      tracker.clear();
+      
+      expect(tracker.getCallers('bar')).toEqual([]);
+    });
+  });
+
+  describe('getCallees', () => {
+    it('should return callees for a function', async () => {
+      if (!tsLanguage) {
+        await Promise.resolve();
+        return;
+      }
+
+      parser.setLanguage(tsLanguage);
+      const code = `
+        function main() {
+          helper1();
+          helper2();
+        }
+        function helper1() {}
+        function helper2() {}
+      `;
+      const tree = parser.parse(code);
+      const { definitions, calls } = tracker.extractReferences(tree, 'test.ts', 'typescript');
+      tracker.addToGraph('test.ts', definitions, calls);
+      
+      const callees = tracker.getCallees('main');
+      expect(callees).toContain('helper1');
+      expect(callees).toContain('helper2');
+    });
+
+    it('should return empty array for non-existent function', () => {
+      const callees = tracker.getCallees('nonexistent');
+      expect(callees).toEqual([]);
+    });
+  });
+
   describe('extractReferences', () => {
     it('should extract function definitions', async () => {
       if (!tsLanguage) {

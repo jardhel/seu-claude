@@ -24,6 +24,7 @@ export const SearchXrefsArgsSchema = z.object({
 });
 
 export type SearchXrefsArgs = z.infer<typeof SearchXrefsArgsSchema>;
+export type SearchXrefsInput = z.input<typeof SearchXrefsArgsSchema>;
 
 interface XrefResult {
   symbol: string;
@@ -76,7 +77,8 @@ export class SearchXrefs {
     }
   }
 
-  async execute(args: SearchXrefsArgs): Promise<string> {
+  async execute(rawArgs: SearchXrefsInput): Promise<string> {
+    const args = SearchXrefsArgsSchema.parse(rawArgs);
     const { symbol, direction, maxResults } = args;
 
     if (!this.xrefGraph) {

@@ -42,6 +42,23 @@ describe('VectorStore', () => {
       await store.initialize();
       // If no error, directory was created successfully
     });
+
+    it('should reopen existing table on re-initialization', async () => {
+      // First, create and populate a table
+      await store.initialize();
+      const chunk = createMockChunk('1');
+      await store.upsert([chunk]);
+      store.close();
+
+      // Create a new store instance and initialize
+      const store2 = new VectorStore(config);
+      await store2.initialize();
+
+      // Should see the existing data
+      const stats = await store2.getStats();
+      expect(stats.totalChunks).toBe(1);
+      store2.close();
+    });
   });
 
   describe('upsert - without initialization', () => {
