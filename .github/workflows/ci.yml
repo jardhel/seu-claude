@@ -128,6 +128,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    continue-on-error: true  # Don't fail the workflow if SonarCloud isn't configured
 
     steps:
       - name: Checkout repository
@@ -157,7 +158,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   release:
-    needs: [build, sonarcloud]
+    needs: [build]  # Remove sonarcloud dependency
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
