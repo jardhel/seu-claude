@@ -1,0 +1,116 @@
+{
+  "benchmarks": [
+    {
+      "query": "How does the embedding engine work?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 986,
+      "tokenSavings": 20852,
+      "savingsPercent": 95.48493451781299,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": true,
+      "rawTimeMs": 1,
+      "seuClaudeTimeMs": 13
+    },
+    {
+      "query": "Where is the vector store implementation?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 452,
+      "tokenSavings": 21386,
+      "savingsPercent": 97.93021338950453,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": false,
+      "rawTimeMs": 2,
+      "seuClaudeTimeMs": 5
+    },
+    {
+      "query": "How does the AST parser extract code structure?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 4385,
+      "tokenSavings": 17453,
+      "savingsPercent": 79.92032237384376,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": false,
+      "rawTimeMs": 1,
+      "seuClaudeTimeMs": 4
+    },
+    {
+      "query": "What MCP tools are available?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 4385,
+      "tokenSavings": 17453,
+      "savingsPercent": 79.92032237384376,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": true,
+      "rawTimeMs": 1,
+      "seuClaudeTimeMs": 4
+    },
+    {
+      "query": "How does the crawler find files?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 385,
+      "tokenSavings": 21453,
+      "savingsPercent": 98.23701804194523,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": false,
+      "rawTimeMs": 1,
+      "seuClaudeTimeMs": 4
+    },
+    {
+      "query": "How is logging implemented?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 326,
+      "tokenSavings": 21512,
+      "savingsPercent": 98.50718930304973,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": true,
+      "rawTimeMs": 1,
+      "seuClaudeTimeMs": 4
+    },
+    {
+      "query": "How does semantic chunking work?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 415,
+      "tokenSavings": 21423,
+      "savingsPercent": 98.09964282443447,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": false,
+      "rawTimeMs": 1,
+      "seuClaudeTimeMs": 3
+    },
+    {
+      "query": "What configuration options are available?",
+      "scenario": "semantic-search",
+      "rawTokens": 21838,
+      "seuClaudeTokens": 4385,
+      "tokenSavings": 17453,
+      "savingsPercent": 79.92032237384376,
+      "filesScanned": 17,
+      "chunksReturned": 5,
+      "relevantCodeFound": false,
+      "rawTimeMs": 0,
+      "seuClaudeTimeMs": 4
+    }
+  ],
+  "summary": {
+    "avgTokenSavings": 19873.125,
+    "avgSavingsPercent": 91.00249564978478,
+    "totalRawTokens": 174704,
+    "totalSeuClaudeTokens": 15719,
+    "contextRetentionRate": 37.5,
+    "avgSpeedup": 0.22628205128205128
+  }
+}
