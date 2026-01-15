@@ -1,0 +1,30 @@
+# Docker ignore file
+node_modules/
+dist/
+coverage/
+.git/
+.github/
+.husky/
+.vscode/
+
+# Test files
+**/__tests__/
+**/*.test.ts
+**/*.spec.ts
+jest.config.js
+
+# Development files
+*.md
+!README.md
+!LICENSE
+!CHANGELOG.md
+.eslintrc*
+.prettierrc
+tsconfig.json
+commitlint.config.cjs
+
+# Misc
+*.log
+*.tgz
+.DS_Store
+benchmark-results/

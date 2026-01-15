@@ -1,0 +1,16 @@
+# Default owners for everything
+* @jardhel
+
+# Security-sensitive files require owner review
+SECURITY.md @jardhel
+.github/workflows/** @jardhel
+package.json @jardhel
+package-lock.json @jardhel
+
+# Core source code
+src/** @jardhel
+
+# Configuration files
+tsconfig.json @jardhel
+.eslintrc* @jardhel
+Dockerfile @jardhel

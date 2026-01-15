@@ -23,7 +23,9 @@ jobs:
     
     permissions:
       contents: write
-      id-token: write
+      id-token: write  # Required for npm provenance and OIDC
+    
+    environment: npm-publish  # Optional: adds manual approval gate
     
     steps:
       - name: Checkout repository
@@ -50,6 +52,10 @@ jobs:
       - name: Run tests
         run: npm test
       
+      - name: Security audit
+        run: npm audit --audit-level=high
+        continue-on-error: true  # Don't fail on moderate vulnerabilities
+      
       - name: Get version
         id: version
         run: |
@@ -73,7 +79,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - name: Publish to npm
+      - name: Publish to npm with provenance
         if: ${{ inputs.dry_run != true }}
         run: npm publish --provenance --access public
         env:

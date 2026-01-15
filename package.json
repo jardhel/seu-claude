@@ -56,25 +56,29 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
-    "@modelcontextprotocol/sdk": "^1.0.0",
     "@anthropic-ai/tokenizer": "^0.0.4",
     "@huggingface/transformers": "^3.0.0",
     "@lancedb/lancedb": "^0.5.0",
-    "web-tree-sitter": "^0.22.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
     "fast-glob": "^3.3.2",
     "ignore": "^5.3.0",
+    "web-tree-sitter": "^0.22.0",
     "xxhash-wasm": "^1.0.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "@types/jest": "^29.5.0",
     "@types/node": "^20.10.0",
-    "typescript": "^5.3.0",
-    "tsx": "^4.7.0",
-    "eslint": "^8.55.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",
-    "prettier": "^3.1.0",
+    "eslint": "^8.55.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
-    "@types/jest": "^29.5.0",
-    "ts-jest": "^29.1.0"
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
   }
 }
