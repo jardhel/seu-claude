@@ -151,8 +151,13 @@ export class ASTParser {
       return null;
     }
 
-    this.parser.setLanguage(lang);
-    return this.parser.parse(code);
+    try {
+      this.parser.setLanguage(lang);
+      return this.parser.parse(code);
+    } catch (err) {
+      this.log.warn(`Failed to parse ${language} (possibly incompatible grammar version):`, err);
+      return null;
+    }
   }
 
   extractNodes(tree: Tree, language: string): ParsedNode[] {

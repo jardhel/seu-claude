@@ -1,0 +1,182 @@
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { SeuClaudeServer } from '../server.js';
+import { Config } from '../utils/config.js';
+import { mkdir, rm } from 'fs/promises';
+import { join } from 'path';
+import { tmpdir } from 'os';
+
+describe('SeuClaudeServer', () => {
+  let testDir: string;
+  let config: Partial<Config>;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `seu-claude-server-test-${Date.now()}-${Math.random()}`);
+    await mkdir(testDir, { recursive: true });
+
+    config = {
+      projectRoot: testDir,
+      dataDir: join(testDir, '.seu-claude'),
+    };
+  });
+
+  afterEach(async () => {
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  describe('constructor', () => {
+    it('should create a SeuClaudeServer instance with default config', () => {
+      const server = new SeuClaudeServer();
+      expect(server).toBeInstanceOf(SeuClaudeServer);
+    });
+
+    it('should create a SeuClaudeServer instance with custom config', () => {
+      const server = new SeuClaudeServer(config);
+      expect(server).toBeInstanceOf(SeuClaudeServer);
+    });
+
+    it('should accept partial config', () => {
+      const server = new SeuClaudeServer({
+        projectRoot: testDir,
+        embeddingDimensions: 128,
+      });
+      expect(server).toBeInstanceOf(SeuClaudeServer);
+    });
+  });
+
+  describe('stop', () => {
+    it('should stop without error', async () => {
+      const server = new SeuClaudeServer(config);
+      // stop closes the store and server - should not throw
+      await expect(server.stop()).resolves.toBeUndefined();
+    });
+  });
+});
+
+describe('SeuClaudeServer - Tool Definitions', () => {
+  it('should define index_codebase tool', () => {
+    const server = new SeuClaudeServer();
+
+    // Access private method via prototype - not ideal but necessary for testing
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    const indexTool = tools.find((t: unknown) => (t as { name: string }).name === 'index_codebase');
+    expect(indexTool).toBeDefined();
+    expect((indexTool as { description: string }).description).toContain('Index the codebase');
+  });
+
+  it('should define search_codebase tool', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    const searchTool = tools.find((t: unknown) => (t as { name: string }).name === 'search_codebase');
+    expect(searchTool).toBeDefined();
+    expect((searchTool as { description: string }).description).toContain('Search the indexed codebase');
+  });
+
+  it('should define read_semantic_context tool', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    const contextTool = tools.find(
+      (t: unknown) => (t as { name: string }).name === 'read_semantic_context'
+    );
+    expect(contextTool).toBeDefined();
+    expect((contextTool as { description: string }).description).toContain('semantic context');
+  });
+
+  it('should have correct input schemas', () => {
+    const server = new SeuClaudeServer();
+    const tools = (server as unknown as { getToolDefinitions: () => unknown[] }).getToolDefinitions();
+
+    // index_codebase should have path and force properties
+    const indexTool = tools.find((t: unknown) => (t as { name: string }).name === 'index_codebase');
+    const indexSchema = (indexTool as { inputSchema: { properties: Record<string, unknown> } })
+      .inputSchema;
+    expect(indexSchema.properties).toHaveProperty('path');
+    expect(indexSchema.properties).toHaveProperty('force');
+
+    // search_codebase should require query
+    const searchTool = tools.find(
+      (t: unknown) => (t as { name: string }).name === 'search_codebase'
+    );
+    const searchSchema = (searchTool as { inputSchema: { required: string[] } }).inputSchema;
+    expect(searchSchema.required).toContain('query');
+
+    // read_semantic_context should require file_path
+    const contextTool = tools.find(
+      (t: unknown) => (t as { name: string }).name === 'read_semantic_context'
+    );
+    const contextSchema = (contextTool as { inputSchema: { required: string[] } }).inputSchema;
+    expect(contextSchema.required).toContain('file_path');
+  });
+});
+
+describe('SeuClaudeServer - Configuration', () => {
+  let testDir: string;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `seu-claude-config-test-${Date.now()}`);
+    await mkdir(testDir, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  it('should use provided config values', () => {
+    const customConfig = {
+      projectRoot: testDir,
+      embeddingDimensions: 128,
+      maxChunkTokens: 256,
+    };
+
+    const server = new SeuClaudeServer(customConfig);
+    expect(server).toBeInstanceOf(SeuClaudeServer);
+  });
+
+  it('should merge partial config with defaults', () => {
+    const partialConfig = {
+      projectRoot: testDir,
+    };
+
+    const server = new SeuClaudeServer(partialConfig);
+    expect(server).toBeInstanceOf(SeuClaudeServer);
+  });
+
+  it('should handle empty config', () => {
+    const server = new SeuClaudeServer({});
+    expect(server).toBeInstanceOf(SeuClaudeServer);
+  });
+});
+
+describe('SeuClaudeServer - Error Handling', () => {
+  it('should be instantiable', () => {
+    // Just verify the server can be created
+    const server = new SeuClaudeServer();
+    expect(server).toBeDefined();
+  });
+});
+
+describe('SeuClaudeServer - Lifecycle', () => {
+  let testDir: string;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `seu-claude-lifecycle-test-${Date.now()}`);
+    await mkdir(testDir, { recursive: true });
+  });
+
+  afterEach(async () => {
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  it('should allow multiple stop calls', async () => {
+    const server = new SeuClaudeServer({
+      projectRoot: testDir,
+      dataDir: join(testDir, '.seu-claude'),
+    });
+
+    await server.stop();
+    // Second stop should not throw
+    await expect(server.stop()).resolves.toBeUndefined();
+  });
+});
