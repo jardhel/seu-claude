@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Local data (user-specific)
+.seu-claude/
+data/
+
+# Downloaded models (large files)
+models/
+*.onnx
+
+# Tree-sitter WASM files (downloaded at runtime)
+languages/*.wasm
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+Thumbs.db
+
+# Planning documents (local only)
+context-seu-claude.txt
+PLAN.md
