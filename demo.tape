@@ -2,12 +2,17 @@
 # Run with: vhs demo.tape
 
 Output assets/demo.gif
-Set FontFamily "JetBrains Mono"
-Set FontSize 18
+Set Shell zsh
+Set FontFamily "SF Mono"
+Set FontSize 16
 Set Width 1200
 Set Height 700
+Set Padding 30
+Set Framerate 30
+Set TypingSpeed 50ms
+
+# Dracula Pro Theme Colors
 Set Theme "Dracula"
-Set Padding 40
 
 # Title frame
 Type "# 🧠 seu-claude - Local Codebase RAG for Claude Code"

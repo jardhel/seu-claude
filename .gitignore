@@ -46,3 +46,6 @@ Thumbs.db
 # Planning documents (local only)
 context-seu-claude.txt
 PLAN.md
+assets/demo.gif
+# Demo GIFs (too large for git)
+assets/demo-linkedin.gif
