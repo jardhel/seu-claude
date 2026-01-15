@@ -38,6 +38,7 @@ describe('CrossReferenceTracker', () => {
     it('should extract function definitions', async () => {
       if (!tsLanguage) {
         console.log('Skipping: TypeScript grammar not available');
+        await Promise.resolve();
         return;
       }
 
@@ -69,6 +70,7 @@ describe('CrossReferenceTracker', () => {
     it('should extract method calls on objects', async () => {
       if (!tsLanguage) {
         console.log('Skipping: TypeScript grammar not available');
+        await Promise.resolve();
         return;
       }
 
@@ -106,6 +108,7 @@ describe('CrossReferenceTracker', () => {
     it('should handle nested function calls', async () => {
       if (!tsLanguage) {
         console.log('Skipping: TypeScript grammar not available');
+        await Promise.resolve();
         return;
       }
 
@@ -135,6 +138,7 @@ describe('CrossReferenceTracker', () => {
     it('should build call graph from multiple files', async () => {
       if (!tsLanguage) {
         console.log('Skipping: TypeScript grammar not available');
+        await Promise.resolve();
         return;
       }
 
@@ -175,6 +179,7 @@ describe('CrossReferenceTracker', () => {
     it('should serialize and deserialize graph', async () => {
       if (!tsLanguage) {
         console.log('Skipping: TypeScript grammar not available');
+        await Promise.resolve();
         return;
       }
 
@@ -208,6 +213,7 @@ describe('CrossReferenceTracker', () => {
     it('should filter out common built-in function names', async () => {
       if (!tsLanguage) {
         console.log('Skipping: TypeScript grammar not available');
+        await Promise.resolve();
         return;
       }
 
