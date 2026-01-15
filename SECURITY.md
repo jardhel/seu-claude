@@ -31,7 +31,7 @@ We take security seriously. If you discover a security vulnerability, please rep
 
 1. **Keep Updated**: Always use the latest version of seu-claude
 2. **NPM Audit**: Regularly run `npm audit` in your projects
-3. **Token Security**: 
+3. **Token Security**:
    - Use granular npm tokens with minimal permissions
    - Set token expiration dates
    - Rotate tokens every 90 days
@@ -40,6 +40,7 @@ We take security seriously. If you discover a security vulnerability, please rep
 ## Security Measures in seu-claude
 
 ### Code Security
+
 - No `eval()` or dynamic code execution
 - Input validation on all tool parameters
 - No external network calls except:
@@ -47,17 +48,20 @@ We take security seriously. If you discover a security vulnerability, please rep
   - npm registry (installation only)
 
 ### Data Security
+
 - **100% Local Processing**: All indexing and search happens locally
 - **No Data Exfiltration**: Code never leaves your machine
 - **Sandboxed Storage**: Vector database stored in `~/.seu-claude/`
 
 ### Dependency Security
+
 - Regular dependency audits via GitHub Actions
 - CodeQL analysis on every PR
 - Automated secret scanning
 - License compliance checking
 
 ### CI/CD Security
+
 - npm provenance for supply chain security
 - Signed releases
 - Protected branches

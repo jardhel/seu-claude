@@ -14,6 +14,7 @@
 ## The Problem
 
 Current memory plugins for Claude Code suffer from "goldfish memory":
+
 - They only remember files the AI has explicitly accessed
 - Heavy resource usage (35GB+ RAM with in-memory vector databases)
 - Complex Python dependencies that conflict with your environment
@@ -55,6 +56,7 @@ seu-claude setup
 ```
 
 This will automatically:
+
 - Detect your project root
 - Create `.claude/settings.json` for Claude Code
 - Configure `claude_desktop_config.json` for Claude Desktop
@@ -111,14 +113,17 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 Once configured, Claude will have access to four powerful tools:
 
 1. **Index your codebase** (run once, then incremental):
+
    > "Index this codebase for semantic search"
 
 2. **Search semantically**:
+
    > "Where is the user authentication logic?"
    > "Find all database connection handling code"
    > "Show me how API rate limiting is implemented"
 
 3. **Read with context**:
+
    > "Read the AuthService.login method with its surrounding context"
 
 4. **Search cross-references** (find callers/callees):
@@ -157,21 +162,21 @@ Once configured, Claude will have access to four powerful tools:
 
 Unlike naive text splitting that breaks code mid-function, seu-claude uses Abstract Syntax Tree analysis to create semantically meaningful chunks:
 
-| Code Structure | Chunking Logic | Metadata |
-|----------------|----------------|----------|
-| Function | Complete function with signature | Type, Name, Scope |
-| Class | Header + methods as separate chunks | Type, Name, Methods |
-| Interface | Complete definition | Type, Module |
-| Method | Full body with context | Parent Class, Signature |
+| Code Structure | Chunking Logic                      | Metadata                |
+| -------------- | ----------------------------------- | ----------------------- |
+| Function       | Complete function with signature    | Type, Name, Scope       |
+| Class          | Header + methods as separate chunks | Type, Name, Methods     |
+| Interface      | Complete definition                 | Type, Module            |
+| Method         | Full body with context              | Parent Class, Signature |
 
 ### Technology Stack
 
-| Component | Technology | Why |
-|-----------|------------|-----|
-| Runtime | Node.js 20+ | Native MCP compatibility |
-| Parser | web-tree-sitter | WASM-based, multi-language |
-| Vector DB | LanceDB | Disk-based, <100MB RAM |
-| Embeddings | Transformers.js | Local, GPU-accelerated |
+| Component  | Technology      | Why                        |
+| ---------- | --------------- | -------------------------- |
+| Runtime    | Node.js 20+     | Native MCP compatibility   |
+| Parser     | web-tree-sitter | WASM-based, multi-language |
+| Vector DB  | LanceDB         | Disk-based, <100MB RAM     |
+| Embeddings | Transformers.js | Local, GPU-accelerated     |
 
 ## MCP Tools
 
@@ -224,6 +229,7 @@ Find callers and callees of functions/methods. Understand code dependencies and 
 ```
 
 **Example prompts:**
+
 > "Who calls the authenticate function?"
 > "What does processPayment call?"
 > "Show me the cross-references for handleRequest"
@@ -232,13 +238,13 @@ Find callers and callees of functions/methods. Understand code dependencies and 
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PROJECT_ROOT` | Current directory | Root of codebase to index |
-| `DATA_DIR` | `~/.seu-claude` | Where to store index data |
-| `EMBEDDING_MODEL` | `Xenova/all-MiniLM-L6-v2` | HuggingFace model |
-| `EMBEDDING_DIMENSIONS` | `384` | Vector dimensions |
-| `LOG_LEVEL` | `info` | debug, info, warn, error |
+| Variable               | Default                   | Description               |
+| ---------------------- | ------------------------- | ------------------------- |
+| `PROJECT_ROOT`         | Current directory         | Root of codebase to index |
+| `DATA_DIR`             | `~/.seu-claude`           | Where to store index data |
+| `EMBEDDING_MODEL`      | `Xenova/all-MiniLM-L6-v2` | HuggingFace model         |
+| `EMBEDDING_DIMENSIONS` | `384`                     | Vector dimensions         |
+| `LOG_LEVEL`            | `info`                    | debug, info, warn, error  |
 
 ### Ignore Patterns
 
@@ -261,38 +267,39 @@ path/to/large/file.ts
 
 seu-claude dramatically reduces token consumption by returning only semantically relevant code chunks instead of entire files.
 
-| Metric | Without seu-claude | With seu-claude | Savings |
-|--------|-------------------|-----------------|---------|
-| Tokens per query | ~22,000 | ~1,500 | **91%** |
-| Cost per session | $0.52 | $0.05 | **91%** |
-| Context accuracy | N/A | 95%+ | - |
+| Metric           | Without seu-claude | With seu-claude | Savings |
+| ---------------- | ------------------ | --------------- | ------- |
+| Tokens per query | ~22,000            | ~1,500          | **91%** |
+| Cost per session | $0.52              | $0.05           | **91%** |
+| Context accuracy | N/A                | 95%+            | -       |
 
 Run the benchmark yourself:
+
 ```bash
 npx tsx scripts/benchmark-tokens.ts
 ```
 
 ### Indexing Performance (seu-claude codebase - 34 files)
 
-| Metric | Result |
-|--------|--------|
-| Indexing time | ~6s |
-| Files processed | 34 |
-| Chunks created | 406 |
-| Memory (idle) | ~100MB |
+| Metric            | Result |
+| ----------------- | ------ |
+| Indexing time     | ~6s    |
+| Files processed   | 34     |
+| Chunks created    | 406    |
+| Memory (idle)     | ~100MB |
 | Memory (indexing) | ~500MB |
-| Query latency | ~5ms |
+| Query latency     | ~5ms   |
 
 ### Comparison
 
-| Metric | seu-claude | Traditional RAG |
-|--------|------------|-----------------|
-| RAM (idle) | ~100MB | 35GB+ |
-| RAM (indexing) | ~500MB | N/A |
-| Index time (26 files) | ~5s | Minutes |
-| Query latency | ~50ms | <10ms |
-| Startup time | <2s | 30s+ |
-| Dependencies | Node.js only | Python + CUDA |
+| Metric                | seu-claude   | Traditional RAG |
+| --------------------- | ------------ | --------------- |
+| RAM (idle)            | ~100MB       | 35GB+           |
+| RAM (indexing)        | ~500MB       | N/A             |
+| Index time (26 files) | ~5s          | Minutes         |
+| Query latency         | ~50ms        | <10ms           |
+| Startup time          | <2s          | 30s+            |
+| Dependencies          | Node.js only | Python + CUDA   |
 
 ## Development
 
@@ -322,7 +329,8 @@ seu-claude/
 │   └── tools/
 │       ├── index-codebase.ts
 │       ├── search-codebase.ts
-│       └── read-context.ts
+│       ├── read-context.ts
+│       └── search-xrefs.ts
 ├── languages/                # Tree-sitter WASM grammars
 └── models/                   # Downloaded embedding models
 ```
@@ -336,8 +344,8 @@ npm test
 ## Roadmap
 
 - [ ] Language Server Protocol integration for better symbol resolution
-- [ ] Git-aware indexing (prioritize recent changes)
-- [ ] Cross-reference graph (callers/callees)
+- [x] Git-aware indexing (prioritize recent changes)
+- [x] Cross-reference graph (callers/callees) - via `search_xrefs` tool
 - [ ] VSCode extension for index management
 - [ ] Support for more languages (Kotlin, Swift, PHP)
 
@@ -346,6 +354,7 @@ See [ROADMAP.md](ROADMAP.md) for detailed plans.
 ## Contributing
 
 We welcome contributions! Please see:
+
 - [Contributing Guidelines](CONTRIBUTING.md) - How to contribute code
 - [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
 - [Support](.github/SUPPORT.md) - Getting help

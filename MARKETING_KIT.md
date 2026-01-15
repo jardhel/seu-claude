@@ -3,12 +3,14 @@
 ## 🎯 Key Messages
 
 ### The Problem (Pain Points)
+
 1. **Goldfish Memory**: Claude Code only remembers files it explicitly opened
 2. **Resource Hog**: Current solutions consume 35GB+ RAM
 3. **Dependency Hell**: Python venvs, conflicting packages
 4. **Zombie Apocalypse**: Orphan processes accumulate over time
 
 ### The Solution (Value Props)
+
 1. **Proactive Understanding**: Index your entire codebase BEFORE Claude needs it
 2. **Lightweight**: < 200MB RAM (vs 35GB)
 3. **Pure Node.js**: No Python, no venv, no conflicts
@@ -28,7 +30,7 @@ And I noticed something frustrating:
 They have "goldfish memory."
 
 ❌ They only remember files they've explicitly opened
-❌ They consume 35GB+ RAM with in-memory vector databases  
+❌ They consume 35GB+ RAM with in-memory vector databases
 ❌ They require complex Python dependencies
 ❌ They leave zombie processes everywhere
 
@@ -49,7 +51,7 @@ Your machine isn't a server farm.
 All processing happens on YOUR machine.
 No data leaves. No API calls. Complete privacy.
 
-⚡ Incremental Indexing  
+⚡ Incremental Indexing
 Only re-processes changed files.
 Index once, update forever.
 
@@ -86,6 +88,7 @@ What features would make this more useful for your workflow?
 ## 🐦 Twitter/X Thread
 
 **Tweet 1 (Hook):**
+
 ```
 I got tired of Claude Code forgetting everything.
 
@@ -97,6 +100,7 @@ So I built seu-claude: local RAG that gives Claude proactive understanding of yo
 ```
 
 **Tweet 2:**
+
 ```
 The problem with Claude Code's memory:
 
@@ -108,6 +112,7 @@ That's like having a colleague who forgets everything you discussed yesterday.
 ```
 
 **Tweet 3:**
+
 ```
 Existing solutions (like claude-mem) tried to fix this with vector databases.
 
@@ -120,6 +125,7 @@ Not exactly lightweight.
 ```
 
 **Tweet 4:**
+
 ```
 seu-claude takes a different approach:
 
@@ -132,6 +138,7 @@ Result: 90MB RAM. Works everywhere.
 ```
 
 **Tweet 5:**
+
 ```
 The numbers:
 
@@ -144,6 +151,7 @@ All 100% local. Your code never leaves your machine.
 ```
 
 **Tweet 6:**
+
 ```
 Get started in 60 seconds:
 
@@ -164,11 +172,13 @@ MIT licensed. PRs welcome.
 ## 📰 Hacker News (Show HN)
 
 **Title:**
+
 ```
 Show HN: seu-claude – Local codebase RAG for Claude Code (90MB vs 35GB RAM)
 ```
 
 **Post:**
+
 ```
 I built seu-claude because I was frustrated with Claude Code's "goldfish memory" - it only knows about files it explicitly opened.
 
@@ -193,7 +203,9 @@ It's an MCP server that gives Claude three tools:
 
 Setup:
 ```
+
 npx seu-claude
+
 ```
 
 Add to your Claude Code config and tell Claude to index your project. Then ask questions like "where is the authentication logic?" and it'll find relevant code even in files Claude hasn't opened.
@@ -215,6 +227,7 @@ Would love feedback on:
 **Title:** "How I Built a 90MB Alternative to 35GB Memory Plugins for Claude Code"
 
 **Sections:**
+
 1. The Problem: AI Coding Assistants Have Goldfish Memory
 2. Why Existing Solutions Failed Me
 3. The Architecture: AST + LanceDB + Transformers.js
@@ -252,22 +265,26 @@ Would love feedback on:
 "What if Claude Code could understand your entire codebase - not just the files you've opened?"
 
 **[0:15-0:45] Problem**
+
 - Show Claude failing to find code it hasn't seen
 - Show Activity Monitor with 35GB RAM usage from competitors
 - Show zombie processes accumulating
 
 **[0:45-1:15] Solution**
+
 - Install: `npx seu-claude`
 - Configure in 10 seconds
 - "Index this codebase" - show progress
 - Show RAM at ~90MB
 
 **[1:15-1:45] Demo**
+
 - "Find the authentication logic" - instant results
 - "Where's the database connection handling?" - finds it
 - "Show me error handling patterns" - multiple files
 
 **[1:45-2:00] CTA**
+
 - GitHub link on screen
 - "Star if you find it useful"
 - "MIT licensed - contributions welcome"
@@ -277,6 +294,7 @@ Would love feedback on:
 ## 📋 Launch Day Checklist
 
 ### Pre-Launch (Day 13)
+
 - [ ] Final version tagged (v1.0.0)
 - [ ] npm package published
 - [ ] README final review
@@ -284,20 +302,24 @@ Would love feedback on:
 - [ ] Social preview image uploaded
 
 ### Launch (Day 14 - Morning)
+
 - [ ] GitHub Release published
 - [ ] Verify npm install works globally
 
-### Launch (Day 14 - Afternoon)  
+### Launch (Day 14 - Afternoon)
+
 - [ ] LinkedIn post published (2-3 PM for best reach)
 - [ ] Twitter thread published
 - [ ] Cross-post to relevant communities
 
 ### Launch (Day 15)
+
 - [ ] Hacker News Show HN
 - [ ] Reddit posts (r/MachineLearning, r/LocalLLaMA)
 - [ ] Dev.to article published
 
 ### Post-Launch (Week 1)
+
 - [ ] Respond to all GitHub issues within 24h
 - [ ] Engage with all social media comments
 - [ ] Track metrics daily

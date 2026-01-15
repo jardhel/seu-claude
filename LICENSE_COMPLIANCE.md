@@ -7,19 +7,19 @@
 
 ## Summary
 
-| License Type | Count | Compatibility with MIT |
-|--------------|-------|------------------------|
-| MIT | 426 | ✅ Fully Compatible |
-| ISC | 40 | ✅ Fully Compatible |
-| BSD-3-Clause | 31 | ✅ Fully Compatible |
-| Apache-2.0 | 21 | ✅ Compatible |
-| BSD-2-Clause | 12 | ✅ Fully Compatible |
-| (MIT OR CC0-1.0) | 4 | ✅ Fully Compatible |
-| BlueOak-1.0.0 | 3 | ✅ Permissive |
-| 0BSD | 1 | ✅ Fully Compatible |
-| CC-BY-4.0 | 1 | ✅ Compatible (attribution) |
-| Python-2.0 | 1 | ✅ Compatible |
-| LGPL-3.0-or-later | 1 | ⚠️ See Note |
+| License Type      | Count | Compatibility with MIT      |
+| ----------------- | ----- | --------------------------- |
+| MIT               | 426   | ✅ Fully Compatible         |
+| ISC               | 40    | ✅ Fully Compatible         |
+| BSD-3-Clause      | 31    | ✅ Fully Compatible         |
+| Apache-2.0        | 21    | ✅ Compatible               |
+| BSD-2-Clause      | 12    | ✅ Fully Compatible         |
+| (MIT OR CC0-1.0)  | 4     | ✅ Fully Compatible         |
+| BlueOak-1.0.0     | 3     | ✅ Permissive               |
+| 0BSD              | 1     | ✅ Fully Compatible         |
+| CC-BY-4.0         | 1     | ✅ Compatible (attribution) |
+| Python-2.0        | 1     | ✅ Compatible               |
+| LGPL-3.0-or-later | 1     | ⚠️ See Note                 |
 
 ---
 
@@ -27,33 +27,33 @@
 
 ### Core Dependencies
 
-| Package | License | Notes |
-|---------|---------|-------|
-| `@modelcontextprotocol/sdk` | MIT | ✅ |
-| `@lancedb/lancedb` | Apache-2.0 | ✅ (see note below) |
-| `@huggingface/transformers` | Apache-2.0 | ✅ |
-| `web-tree-sitter` | MIT | ✅ |
-| `fast-glob` | MIT | ✅ |
-| `ignore` | MIT | ✅ |
-| `xxhash-wasm` | MIT | ✅ |
-| `@anthropic-ai/sdk` | MIT | ✅ |
-| `@anthropic-ai/tokenizer` | Apache-2.0 | ✅ |
+| Package                     | License    | Notes               |
+| --------------------------- | ---------- | ------------------- |
+| `@modelcontextprotocol/sdk` | MIT        | ✅                  |
+| `@lancedb/lancedb`          | Apache-2.0 | ✅ (see note below) |
+| `@huggingface/transformers` | Apache-2.0 | ✅                  |
+| `web-tree-sitter`           | MIT        | ✅                  |
+| `fast-glob`                 | MIT        | ✅                  |
+| `ignore`                    | MIT        | ✅                  |
+| `xxhash-wasm`               | MIT        | ✅                  |
+| `@anthropic-ai/sdk`         | MIT        | ✅                  |
+| `@anthropic-ai/tokenizer`   | Apache-2.0 | ✅                  |
 
 ### Tree-sitter Grammar Licenses
 
 All official Tree-sitter grammars are **MIT Licensed**:
 
-| Grammar | Source | License |
-|---------|--------|---------|
-| tree-sitter-typescript | github.com/tree-sitter/tree-sitter-typescript | MIT |
-| tree-sitter-javascript | github.com/tree-sitter/tree-sitter-javascript | MIT |
-| tree-sitter-python | github.com/tree-sitter/tree-sitter-python | MIT |
-| tree-sitter-rust | github.com/tree-sitter/tree-sitter-rust | MIT |
-| tree-sitter-go | github.com/tree-sitter/tree-sitter-go | MIT |
-| tree-sitter-java | github.com/tree-sitter/tree-sitter-java | MIT |
-| tree-sitter-c | github.com/tree-sitter/tree-sitter-c | MIT |
-| tree-sitter-cpp | github.com/tree-sitter/tree-sitter-cpp | MIT |
-| tree-sitter | github.com/tree-sitter/tree-sitter | MIT |
+| Grammar                | Source                                        | License |
+| ---------------------- | --------------------------------------------- | ------- |
+| tree-sitter-typescript | github.com/tree-sitter/tree-sitter-typescript | MIT     |
+| tree-sitter-javascript | github.com/tree-sitter/tree-sitter-javascript | MIT     |
+| tree-sitter-python     | github.com/tree-sitter/tree-sitter-python     | MIT     |
+| tree-sitter-rust       | github.com/tree-sitter/tree-sitter-rust       | MIT     |
+| tree-sitter-go         | github.com/tree-sitter/tree-sitter-go         | MIT     |
+| tree-sitter-java       | github.com/tree-sitter/tree-sitter-java       | MIT     |
+| tree-sitter-c          | github.com/tree-sitter/tree-sitter-c          | MIT     |
+| tree-sitter-cpp        | github.com/tree-sitter/tree-sitter-cpp        | MIT     |
+| tree-sitter            | github.com/tree-sitter/tree-sitter            | MIT     |
 
 ---
 
@@ -68,6 +68,7 @@ The `@lancedb/lancedb` package shows as "UNKNOWN" or "Custom" in license-checker
 - **Copyright:** LanceDB Inc.
 
 **Compatibility:** Apache-2.0 is compatible with MIT. When distributing, we must:
+
 1. Include the Apache-2.0 license notice
 2. Include the NOTICE file if provided
 
@@ -75,7 +76,8 @@ The `@lancedb/lancedb` package shows as "UNKNOWN" or "Custom" in license-checker
 
 The `@img/sharp-libvips-darwin-arm64` package is LGPL-3.0-or-later. This is a **transitive dependency** of Sharp (image processing library).
 
-**Impact:** 
+**Impact:**
+
 - Sharp is used by `@huggingface/transformers` for image processing
 - seu-claude does NOT use image processing features
 - The binary is dynamically linked, satisfying LGPL requirements
@@ -103,6 +105,7 @@ The Python-2.0 license is a permissive open source license, compatible with MIT 
 ### Recommended: Third-Party License File
 
 Create `THIRD_PARTY_LICENSES.md` including:
+
 - LanceDB (Apache-2.0)
 - Hugging Face Transformers (Apache-2.0)
 - Tree-sitter ecosystem (MIT)

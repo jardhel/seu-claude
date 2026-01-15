@@ -2,28 +2,34 @@
 
 ## 🚀 Release Strategy
 
-### Phase 1: v1.0.0 - Stable Release (NOW)
+### Phase 1: v1.0.0 - Stable Release ✅ RELEASED
+
 **Goal:** Get a working, stable version published to npm for early adopters
 
-**Status:** ✅ READY TO SHIP
-- All tests passing (214/214)
+**Status:** ✅ SHIPPED
+
+- All tests passing (285 tests)
+- 78%+ code coverage
 - Real-world validation complete
 - Documentation updated
 - CI/CD pipelines ready
 
 ### Phase 2: v1.1.0 - Performance & Polish (Week 2-3)
-- [ ] Incremental indexing optimization
+
+- [ ] Incremental indexing optimization (mtime checking)
 - [ ] Memory usage profiling
 - [ ] Better progress reporting during indexing
-- [ ] Support for more languages (Rust, Go grammars)
+- [x] Cross-file reference tracking (via `search_xrefs`)
+- [x] Git-aware indexing (via `git-tracker`)
 
 ### Phase 3: v1.2.0 - Enhanced Search (Week 4-5)
+
 - [ ] Hybrid search (keyword + semantic)
 - [ ] Code similarity detection
-- [ ] Cross-file reference tracking
 - [ ] Search result ranking improvements
 
 ### Phase 4: v2.0.0 - Advanced Features (Month 2+)
+
 - [ ] Multi-project support
 - [ ] Custom embedding model support
 - [ ] Real-time file watching
@@ -35,47 +41,54 @@
 ## 📋 v1.0.0 Release Checklist
 
 ### ✅ Completed
+
 - [x] Build passes
-- [x] 214 tests passing
-- [x] 72.72% code coverage
+- [x] 285 tests passing
+- [x] 78%+ code coverage
 - [x] Real-world validation (26 files, 359 chunks)
 - [x] README with benchmarks
 - [x] License compliance verified
-- [x] CI/CD workflows configured
+- [x] CI/CD workflows configured (GitHub Actions)
 - [x] Embedding model works without auth
-
-### 🔄 To Complete (15 minutes)
-1. [ ] Update package.json version to 1.0.0
-2. [ ] Add "bin" entry for CLI
-3. [ ] Create CHANGELOG.md
-4. [ ] Git tag v1.0.0
-5. [ ] Publish to npm
+- [x] Update package.json version to 1.0.0
+- [x] Add "bin" entry for CLI
+- [x] Create CHANGELOG.md
+- [x] Git tag v1.0.0
+- [x] Cross-reference tracking (`search_xrefs` tool)
+- [x] Git-aware indexing (`git-tracker`)
+- [x] Diagnostic tool (`seu-claude doctor`)
 
 ### ⏳ Post-Release (Optional)
+
 - [ ] Demo video (nice-to-have, not blocking)
 - [ ] Announce on social media
 - [ ] Submit to MCP server directory
+- [ ] Publish to npm
 
 ---
 
 ## 🎯 Priority Order for First Release
 
 ### CRITICAL (Must have for v1.0.0)
+
 1. **npm publishable** - Correct package.json with bin entry
 2. **Works out of box** - No auth required, grammars bundled
 3. **Documentation** - Clear README with quick start
 
 ### HIGH (Should have)
+
 1. Changelog for version tracking
 2. Contributing guidelines
 3. Issue templates
 
 ### MEDIUM (Nice to have)
+
 1. Demo video
 2. Social media announcement
 3. Performance benchmarks on larger codebases
 
 ### LOW (Future versions)
+
 1. VS Code extension
 2. Web dashboard
 3. Multi-project support
@@ -104,6 +117,7 @@ git push --tags
 ```
 
 That's it! Users can then:
+
 ```bash
 npm install -g seu-claude
 # or
@@ -114,13 +128,13 @@ npx seu-claude
 
 ## 🗓️ Suggested Timeline
 
-| Day | Task | Time |
-|-----|------|------|
-| Today | Publish v1.0.0 to npm | 15 min |
-| Today | Share on Twitter/LinkedIn | 10 min |
+| Day    | Task                      | Time    |
+| ------ | ------------------------- | ------- |
+| Today  | Publish v1.0.0 to npm     | 15 min  |
+| Today  | Share on Twitter/LinkedIn | 10 min  |
 | Week 1 | Gather feedback, fix bugs | Ongoing |
-| Week 2 | Demo video (optional) | 30 min |
-| Week 3 | v1.1.0 with improvements | TBD |
+| Week 2 | Demo video (optional)     | 30 min  |
+| Week 3 | v1.1.0 with improvements  | TBD     |
 
 ---
 
@@ -129,6 +143,7 @@ npx seu-claude
 **Don't wait for perfect. Ship now, iterate later.**
 
 Your v1.0.0 has:
+
 - ✅ Working semantic search
 - ✅ AST-based chunking
 - ✅ Low memory footprint

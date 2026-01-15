@@ -8,23 +8,23 @@
 
 **Seu Claude** is a Premium Local RAG (Semantic Memory) plugin for Claude Code.
 
-| Attribute | Value |
-|-----------|-------|
-| **Concept** | A wise, technological "senior grandpa" (vovô sênior) |
+| Attribute          | Value                                                              |
+| ------------------ | ------------------------------------------------------------------ |
+| **Concept**        | A wise, technological "senior grandpa" (vovô sênior)               |
 | **Differentiator** | Ultra-efficient (< 400MB RAM) vs Python/ChromaDB solutions (35GB+) |
-| **Philosophy** | Local-first, privacy-preserving, zero-dependency |
+| **Philosophy**     | Local-first, privacy-preserving, zero-dependency                   |
 
 ---
 
 ## 2. Technical Stack (Mandatory)
 
-| Layer | Technology |
-|-------|------------|
-| **Runtime** | Node.js (TypeScript, ESM) |
-| **Vector Database** | LanceDB (native disk persistence) |
-| **Indexing** | web-tree-sitter for AST-based chunking (cAST) |
-| **Embeddings** | `Xenova/all-MiniLM-L6-v2` via `@huggingface/transformers` (100% local) |
-| **UI Framework** | React + Tailwind CSS (for Landing Page/Dashboard) |
+| Layer               | Technology                                                             |
+| ------------------- | ---------------------------------------------------------------------- |
+| **Runtime**         | Node.js (TypeScript, ESM)                                              |
+| **Vector Database** | LanceDB (native disk persistence)                                      |
+| **Indexing**        | web-tree-sitter for AST-based chunking (cAST)                          |
+| **Embeddings**      | `Xenova/all-MiniLM-L6-v2` via `@huggingface/transformers` (100% local) |
+| **UI Framework**    | React + Tailwind CSS (for Landing Page/Dashboard)                      |
 
 ---
 
@@ -35,30 +35,30 @@
 ```css
 :root {
   /* Backgrounds */
-  --bg-primary: #0a0b10;     /* Deep Charcoal */
-  --bg-card: #24283b;        /* Card/Fractal base */
-  --bg-sticker: #161b22;     /* Dark Indigo (mascot base) */
-  
+  --bg-primary: #0a0b10; /* Deep Charcoal */
+  --bg-card: #24283b; /* Card/Fractal base */
+  --bg-sticker: #161b22; /* Dark Indigo (mascot base) */
+
   /* Accents (Dracula Pro) */
-  --pink: #ff79c6;           /* Primary actions, mustache */
-  --cyan: #7dcfff;           /* Data, visor */
-  --purple: #bd93f9;         /* Fractal structure */
-  --green: #50fa7b;          /* Status, prompt */
-  --orange: #ffb86c;         /* Warnings */
-  
+  --pink: #ff79c6; /* Primary actions, mustache */
+  --cyan: #7dcfff; /* Data, visor */
+  --purple: #bd93f9; /* Fractal structure */
+  --green: #50fa7b; /* Status, prompt */
+  --orange: #ffb86c; /* Warnings */
+
   /* Text */
-  --fg-primary: #c0caf5;     /* Main text */
-  --fg-white: #ffffff;       /* High contrast */
+  --fg-primary: #c0caf5; /* Main text */
+  --fg-white: #ffffff; /* High contrast */
 }
 ```
 
 ### Design Principles
 
-| Principle | Implementation |
-|-----------|----------------|
-| **Minimalism** | Maximum negative space, light fonts (Inter/JetBrains Mono) |
-| **High Contrast** | Sharp contrast between dark background and neon Dracula accents |
-| **Premium Feel** | Ultra-thin borders (0.5px), subtle radial gradients, deep shadows |
+| Principle         | Implementation                                                    |
+| ----------------- | ----------------------------------------------------------------- |
+| **Minimalism**    | Maximum negative space, light fonts (Inter/JetBrains Mono)        |
+| **High Contrast** | Sharp contrast between dark background and neon Dracula accents   |
+| **Premium Feel**  | Ultra-thin borders (0.5px), subtle radial gradients, deep shadows |
 
 ---
 
@@ -66,12 +66,12 @@
 
 The mascot is composed of **faceted fractal geometry** (no beret).
 
-| Element | Description |
-|---------|-------------|
-| **Eyes** | Technical visor with terminal symbols `> _` |
+| Element      | Description                                       |
+| ------------ | ------------------------------------------------- |
+| **Eyes**     | Technical visor with terminal symbols `> _`       |
 | **Mustache** | Code braces `{ }` shape in premium monoline style |
-| **Face** | Faceted (triangles/fractals) in `#24283b` |
-| **Base** | Circle in `#161b22` (Dark Indigo) |
+| **Face**     | Faceted (triangles/fractals) in `#24283b`         |
+| **Base**     | Circle in `#161b22` (Dark Indigo)                 |
 
 ---
 
@@ -81,10 +81,10 @@ The mascot is composed of **faceted fractal geometry** (no beret).
 <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Outer glow ring -->
   <circle cx="100" cy="100" r="98" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="0.5" />
-  
+
   <!-- Background circle -->
   <circle cx="100" cy="100" r="92" fill="#161b22" />
-  
+
   <!-- Fractal face structure -->
   <g opacity="1">
     <!-- Right diamond half -->
@@ -107,17 +107,17 @@ The mascot is composed of **faceted fractal geometry** (no beret).
       <path d="M72 107L78 113L72 119" stroke="#50fa7b" />
       <line x1="114" y1="119" x2="124" y2="119" stroke="#ff79c6" />
     </g>
-    
+
     <!-- Mustache (code braces style) -->
     <g stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none">
       <path d="M75 145C75 132 88 130 95 138" />
       <path d="M125 145C125 132 112 130 105 138" />
     </g>
-    
+
     <!-- Nose accent -->
     <circle cx="100" cy="138" r="3" fill="#ff79c6" />
   </g>
-  
+
   <!-- Status indicator (top right) -->
   <circle cx="165" cy="65" r="4" fill="#50fa7b" />
 </svg>
@@ -127,12 +127,12 @@ The mascot is composed of **faceted fractal geometry** (no beret).
 
 ## 6. Voice & Tone
 
-| Context | Tone |
-|---------|------|
-| **System Messages** | Senior, sophisticated, wise |
-| **Error Messages** | Calm, reassuring, solution-oriented |
-| **Success Messages** | Confident, proud, efficient |
-| **Marketing** | Premium, exclusive, technically impressive |
+| Context              | Tone                                       |
+| -------------------- | ------------------------------------------ |
+| **System Messages**  | Senior, sophisticated, wise                |
+| **Error Messages**   | Calm, reassuring, solution-oriented        |
+| **Success Messages** | Confident, proud, efficient                |
+| **Marketing**        | Premium, exclusive, technically impressive |
 
 ### Example Phrases
 
@@ -158,12 +158,12 @@ When generating code for Seu Claude:
 
 ## 8. Key Links
 
-| Resource | URL |
-|----------|-----|
-| **GitHub** | https://github.com/jardhel/seu-claude |
-| **npm** | https://www.npmjs.com/package/seu-claude |
+| Resource    | URL                                                       |
+| ----------- | --------------------------------------------------------- |
+| **GitHub**  | https://github.com/jardhel/seu-claude                     |
+| **npm**     | https://www.npmjs.com/package/seu-claude                  |
 | **Release** | https://github.com/jardhel/seu-claude/releases/tag/v1.0.0 |
 
 ---
 
-*Last updated: January 15, 2026 - v1.0.0 Launch*
+_Last updated: January 15, 2026 - v1.0.0 Launch_

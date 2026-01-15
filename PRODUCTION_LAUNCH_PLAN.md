@@ -31,6 +31,7 @@
 ```
 
 **Tasks:**
+
 - [ ] Fix `ignore` module import (ESM compatibility)
 - [ ] Verify full TypeScript compilation succeeds
 - [ ] Run existing tests to confirm no regressions
@@ -47,14 +48,15 @@
 
 ### 2.1 Performance Optimizations
 
-| Task | Description | Impact |
-|------|-------------|--------|
-| Worker Threads | Move embedding generation to worker thread | Non-blocking indexing |
-| Batch Processing | Optimize chunk batching for large codebases | 3x faster indexing |
-| Memory Management | Implement streaming for large files | Handle 100k+ LOC files |
-| Incremental Updates | True diff-based indexing (skip unchanged files) | 10x faster re-index |
+| Task                | Description                                     | Impact                 |
+| ------------------- | ----------------------------------------------- | ---------------------- |
+| Worker Threads      | Move embedding generation to worker thread      | Non-blocking indexing  |
+| Batch Processing    | Optimize chunk batching for large codebases     | 3x faster indexing     |
+| Memory Management   | Implement streaming for large files             | Handle 100k+ LOC files |
+| Incremental Updates | True diff-based indexing (skip unchanged files) | 10x faster re-index    |
 
 **Implementation Files:**
+
 ```
 src/
 ├── workers/
@@ -72,6 +74,7 @@ src/
 - [ ] **Path Traversal Prevention**: Sanitize all file paths
 
 **Secret Patterns to Detect:**
+
 ```typescript
 const SECRET_PATTERNS = [
   /api[_-]?key['":\s]*['"][a-zA-Z0-9]{20,}/gi,
@@ -79,8 +82,8 @@ const SECRET_PATTERNS = [
   /password['":\s]*['"][^'"]{8,}/gi,
   /token['":\s]*['"][a-zA-Z0-9._-]{20,}/gi,
   /AWS[A-Z0-9]{16,}/g,
-  /ghp_[a-zA-Z0-9]{36}/g,  // GitHub tokens
-  /sk-[a-zA-Z0-9]{48}/g,    // OpenAI keys
+  /ghp_[a-zA-Z0-9]{36}/g, // GitHub tokens
+  /sk-[a-zA-Z0-9]{48}/g, // OpenAI keys
   /Bearer [a-zA-Z0-9._-]+/gi,
 ];
 ```
@@ -124,14 +127,14 @@ src/__tests__/
 
 ### 3.2 Integration Tests
 
-| Test Scenario | Description | Validation |
-|---------------|-------------|------------|
-| Fresh Index | Index new project from scratch | All files processed |
-| Incremental Index | Re-index after file changes | Only changed files processed |
-| Multi-Language | Index project with TS, Python, Rust | All languages parsed |
-| Large Codebase | Index 10,000+ file project | Completes in < 10 min |
-| Search Accuracy | Query known code patterns | Returns relevant results |
-| Context Reading | Read function with context | Shows surrounding code |
+| Test Scenario     | Description                         | Validation                   |
+| ----------------- | ----------------------------------- | ---------------------------- |
+| Fresh Index       | Index new project from scratch      | All files processed          |
+| Incremental Index | Re-index after file changes         | Only changed files processed |
+| Multi-Language    | Index project with TS, Python, Rust | All languages parsed         |
+| Large Codebase    | Index 10,000+ file project          | Completes in < 10 min        |
+| Search Accuracy   | Query known code patterns           | Returns relevant results     |
+| Context Reading   | Read function with context          | Shows surrounding code       |
 
 ### 3.3 Benchmark Tests
 
@@ -175,6 +178,7 @@ export interface BenchmarkResult {
 **This is critical for LinkedIn credibility. Each claim from the manifest must be validated.**
 
 #### Claim 1: "Goldfish Memory" Solution
+
 ```markdown
 **Test:** Index a 500-file TypeScript project
 **Prove:** Search finds code in files Claude never explicitly opened
@@ -182,6 +186,7 @@ export interface BenchmarkResult {
 ```
 
 #### Claim 2: Minimal Resource Usage
+
 ```markdown
 **Test:** Monitor RAM during 10,000 file indexing
 **Prove:** Peak RAM < 800MB, idle < 100MB
@@ -189,6 +194,7 @@ export interface BenchmarkResult {
 ```
 
 #### Claim 3: No Python Dependencies
+
 ```markdown
 **Test:** Fresh install on clean Node.js environment
 **Prove:** Works without Python, venv, or pip
@@ -196,6 +202,7 @@ export interface BenchmarkResult {
 ```
 
 #### Claim 4: No Zombie Processes
+
 ```markdown
 **Test:** Start/stop server 100 times
 **Prove:** Zero orphan processes remain
@@ -206,12 +213,12 @@ export interface BenchmarkResult {
 
 **Test on these open-source projects:**
 
-| Repository | Size | Languages | Why |
-|------------|------|-----------|-----|
+| Repository | Size   | Languages  | Why                   |
+| ---------- | ------ | ---------- | --------------------- |
 | express.js | Medium | JavaScript | Popular web framework |
-| fastapi | Medium | Python | Test Python parsing |
-| Rocket | Medium | Rust | Test Rust parsing |
-| VS Code | Large | TypeScript | Ultimate stress test |
+| fastapi    | Medium | Python     | Test Python parsing   |
+| Rocket     | Medium | Rust       | Test Rust parsing     |
+| VS Code    | Large  | TypeScript | Ultimate stress test  |
 
 ### 4.3 Video Demo Recording
 
@@ -240,6 +247,7 @@ export interface BenchmarkResult {
 
 ```markdown
 # Required Sections:
+
 - Hero banner with animated demo GIF
 - One-line description
 - Problem statement (with numbers)
@@ -388,6 +396,7 @@ The project is MIT licensed and available now:
 🔗 github.com/jardhel/seu-claude
 
 Built with:
+
 - Tree-sitter for AST-based semantic chunking
 - LanceDB for disk-based vector storage
 - Transformers.js for local embeddings
@@ -398,16 +407,16 @@ Built with:
 
 ### 7.3 Launch Channels
 
-| Channel | Action | Timing |
-|---------|--------|--------|
-| GitHub | Publish v1.0.0 release | Day 14 AM |
-| npm | Publish package | Day 14 AM |
-| LinkedIn | Personal post | Day 14 PM |
-| Twitter/X | Thread with demo | Day 14 PM |
-| Reddit | r/MachineLearning, r/LocalLLaMA | Day 14 PM |
-| Hacker News | Show HN post | Day 15 AM |
-| Dev.to | Technical deep-dive article | Day 15 |
-| Discord | Claude/AI dev communities | Day 15 |
+| Channel     | Action                          | Timing    |
+| ----------- | ------------------------------- | --------- |
+| GitHub      | Publish v1.0.0 release          | Day 14 AM |
+| npm         | Publish package                 | Day 14 AM |
+| LinkedIn    | Personal post                   | Day 14 PM |
+| Twitter/X   | Thread with demo                | Day 14 PM |
+| Reddit      | r/MachineLearning, r/LocalLLaMA | Day 14 PM |
+| Hacker News | Show HN post                    | Day 15 AM |
+| Dev.to      | Technical deep-dive article     | Day 15    |
+| Discord     | Claude/AI dev communities       | Day 15    |
 
 ### 7.4 Post-Launch
 
@@ -423,16 +432,16 @@ Built with:
 
 ### Validation Matrix
 
-| Claim | Test Method | Success Criteria | Evidence Type |
-|-------|-------------|------------------|---------------|
-| **1. No Goldfish Memory** | Index 500+ files, search without opening | 95% recall | Video demo |
-| **2. < 200MB RAM (idle)** | Monitor with htop during normal use | < 200MB | Screenshot |
-| **3. < 800MB RAM (indexing)** | Monitor during 10k file index | < 800MB | Screenshot |
-| **4. No Python deps** | Fresh Node.js install | Works with npm only | Install log |
-| **5. No zombie processes** | 100x start/stop cycles | 0 orphans | ps output |
-| **6. < 5 min for 5k files** | Benchmark on standard HW | < 300s | Timing log |
-| **7. < 100ms query latency** | 1000 query benchmark | p99 < 100ms | Benchmark |
-| **8. Multi-language support** | Parse TS, Python, Rust, Go, Java | All succeed | Test output |
+| Claim                         | Test Method                              | Success Criteria    | Evidence Type |
+| ----------------------------- | ---------------------------------------- | ------------------- | ------------- |
+| **1. No Goldfish Memory**     | Index 500+ files, search without opening | 95% recall          | Video demo    |
+| **2. < 200MB RAM (idle)**     | Monitor with htop during normal use      | < 200MB             | Screenshot    |
+| **3. < 800MB RAM (indexing)** | Monitor during 10k file index            | < 800MB             | Screenshot    |
+| **4. No Python deps**         | Fresh Node.js install                    | Works with npm only | Install log   |
+| **5. No zombie processes**    | 100x start/stop cycles                   | 0 orphans           | ps output     |
+| **6. < 5 min for 5k files**   | Benchmark on standard HW                 | < 300s              | Timing log    |
+| **7. < 100ms query latency**  | 1000 query benchmark                     | p99 < 100ms         | Benchmark     |
+| **8. Multi-language support** | Parse TS, Python, Rust, Go, Java         | All succeed         | Test output   |
 
 ### Evidence Collection Script
 
@@ -471,16 +480,19 @@ ps aux | grep seu-claude | grep -v grep || echo "No zombie processes found ✓"
 ## Success Metrics
 
 ### GitHub
+
 - [ ] 100+ stars in first week
 - [ ] 500+ stars in first month
 - [ ] 10+ forks
 - [ ] Featured in GitHub Trending
 
 ### npm
+
 - [ ] 500+ weekly downloads
 - [ ] 0 critical issues reported
 
 ### LinkedIn
+
 - [ ] 10,000+ impressions
 - [ ] 100+ reactions
 - [ ] 50+ comments
@@ -490,15 +502,15 @@ ps aux | grep seu-claude | grep -v grep || echo "No zombie processes found ✓"
 
 ## Timeline Summary
 
-| Day | Phase | Key Deliverables |
-|-----|-------|------------------|
-| 1 | Bug Fixes | Build passes, server starts |
-| 2-4 | Production Hardening | Workers, security, error handling |
-| 5-7 | Testing | 90% coverage, benchmarks pass |
-| 8-10 | Validation | All claims proven with evidence |
-| 11-12 | Documentation | README, demo GIF, diagrams |
-| 13 | CI/CD | GitHub Actions, npm publishing |
-| 14-15 | Launch | v1.0.0 release, LinkedIn post |
+| Day   | Phase                | Key Deliverables                  |
+| ----- | -------------------- | --------------------------------- |
+| 1     | Bug Fixes            | Build passes, server starts       |
+| 2-4   | Production Hardening | Workers, security, error handling |
+| 5-7   | Testing              | 90% coverage, benchmarks pass     |
+| 8-10  | Validation           | All claims proven with evidence   |
+| 11-12 | Documentation        | README, demo GIF, diagrams        |
+| 13    | CI/CD                | GitHub Actions, npm publishing    |
+| 14-15 | Launch               | v1.0.0 release, LinkedIn post     |
 
 ---
 
@@ -524,4 +536,4 @@ npm publish
 
 ---
 
-*This plan ensures seu-claude meets gold standard software engineering practices while providing irrefutable evidence that it solves the problems identified in the manifest.*
+_This plan ensures seu-claude meets gold standard software engineering practices while providing irrefutable evidence that it solves the problems identified in the manifest._

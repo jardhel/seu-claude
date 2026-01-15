@@ -7,13 +7,14 @@ Ready-to-post content for each platform. Copy, paste, and post!
 ## 🐦 Twitter/X
 
 ### Main Launch Tweet
+
 ```
 🚀 Just released seu-claude v1.0.0
 
 Local Codebase RAG for Claude Code that actually works:
 
 ✅ AST-based semantic chunking (not naive text splitting)
-✅ ~100MB RAM idle (vs 35GB+ competitors)  
+✅ ~100MB RAM idle (vs 35GB+ competitors)
 ✅ 100% local - your code never leaves your machine
 ✅ Works with Claude Code & Desktop
 
@@ -25,6 +26,7 @@ https://github.com/jardhel/seu-claude
 ```
 
 ### Thread (Optional)
+
 ```
 🧵 Why I built seu-claude:
 
@@ -80,11 +82,13 @@ I'd love feedback from developers using Claude Code!
 ## 🔶 Hacker News (Show HN)
 
 ### Title
+
 ```
 Show HN: seu-claude – Local RAG for Claude Code with AST-based chunking (~100MB RAM)
 ```
 
 ### Post
+
 ```
 Hey HN!
 
@@ -134,7 +138,9 @@ Just released seu-claude, an MCP server that gives Claude Code semantic understa
 
 **Install:**
 ```
+
 npm i -g seu-claude
+
 ```
 
 **GitHub:** https://github.com/jardhel/seu-claude

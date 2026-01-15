@@ -7,6 +7,7 @@ Configure these rules at: https://github.com/jardhel/seu-claude/settings/branche
 ### Settings to Enable
 
 #### Protect matching branches
+
 - [x] **Require a pull request before merging**
   - [x] Require approvals: 1
   - [x] Dismiss stale pull request approvals when new commits are pushed
@@ -35,6 +36,7 @@ Configure these rules at: https://github.com/jardhel/seu-claude/settings/branche
 ## Tag Protection
 
 ### Settings
+
 - Protect tags matching: `v*`
 - Restrict who can create matching tags: Maintainers only
 

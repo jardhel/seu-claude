@@ -39,6 +39,7 @@ git push origin v1.0.0
 ```
 
 The CI/CD will automatically:
+
 - ✅ Run tests
 - ✅ Build the package
 - ✅ Publish to npm
@@ -106,13 +107,17 @@ git push origin main --tags
 ## 🐛 Troubleshooting
 
 ### "NPM_TOKEN not found"
+
 → Add the secret in GitHub repo settings
 
 ### "Package name already taken"
+
 → The package `seu-claude` is unique, shouldn't happen
 
 ### "Version already exists"
+
 → Bump version in package.json before publishing
 
 ### "Tests failing in CI"
+
 → Run `npm test` locally to debug

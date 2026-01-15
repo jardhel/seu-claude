@@ -64,6 +64,7 @@ Feature suggestions are welcome! Please include:
 ### Pull Requests
 
 1. Create a new branch for your feature/fix:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -73,17 +74,20 @@ Feature suggestions are welcome! Please include:
 3. Write or update tests as needed
 
 4. Ensure all tests pass:
+
    ```bash
    npm test
    ```
 
 5. Ensure your code is properly formatted:
+
    ```bash
    npm run lint
    npm run format
    ```
 
 6. Commit your changes with a descriptive message:
+
    ```bash
    git commit -m "feat: add support for Kotlin language parsing"
    ```
@@ -103,6 +107,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 - `chore:` - Maintenance tasks
 
 Examples:
+
 ```
 feat: add support for Go language parsing
 fix: handle empty files during indexing
@@ -187,6 +192,7 @@ npm test -- --testPathPattern=parser
 ## Questions?
 
 If you have questions, feel free to:
+
 - Open a GitHub issue
 - Start a discussion in the repository
 
