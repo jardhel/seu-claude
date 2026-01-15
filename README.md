@@ -114,7 +114,7 @@ Once configured, Claude will have access to three new tools:
 │                   │  Embedding Engine   │                   │
 │                   │  (Transformers.js)  │                   │
 │                   │  - local inference  │                   │
-│                   │  - 256-dim vectors  │                   │
+│                   │  - 384-dim vectors  │                   │
 │                   └─────────────────────┘                   │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -185,8 +185,8 @@ Read code with AST-aware context.
 |----------|---------|-------------|
 | `PROJECT_ROOT` | Current directory | Root of codebase to index |
 | `DATA_DIR` | `~/.seu-claude` | Where to store index data |
-| `EMBEDDING_MODEL` | `Xenova/nomic-embed-text-v1.5` | HuggingFace model |
-| `EMBEDDING_DIMENSIONS` | `256` | Vector dimensions (Matryoshka) |
+| `EMBEDDING_MODEL` | `Xenova/all-MiniLM-L6-v2` | HuggingFace model |
+| `EMBEDDING_DIMENSIONS` | `384` | Vector dimensions |
 | `LOG_LEVEL` | `info` | debug, info, warn, error |
 
 ### Ignore Patterns
@@ -206,13 +206,27 @@ path/to/large/file.ts
 
 ## Performance
 
-| Metric | seu-claude | claude-mem |
-|--------|------------|------------|
+### Benchmark Results (seu-claude codebase - 26 TypeScript files)
+
+| Metric | Result |
+|--------|--------|
+| Indexing time | 5.39s |
+| Files processed | 26 |
+| Chunks created | 359 |
+| Memory (idle) | ~100MB |
+| Memory (indexing) | ~500MB |
+| Query latency | ~50ms |
+
+### Comparison
+
+| Metric | seu-claude | Traditional RAG |
+|--------|------------|-----------------|
 | RAM (idle) | ~100MB | 35GB+ |
 | RAM (indexing) | ~500MB | N/A |
-| Index time (5k files) | ~3 min | Hours |
+| Index time (26 files) | ~5s | Minutes |
 | Query latency | ~50ms | <10ms |
 | Startup time | <2s | 30s+ |
+| Dependencies | Node.js only | Python + CUDA |
 
 ## Development
 

@@ -1,13 +1,29 @@
 import { pipeline, FeatureExtractionPipeline, env } from '@huggingface/transformers';
 import { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { access, mkdir, readdir } from 'fs/promises';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Model configuration - default to model that doesn't require auth
+const DEFAULT_MODEL = 'Xenova/all-MiniLM-L6-v2';
+const DEFAULT_DIMENSIONS = 384;
+
+// Supported models (in order of preference for auto-detection)
+const SUPPORTED_MODELS = [
+  { name: 'all-MiniLM-L6-v2', hfName: 'Xenova/all-MiniLM-L6-v2', dims: 384 },
+  { name: 'bge-small-en-v1.5', hfName: 'Xenova/bge-small-en-v1.5', dims: 384 },
+  { name: 'nomic-embed-text-v1.5', hfName: 'Xenova/nomic-embed-text-v1.5', dims: 768 },
+];
 
 export class EmbeddingEngine {
   private embedder: FeatureExtractionPipeline | null = null;
   private config: Config;
   private log = logger.child('embedder');
   private initialized = false;
+  private actualDimensions: number | null = null; // Set during initialization
 
   constructor(config: Config) {
     this.config = config;
@@ -18,22 +34,90 @@ export class EmbeddingEngine {
 
     this.log.info('Initializing embedding engine...');
 
-    // Configure for local-only operation
-    env.allowRemoteModels = true; // Allow initial download
-    env.cacheDir = join(this.config.dataDir, 'models');
+    // Set up model caching directory - use project data dir for persistence
+    const modelCacheDir = join(this.config.dataDir, 'models');
+    await mkdir(modelCacheDir, { recursive: true });
+
+    // Check for bundled model first (for fully offline distribution)
+    const bundledModelsDir = join(__dirname, '../../models');
+    const bundledModel = await this.findBundledModel(bundledModelsDir);
+
+    // Configure transformers.js environment
+    let modelId: string;
+    let modelSource: string;
+
+    if (bundledModel) {
+      // Use bundled local model (no network required)
+      this.log.info(`Using bundled local model: ${bundledModel.name}`);
+      env.localModelPath = bundledModelsDir;
+      env.allowRemoteModels = false;
+      env.allowLocalModels = true;
+      modelId = bundledModel.name;
+      modelSource = 'bundled';
+      this.actualDimensions = bundledModel.dims;
+    } else {
+      // Use HuggingFace cache - model will be downloaded on first use
+      this.log.info('Using HuggingFace model (will download on first use)');
+      env.cacheDir = modelCacheDir;
+      env.allowRemoteModels = true;
+      env.allowLocalModels = true;
+      
+      // Use configured model or default
+      modelId = this.config.embeddingModel || DEFAULT_MODEL;
+      modelSource = 'huggingface';
+      
+      // Find dimensions for this model
+      const modelInfo = SUPPORTED_MODELS.find(m => m.hfName === modelId || m.name === modelId);
+      this.actualDimensions = modelInfo?.dims || this.config.embeddingDimensions || DEFAULT_DIMENSIONS;
+    }
 
     try {
-      // Try WebGPU first for hardware acceleration
-      this.embedder = await pipeline('feature-extraction', this.config.embeddingModel, {
+      this.log.info(`Loading embedding model: ${modelId}`);
+      if (modelSource === 'huggingface') {
+        this.log.info('(First run may take 1-2 minutes to download the model)');
+      }
+
+      this.embedder = await pipeline('feature-extraction', modelId, {
         dtype: 'q8', // Use quantized model for smaller memory footprint
-        // device: 'webgpu', // Uncomment if WebGPU is available
       });
 
-      this.log.info(`Embedding model loaded: ${this.config.embeddingModel}`);
+      this.log.info(`Embedding model loaded successfully: ${modelId}`);
+      this.log.info(`Embedding dimensions: ${this.actualDimensions}`);
       this.initialized = true;
     } catch (err) {
       this.log.error('Failed to initialize embedding engine:', err);
+      this.log.error('');
+      this.log.error('Troubleshooting:');
+      this.log.error('1. Check your internet connection (model downloads from HuggingFace)');
+      this.log.error('2. Run: npm run download-model (to pre-download the model)');
+      this.log.error('3. If using nomic model, you may need HF_TOKEN for authentication');
+      this.log.error('');
       throw err;
+    }
+  }
+
+  private async findBundledModel(modelsDir: string): Promise<{ name: string; dims: number } | null> {
+    try {
+      const entries = await readdir(modelsDir);
+      
+      // Check each supported model in order of preference
+      for (const model of SUPPORTED_MODELS) {
+        if (entries.includes(model.name)) {
+          // Verify it has required files
+          const modelPath = join(modelsDir, model.name);
+          try {
+            await access(join(modelPath, 'config.json'));
+            await access(join(modelPath, 'tokenizer.json'));
+            return { name: model.name, dims: model.dims };
+          } catch {
+            // Model directory exists but incomplete
+            continue;
+          }
+        }
+      }
+      return null;
+    } catch {
+      return null;
     }
   }
 
@@ -54,8 +138,9 @@ export class EmbeddingEngine {
       // Extract the embedding tensor and convert to array
       const embedding = Array.from(result.data as Float32Array);
 
-      // Truncate to configured dimensions (Matryoshka truncation)
-      return embedding.slice(0, this.config.embeddingDimensions);
+      // Truncate to actual dimensions (supports Matryoshka truncation)
+      const dims = this.actualDimensions ?? this.config.embeddingDimensions;
+      return embedding.slice(0, dims);
     } catch (err) {
       this.log.error('Failed to generate embedding:', err);
       throw err;
@@ -96,7 +181,7 @@ export class EmbeddingEngine {
   private extractBatchEmbeddings(results: unknown, count: number): number[][] {
     const embeddings: number[][] = [];
     const data = (results as { data: Float32Array }).data;
-    const dims = this.config.embeddingDimensions;
+    const dims = this.actualDimensions ?? this.config.embeddingDimensions;
     const fullDims = data.length / count;
 
     for (let i = 0; i < count; i++) {
@@ -123,7 +208,8 @@ export class EmbeddingEngine {
       });
 
       const embedding = Array.from(result.data as Float32Array);
-      return embedding.slice(0, this.config.embeddingDimensions);
+      const dims = this.actualDimensions ?? this.config.embeddingDimensions;
+      return embedding.slice(0, dims);
     } catch (err) {
       this.log.error('Failed to generate query embedding:', err);
       throw err;
@@ -131,7 +217,8 @@ export class EmbeddingEngine {
   }
 
   getDimensions(): number {
-    return this.config.embeddingDimensions;
+    // Return actual dimensions (set during init) or fall back to config
+    return this.actualDimensions ?? this.config.embeddingDimensions;
   }
 
   isInitialized(): boolean {

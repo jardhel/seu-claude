@@ -15,8 +15,8 @@ export interface Config {
 const defaultConfig: Config = {
   projectRoot: process.cwd(),
   dataDir: join(homedir(), '.seu-claude'),
-  embeddingModel: 'Xenova/nomic-embed-text-v1.5',
-  embeddingDimensions: 256, // Matryoshka truncation for smaller storage
+  embeddingModel: 'Xenova/all-MiniLM-L6-v2', // Default model (no auth required)
+  embeddingDimensions: 384, // Match default model dimensions
   maxChunkTokens: 512,
   minChunkLines: 5,
   supportedLanguages: [

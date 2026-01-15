@@ -20,8 +20,8 @@ describe('Config', () => {
 
       expect(config.projectRoot).toBe(process.cwd());
       expect(config.dataDir).toBe(join(homedir(), '.seu-claude'));
-      expect(config.embeddingModel).toBe('Xenova/nomic-embed-text-v1.5');
-      expect(config.embeddingDimensions).toBe(256);
+      expect(config.embeddingModel).toBe('Xenova/all-MiniLM-L6-v2');
+      expect(config.embeddingDimensions).toBe(384);
       expect(config.maxChunkTokens).toBe(512);
       expect(config.minChunkLines).toBe(5);
     });

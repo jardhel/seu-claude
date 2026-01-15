@@ -1,6 +1,6 @@
 {
   "name": "seu-claude",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Local Codebase RAG MCP Server for Claude Code - Proactive semantic indexing with AST-based chunking",
   "type": "module",
   "main": "dist/index.js",
@@ -8,6 +8,13 @@
   "bin": {
     "seu-claude": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "languages",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -18,9 +25,12 @@
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "benchmark": "npx tsx benchmarks/performance.ts",
     "download-grammars": "npx tsx scripts/download-grammars.ts",
+    "download-model": "npx tsx scripts/download-model.ts",
+    "download-model:bundled": "npx tsx scripts/download-model.ts --bundled",
     "postinstall": "npm run download-grammars || true",
     "prepare": "npm run build",
-    "evidence": "./scripts/collect-evidence.sh"
+    "evidence": "./scripts/collect-evidence.sh",
+    "setup": "npm run download-grammars && npm run download-model"
   },
   "keywords": [
     "claude",
@@ -31,9 +41,11 @@
     "ast",
     "tree-sitter",
     "vector-database",
-    "local-llm"
+    "local-llm",
+    "claude-code",
+    "model-context-protocol"
   ],
-  "author": "",
+  "author": "jardhel",
   "license": "MIT",
   "repository": {
     "type": "git",

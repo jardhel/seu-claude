@@ -557,3 +557,297 @@ describe('ContextResult interface', () => {
     expect(result.symbol).toBeUndefined();
   });
 });
+
+// ============================================================================
+// SearchCodebase Integration Tests
+// ============================================================================
+
+describe('SearchCodebase - Integration', () => {
+  let testDir: string;
+  let config: Config;
+  let store: VectorStore;
+  let searchTool: SearchCodebase;
+
+  // Mock embedder that doesn't require HuggingFace model download
+  const mockEmbedder = {
+    embed: async (text: string) => {
+      // Simple hash-based mock embedding
+      const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
+      // Normalize
+      const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
+      return vector.map(v => v / magnitude);
+    },
+    embedQuery: async (text: string) => {
+      const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
+      const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
+      return vector.map(v => v / magnitude);
+    },
+    embedBatch: async (texts: string[]) => {
+      return Promise.all(texts.map(t => mockEmbedder.embed(t)));
+    },
+    initialize: async () => {},
+    isInitialized: () => true,
+    getDimensions: () => 384,
+  } as unknown as EmbeddingEngine;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `seu-claude-search-integration-${Date.now()}-${Math.random()}`);
+    await mkdir(testDir, { recursive: true });
+
+    config = loadConfig({
+      projectRoot: testDir,
+      dataDir: join(testDir, '.seu-claude'),
+      embeddingDimensions: 384,
+    });
+
+    store = new VectorStore(config);
+    searchTool = new SearchCodebase(mockEmbedder, store);
+
+    await store.initialize();
+  });
+
+  afterEach(async () => {
+    store.close();
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  it('should execute search with type filter', async () => {
+    // Create test data
+    const testVector = await mockEmbedder.embed('test function code');
+    const now = new Date();
+
+    await store.upsert([
+      {
+        id: 'chunk1',
+        filePath: join(testDir, 'file.ts'),
+        relativePath: 'file.ts',
+        code: 'function testFunction() { return 1; }',
+        startLine: 1,
+        endLine: 5,
+        language: 'typescript',
+        type: 'function',
+        name: 'testFunction',
+        scope: 'file.ts',
+        docstring: null,
+        tokenEstimate: 20,
+        vector: testVector,
+        lastUpdated: now,
+      },
+      {
+        id: 'chunk2',
+        filePath: join(testDir, 'file.ts'),
+        relativePath: 'file.ts',
+        code: 'class TestClass { }',
+        startLine: 10,
+        endLine: 15,
+        language: 'typescript',
+        type: 'class',
+        name: 'TestClass',
+        scope: 'file.ts',
+        docstring: null,
+        tokenEstimate: 10,
+        vector: testVector,
+        lastUpdated: now,
+      },
+    ]);
+
+    const results = await searchTool.execute({
+      query: 'test function',
+      filterType: 'function',
+      limit: 10,
+    });
+
+    // Should only return functions
+    expect(results.every(r => r.type === 'function')).toBe(true);
+  });
+
+  it('should execute search with language filter', async () => {
+    const testVector = await mockEmbedder.embed('test code');
+    const now = new Date();
+
+    await store.upsert([
+      {
+        id: 'ts-chunk',
+        filePath: join(testDir, 'file.ts'),
+        relativePath: 'file.ts',
+        code: 'const x = 1;',
+        startLine: 1,
+        endLine: 1,
+        language: 'typescript',
+        type: 'block',
+        name: null,
+        scope: 'file.ts',
+        docstring: null,
+        tokenEstimate: 5,
+        vector: testVector,
+        lastUpdated: now,
+      },
+      {
+        id: 'py-chunk',
+        filePath: join(testDir, 'file.py'),
+        relativePath: 'file.py',
+        code: 'x = 1',
+        startLine: 1,
+        endLine: 1,
+        language: 'python',
+        type: 'block',
+        name: null,
+        scope: 'file.py',
+        docstring: null,
+        tokenEstimate: 3,
+        vector: testVector,
+        lastUpdated: now,
+      },
+    ]);
+
+    const results = await searchTool.execute({
+      query: 'variable x',
+      filterLanguage: 'typescript',
+      limit: 10,
+    });
+
+    // Should only return TypeScript chunks
+    expect(results.every(r => r.language === 'typescript')).toBe(true);
+  });
+
+  it('should apply both type and language filters', async () => {
+    const testVector = await mockEmbedder.embed('function code');
+    const now = new Date();
+
+    await store.upsert([
+      {
+        id: 'ts-func',
+        filePath: join(testDir, 'file.ts'),
+        relativePath: 'file.ts',
+        code: 'function tsFunc() {}',
+        startLine: 1,
+        endLine: 3,
+        language: 'typescript',
+        type: 'function',
+        name: 'tsFunc',
+        scope: 'file.ts',
+        docstring: null,
+        tokenEstimate: 10,
+        vector: testVector,
+        lastUpdated: now,
+      },
+      {
+        id: 'ts-class',
+        filePath: join(testDir, 'file.ts'),
+        relativePath: 'file.ts',
+        code: 'class TsClass {}',
+        startLine: 5,
+        endLine: 7,
+        language: 'typescript',
+        type: 'class',
+        name: 'TsClass',
+        scope: 'file.ts',
+        docstring: null,
+        tokenEstimate: 8,
+        vector: testVector,
+        lastUpdated: now,
+      },
+      {
+        id: 'py-func',
+        filePath: join(testDir, 'file.py'),
+        relativePath: 'file.py',
+        code: 'def py_func(): pass',
+        startLine: 1,
+        endLine: 2,
+        language: 'python',
+        type: 'function',
+        name: 'py_func',
+        scope: 'file.py',
+        docstring: null,
+        tokenEstimate: 8,
+        vector: testVector,
+        lastUpdated: now,
+      },
+    ]);
+
+    const results = await searchTool.execute({
+      query: 'function',
+      filterType: 'function',
+      filterLanguage: 'typescript',
+      limit: 10,
+    });
+
+    // Should only return TypeScript functions
+    for (const r of results) {
+      expect(r.type).toBe('function');
+      expect(r.language).toBe('typescript');
+    }
+  });
+
+  it('should respect limit parameter', async () => {
+    const testVector = await mockEmbedder.embed('test');
+    const now = new Date();
+
+    // Create more chunks than the limit
+    const chunks = [];
+    for (let i = 0; i < 20; i++) {
+      chunks.push({
+        id: `chunk-${i}`,
+        filePath: join(testDir, `file${i}.ts`),
+        relativePath: `file${i}.ts`,
+        code: `const x${i} = ${i};`,
+        startLine: 1,
+        endLine: 1,
+        language: 'typescript',
+        type: 'block',
+        name: null,
+        scope: `file${i}.ts`,
+        docstring: null,
+        tokenEstimate: 5,
+        vector: testVector,
+        lastUpdated: now,
+      });
+    }
+
+    await store.upsert(chunks);
+
+    const results = await searchTool.execute({
+      query: 'test',
+      limit: 5,
+    });
+
+    expect(results.length).toBeLessThanOrEqual(5);
+  });
+
+  it('should convert distance to similarity score', async () => {
+    const testVector = await mockEmbedder.embed('function myFunction');
+    const now = new Date();
+
+    await store.upsert([
+      {
+        id: 'chunk1',
+        filePath: join(testDir, 'file.ts'),
+        relativePath: 'file.ts',
+        code: 'function myFunction() { return 1; }',
+        startLine: 1,
+        endLine: 3,
+        language: 'typescript',
+        type: 'function',
+        name: 'myFunction',
+        scope: 'file.ts',
+        docstring: null,
+        tokenEstimate: 15,
+        vector: testVector,
+        lastUpdated: now,
+      },
+    ]);
+
+    const results = await searchTool.execute({
+      query: 'function myFunction',
+      limit: 1,
+    });
+
+    if (results.length > 0) {
+      // Score should be between 0 and 1 (converted from distance)
+      expect(results[0].score).toBeGreaterThanOrEqual(0);
+      expect(results[0].score).toBeLessThanOrEqual(1);
+    }
+  });
+});

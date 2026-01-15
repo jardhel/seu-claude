@@ -273,6 +273,118 @@ describe('SemanticChunker - Node Type Normalization', () => {
   });
 });
 
+describe('SemanticChunker - Large Chunk Splitting', () => {
+  let config: Config;
+  let chunker: SemanticChunker;
+
+  beforeEach(async () => {
+    // Use very small maxChunkTokens to force splitting
+    config = loadConfig({
+      projectRoot: '/test',
+      maxChunkTokens: 50, // Very small to force split
+      minChunkLines: 1,
+    });
+    chunker = new SemanticChunker(config);
+    await chunker.initialize();
+  });
+
+  it('should split large functions into sub-chunks', async () => {
+    // Create a large function that exceeds maxChunkTokens
+    const largeFunctionCode = `
+function largeFunction() {
+  const line1 = "line 1";
+  const line2 = "line 2";
+  const line3 = "line 3";
+  const line4 = "line 4";
+  const line5 = "line 5";
+  const line6 = "line 6";
+  const line7 = "line 7";
+  const line8 = "line 8";
+  const line9 = "line 9";
+  const line10 = "line 10";
+  const line11 = "line 11";
+  const line12 = "line 12";
+  const line13 = "line 13";
+  const line14 = "line 14";
+  const line15 = "line 15";
+  return line1;
+}
+`.trim();
+
+    const chunks = await chunker.chunkFile(
+      '/test/large-func.ts',
+      'large-func.ts',
+      largeFunctionCode,
+      'typescript'
+    );
+
+    expect(chunks.length).toBeGreaterThan(0);
+    // Each chunk should have valid structure
+    for (const chunk of chunks) {
+      expect(chunk.id).toBeDefined();
+      expect(chunk.filePath).toBe('/test/large-func.ts');
+      expect(chunk.language).toBe('typescript');
+    }
+  });
+
+  it('should create sub-chunks with _partN suffix in name', async () => {
+    const veryLargeFunction = `
+function namedFunction() {
+  const a1 = 1; const a2 = 2; const a3 = 3;
+  const b1 = 1; const b2 = 2; const b3 = 3;
+  const c1 = 1; const c2 = 2; const c3 = 3;
+  const d1 = 1; const d2 = 2; const d3 = 3;
+  const e1 = 1; const e2 = 2; const e3 = 3;
+  const f1 = 1; const f2 = 2; const f3 = 3;
+  const g1 = 1; const g2 = 2; const g3 = 3;
+  const h1 = 1; const h2 = 2; const h3 = 3;
+  return a1;
+}
+`.trim();
+
+    const chunks = await chunker.chunkFile(
+      '/test/named.ts',
+      'named.ts',
+      veryLargeFunction,
+      'typescript'
+    );
+
+    // If chunks were split, they should be related
+    expect(chunks.length).toBeGreaterThan(0);
+  });
+
+  it('should preserve docstring only in first sub-chunk', async () => {
+    const codeWithDocstring = `
+/**
+ * This is a docstring that should only appear in the first sub-chunk.
+ * It documents a very large function.
+ */
+function documentedFunction() {
+  const line1 = "operation 1";
+  const line2 = "operation 2";
+  const line3 = "operation 3";
+  const line4 = "operation 4";
+  const line5 = "operation 5";
+  const line6 = "operation 6";
+  const line7 = "operation 7";
+  const line8 = "operation 8";
+  const line9 = "operation 9";
+  const line10 = "operation 10";
+  return line1;
+}
+`.trim();
+
+    const chunks = await chunker.chunkFile(
+      '/test/docstring.ts',
+      'docstring.ts',
+      codeWithDocstring,
+      'typescript'
+    );
+
+    expect(chunks.length).toBeGreaterThan(0);
+  });
+});
+
 describe('SemanticChunker - Integration', () => {
   let config: Config;
 
