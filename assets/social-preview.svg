@@ -57,7 +57,7 @@
   <!-- Features bar -->
   <g transform="translate(640, 540)" text-anchor="middle" fill="#7dcfff" font-family="monospace" font-size="16" letter-spacing="2">
     <text x="-300" y="0">🧠 AST Chunking</text>
-    <text x="0" y="0">💾 90MB RAM</text>
+    <text x="0" y="0">💾 ~100MB RAM</text>
     <text x="300" y="0">🔒 100% Local</text>
   </g>
   
