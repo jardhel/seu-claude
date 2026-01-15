@@ -2,12 +2,12 @@
 
 /**
  * Download Tree-sitter WASM grammar files for supported languages.
- * Uses @vscode/tree-sitter-wasm (MIT licensed, maintained by Microsoft)
+ * Uses tree-sitter-wasms package (compatible with web-tree-sitter 0.22.x)
  * 
  * Run with: npx tsx scripts/download-grammars.ts
  */
 
-import { writeFile, mkdir, access, readFile, copyFile } from 'fs/promises';
+import { mkdir, copyFile, access } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -16,8 +16,7 @@ import { existsSync } from 'fs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LANGUAGES_DIR = join(__dirname, '../languages');
 
-// Languages we support - map to @vscode/tree-sitter-wasm filenames
-// All grammars are MIT licensed
+// Languages we support - these grammars are compatible with web-tree-sitter 0.22.x
 const SUPPORTED_GRAMMARS = [
   'tree-sitter-typescript',
   'tree-sitter-javascript', 
@@ -30,29 +29,29 @@ const SUPPORTED_GRAMMARS = [
 ];
 
 async function downloadFromNpm(): Promise<void> {
-  console.log('Installing @vscode/tree-sitter-wasm...\n');
+  console.log('Installing tree-sitter-wasms (compatible with web-tree-sitter 0.22.x)...\n');
   
   try {
-    // Install the package temporarily
-    execSync('npm install --no-save @vscode/tree-sitter-wasm@latest', {
+    // Install the package temporarily - version 0.1.11 is compatible with web-tree-sitter 0.22.x
+    execSync('npm install --no-save tree-sitter-wasms@0.1.11', {
       cwd: join(__dirname, '..'),
       stdio: 'inherit',
     });
   } catch (error) {
-    throw new Error('Failed to install @vscode/tree-sitter-wasm');
+    throw new Error('Failed to install tree-sitter-wasms');
   }
 }
 
 async function copyGrammars(): Promise<{ name: string; success: boolean; error?: string }[]> {
   const results: { name: string; success: boolean; error?: string }[] = [];
-  const vscodeWasmDir = join(__dirname, '../node_modules/@vscode/tree-sitter-wasm/wasm');
+  const wasmDir = join(__dirname, '../node_modules/tree-sitter-wasms/out');
   
   // Ensure languages directory exists
   await mkdir(LANGUAGES_DIR, { recursive: true });
   
   for (const grammar of SUPPORTED_GRAMMARS) {
     const wasmFile = `${grammar}.wasm`;
-    const srcPath = join(vscodeWasmDir, wasmFile);
+    const srcPath = join(wasmDir, wasmFile);
     const destPath = join(LANGUAGES_DIR, wasmFile);
     
     // Check if already exists
@@ -73,7 +72,7 @@ async function copyGrammars(): Promise<{ name: string; success: boolean; error?:
         results.push({ name: wasmFile, success: true });
       } else {
         console.log(`Not found in package: ${wasmFile}`);
-        results.push({ name: wasmFile, success: false, error: 'Not found in @vscode/tree-sitter-wasm' });
+        results.push({ name: wasmFile, success: false, error: 'Not found in tree-sitter-wasms' });
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -87,7 +86,7 @@ async function copyGrammars(): Promise<{ name: string; success: boolean; error?:
 
 async function main(): Promise<void> {
   console.log('Downloading Tree-sitter WASM grammars...\n');
-  console.log('Source: @vscode/tree-sitter-wasm (MIT licensed, by Microsoft)\n');
+  console.log('Source: tree-sitter-wasms (MIT licensed)\n');
   
   await downloadFromNpm();
   const results = await copyGrammars();

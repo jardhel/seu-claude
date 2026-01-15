@@ -14,6 +14,12 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (process.argv[2] === 'index') {
+    const { runIndex } = await import('./cli-index.js');
+    await runIndex(process.argv[3]);
+    return;
+  }
+
   // Now load the server and its dependencies
   const { SeuClaudeServer } = await import('./server.js');
   const { logger } = await import('./utils/logger.js');
