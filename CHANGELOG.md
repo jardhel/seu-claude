@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-01-15
+
+### Changed
+
+- 📚 Updated documentation to reflect complete v1.0 feature set
+- Updated README roadmap with completed feature indicators
+- Updated FEATURE_AUDIT with `search_xrefs` tool documentation
+- Added cross-reference tracking and git-aware indexing sections
+- Corrected test counts and coverage metrics across all docs
+- Applied Prettier formatting to all markdown files
+
+### Fixed
+
+- Fixed project structure in README to include `search-xrefs.ts`
+- Corrected tool count from 3 to 4 in documentation
+
 ## [1.0.0] - 2026-01-15
 
 ### Added
