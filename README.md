@@ -4,6 +4,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org)
+[![npm version](https://img.shields.io/npm/v/seu-claude.svg)](https://www.npmjs.com/package/seu-claude)
+[![CI Status](https://github.com/jardhel/seu-claude/workflows/CI/badge.svg)](https://github.com/jardhel/seu-claude/actions)
+[![GitHub issues](https://img.shields.io/github/issues/jardhel/seu-claude)](https://github.com/jardhel/seu-claude/issues)
+[![GitHub stars](https://img.shields.io/github/stars/jardhel/seu-claude)](https://github.com/jardhel/seu-claude/stargazers)
 
 > Give Claude Code deep, proactive understanding of your entire codebase - not just the files it has touched.
 
@@ -275,9 +279,31 @@ npm test
 - [ ] VSCode extension for index management
 - [ ] Support for more languages (Kotlin, Swift, PHP)
 
+See [ROADMAP.md](ROADMAP.md) for detailed plans.
+
 ## Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting PRs.
+We welcome contributions! Please see:
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute code
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
+- [Support](.github/SUPPORT.md) - Getting help
+- [GitHub Discussions](https://github.com/jardhel/seu-claude/discussions) - Ask questions
+
+### Quick Start for Contributors
+
+```bash
+git clone https://github.com/jardhel/seu-claude.git
+cd seu-claude
+npm install
+npm run build
+npm test
+```
+
+## Community
+
+- 💬 [GitHub Discussions](https://github.com/jardhel/seu-claude/discussions) - Ask questions, share ideas
+- 🐛 [Issue Tracker](https://github.com/jardhel/seu-claude/issues) - Report bugs or request features
+- 🌟 [Star the repo](https://github.com/jardhel/seu-claude) - Show your support!
 
 ## License
 
