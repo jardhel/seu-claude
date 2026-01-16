@@ -63,7 +63,15 @@ describe('FileIndex', () => {
       const data = {
         version: 999, // Wrong version
         projectRoot: testDir,
-        files: { 'test.ts': { relativePath: 'test.ts', hash: 'abc', mtime: 0, indexedAt: 0, chunkCount: 1 } },
+        files: {
+          'test.ts': {
+            relativePath: 'test.ts',
+            hash: 'abc',
+            mtime: 0,
+            indexedAt: 0,
+            chunkCount: 1,
+          },
+        },
       };
       await writeFile(indexPath, JSON.stringify(data));
 
@@ -77,7 +85,15 @@ describe('FileIndex', () => {
       const data = {
         version: 1,
         projectRoot: '/different/project', // Different project
-        files: { 'test.ts': { relativePath: 'test.ts', hash: 'abc', mtime: 0, indexedAt: 0, chunkCount: 1 } },
+        files: {
+          'test.ts': {
+            relativePath: 'test.ts',
+            hash: 'abc',
+            mtime: 0,
+            indexedAt: 0,
+            chunkCount: 1,
+          },
+        },
       };
       await writeFile(indexPath, JSON.stringify(data));
 
@@ -153,9 +169,7 @@ describe('FileIndex', () => {
     it('should detect new files', async () => {
       await fileIndex.load();
 
-      const currentFiles: FileInfo[] = [
-        createFileInfo('new-file.ts', 'hash1', Date.now()),
-      ];
+      const currentFiles: FileInfo[] = [createFileInfo('new-file.ts', 'hash1', Date.now())];
 
       const changed = fileIndex.getChangedFiles(currentFiles);
 
@@ -172,9 +186,7 @@ describe('FileIndex', () => {
         chunkCount: 5,
       });
 
-      const currentFiles: FileInfo[] = [
-        createFileInfo('existing.ts', 'new-hash', 1000),
-      ];
+      const currentFiles: FileInfo[] = [createFileInfo('existing.ts', 'new-hash', 1000)];
 
       const changed = fileIndex.getChangedFiles(currentFiles);
 
@@ -225,11 +237,14 @@ describe('FileIndex', () => {
     it('should detect deleted files', async () => {
       await fileIndex.load();
       fileIndex.updateFile('deleted.ts', { hash: 'abc', mtime: 0, indexedAt: 0, chunkCount: 1 });
-      fileIndex.updateFile('still-exists.ts', { hash: 'def', mtime: 0, indexedAt: 0, chunkCount: 2 });
+      fileIndex.updateFile('still-exists.ts', {
+        hash: 'def',
+        mtime: 0,
+        indexedAt: 0,
+        chunkCount: 2,
+      });
 
-      const currentFiles: FileInfo[] = [
-        createFileInfo('still-exists.ts', 'def', 0),
-      ];
+      const currentFiles: FileInfo[] = [createFileInfo('still-exists.ts', 'def', 0)];
 
       const deleted = fileIndex.getDeletedFiles(currentFiles);
 
@@ -241,9 +256,7 @@ describe('FileIndex', () => {
       await fileIndex.load();
       fileIndex.updateFile('file1.ts', { hash: 'abc', mtime: 0, indexedAt: 0, chunkCount: 1 });
 
-      const currentFiles: FileInfo[] = [
-        createFileInfo('file1.ts', 'abc', 0),
-      ];
+      const currentFiles: FileInfo[] = [createFileInfo('file1.ts', 'abc', 0)];
 
       const deleted = fileIndex.getDeletedFiles(currentFiles);
 
