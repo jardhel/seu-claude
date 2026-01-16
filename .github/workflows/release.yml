@@ -4,37 +4,21 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (e.g., 1.0.0)'
-        required: true
-        type: string
-      dry_run:
-        description: 'Dry run (skip actual publish)'
-        required: false
-        type: boolean
-        default: false
 
 jobs:
-  release:
-    name: Release to npm
+  # Validate the release (tests already passed locally via release.sh)
+  validate:
+    name: Validate Release
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       
       - name: Install dependencies
@@ -48,69 +32,56 @@ jobs:
       
       - name: Run tests
         run: npm test
-      
-      - name: Security audit
-        run: npm audit --audit-level=high
-        continue-on-error: true  # Don't fail on moderate vulnerabilities
+
+  # Create GitHub release (npm publish is done locally via release.sh)
+  github-release:
+    name: Create GitHub Release
+    needs: validate
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
       - name: Get version
         id: version
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
-            echo "tag=v${{ inputs.version }}" >> $GITHUB_OUTPUT
+          echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+      
+      - name: Check if GitHub release exists
+        id: check_release
+        run: |
+          if gh release view ${{ steps.version.outputs.tag }} &>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
           else
-            echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
-            echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+            echo "exists=false" >> $GITHUB_OUTPUT
           fi
-      
-      - name: Verify package version
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          echo "Package version: $PACKAGE_VERSION"
-          echo "Release version: ${{ steps.version.outputs.version }}"
-      
-      - name: Publish to npm (dry run)
-        if: ${{ inputs.dry_run == true }}
-        run: npm publish --dry-run
-      
-      # npm publishing with classic token authentication
-      # Requires NPM_TOKEN: Generate a Granular Access Token at npmjs.com
-      # Token should have: Read-write access to seu-claude, CIDR allowlist optional
-      # TODO: Re-enable provenance once OIDC trusted publishing is configured (see issue)
-      - name: Publish to npm
-        if: ${{ inputs.dry_run != true }}
-        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - name: Create git tag (manual trigger only)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run != true }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git tag -a ${{ steps.version.outputs.tag }} -m "Release ${{ steps.version.outputs.tag }}"
-          git push origin ${{ steps.version.outputs.tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate release notes
-        id: release_notes
+        if: steps.check_release.outputs.exists == 'false'
         run: |
           cat << 'EOF' > release_notes.md
           ## 🚀 seu-claude ${{ steps.version.outputs.tag }}
           
           ### Installation
-          ```bash
+          \`\`\`bash
           npm install -g seu-claude
           # or
           npx seu-claude
-          ```
+          \`\`\`
           
           ### What's New
           See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
           
           ### Quick Start
           Add to your Claude Code settings:
-          ```json
+          \`\`\`json
           {
             "mcpServers": {
               "seu-claude": {
@@ -120,7 +91,7 @@ jobs:
               }
             }
           }
-          ```
+          \`\`\`
           
           ### Links
           - 📦 [npm package](https://www.npmjs.com/package/seu-claude)
@@ -129,7 +100,7 @@ jobs:
           EOF
       
       - name: Create GitHub Release
-        if: ${{ inputs.dry_run != true }}
+        if: steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.version.outputs.tag }}
@@ -139,26 +110,28 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Release already exists
+        if: steps.check_release.outputs.exists == 'true'
+        run: |
+          echo "GitHub release ${{ steps.version.outputs.tag }} already exists (created by release.sh)"
 
   notify:
     name: Post-release notification
-    needs: release
+    needs: [validate, github-release]
     runs-on: ubuntu-latest
-    if: ${{ inputs.dry_run != true }}
     
     steps:
       - name: Release notification
         run: |
           echo "============================================"
-          echo "🚀 seu-claude has been released!"
+          echo "🚀 seu-claude ${GITHUB_REF_NAME} validated!"
           echo "============================================"
           echo ""
           echo "📦 npm: https://www.npmjs.com/package/seu-claude"
-          echo "🏷️  GitHub: https://github.com/${{ github.repository }}/releases"
+          echo "🏷️  GitHub: https://github.com/${{ github.repository }}/releases/tag/${GITHUB_REF_NAME}"
           echo ""
-          echo "📋 Next steps:"
-          echo "   1. Verify npm package: npm info seu-claude"
-          echo "   2. Test installation: npx seu-claude --version"
-          echo "   3. Share on social media!"
+          echo "✅ Build and tests passed"
+          echo "✅ GitHub release created/verified"
           echo ""
           echo "============================================"
