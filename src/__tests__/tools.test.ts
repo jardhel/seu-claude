@@ -10,6 +10,34 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 
 // ============================================================================
+// Mock Embedder for tests (avoids network dependency)
+// ============================================================================
+
+const createMockEmbedder = () => {
+  return {
+    embed: (text: string): Promise<number[]> => {
+      const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
+      const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
+      return Promise.resolve(vector.map(v => v / magnitude));
+    },
+    embedQuery: (text: string): Promise<number[]> => {
+      const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
+      const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
+      return Promise.resolve(vector.map(v => v / magnitude));
+    },
+    embedBatch: async (texts: string[]) => {
+      const embedder = createMockEmbedder();
+      return Promise.all(texts.map(t => embedder.embed(t)));
+    },
+    initialize: async () => {},
+    isInitialized: () => true,
+    getDimensions: () => 384,
+  } as unknown as EmbeddingEngine;
+};
+
+// ============================================================================
 // IndexCodebase Tests
 // ============================================================================
 
@@ -27,9 +55,11 @@ describe('IndexCodebase', () => {
     config = loadConfig({
       projectRoot: testDir,
       dataDir: join(testDir, '.seu-claude'),
+      embeddingDimensions: 384,
     });
 
-    embedder = new EmbeddingEngine(config);
+    // Use mock embedder to avoid network dependency
+    embedder = createMockEmbedder();
     store = new VectorStore(config);
     indexTool = new IndexCodebase(config, embedder, store);
   });
@@ -64,14 +94,7 @@ describe('IndexCodebase', () => {
   describe('execute - empty directory', () => {
     it('should handle empty directory', async () => {
       await store.initialize();
-
-      // Embedder initialization may fail without network
-      try {
-        await embedder.initialize();
-      } catch {
-        // Skip test if embedder can't initialize
-        return;
-      }
+      await embedder.initialize();
 
       const result = await indexTool.execute();
 
@@ -79,6 +102,173 @@ describe('IndexCodebase', () => {
       expect(result.filesProcessed).toBe(0);
       expect(result.chunksCreated).toBe(0);
     }, 30000);
+  });
+
+  describe('execute - with files', () => {
+    it('should index TypeScript files', async () => {
+      // Create test TypeScript file
+      await writeFile(
+        join(testDir, 'test.ts'),
+        `function hello(): string {
+  return "world";
+}
+
+export { hello };
+`
+      );
+
+      await store.initialize();
+      await embedder.initialize();
+
+      const result = await indexTool.execute();
+
+      expect(result.success).toBe(true);
+      expect(result.filesProcessed).toBeGreaterThan(0);
+      expect(result.chunksCreated).toBeGreaterThan(0);
+      expect(result.languages).toHaveProperty('typescript');
+    });
+
+    it('should handle force mode', async () => {
+      // Create test file
+      await writeFile(join(testDir, 'app.ts'), 'const x = 1;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      // First indexing
+      const result1 = await indexTool.execute();
+      expect(result1.success).toBe(true);
+      expect(result1.filesProcessed).toBeGreaterThan(0);
+
+      // Force re-index should process all files again
+      const result2 = await indexTool.execute(true);
+      expect(result2.success).toBe(true);
+      expect(result2.filesProcessed).toBeGreaterThan(0);
+    });
+
+    it('should skip unchanged files in incremental mode', async () => {
+      // Create test file
+      await writeFile(join(testDir, 'stable.ts'), 'const stable = true;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      // First indexing
+      const result1 = await indexTool.execute();
+      expect(result1.success).toBe(true);
+
+      // Second indexing without changes should skip files
+      const result2 = await indexTool.execute();
+      expect(result2.success).toBe(true);
+      expect(result2.filesProcessed).toBe(0);
+      expect(result2.filesSkipped).toBeGreaterThan(0);
+    });
+
+    it('should call progress callback', async () => {
+      await writeFile(join(testDir, 'progress.ts'), 'const x = 1;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      const progressCalls: Array<{ phase: string; message: string }> = [];
+      const onProgress = (progress: { phase: string; message: string }) => {
+        progressCalls.push({ phase: progress.phase, message: progress.message });
+      };
+
+      await indexTool.execute(false, onProgress);
+
+      expect(progressCalls.length).toBeGreaterThan(0);
+      expect(progressCalls.some(p => p.phase === 'crawling')).toBe(true);
+    });
+
+    it('should handle multiple file types', async () => {
+      await writeFile(join(testDir, 'file1.ts'), 'const ts = 1;');
+      await writeFile(join(testDir, 'file2.js'), 'const js = 1;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      const result = await indexTool.execute();
+
+      expect(result.success).toBe(true);
+      expect(result.filesProcessed).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should detect and process new files', async () => {
+      await writeFile(join(testDir, 'initial.ts'), 'const initial = 1;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      // First index
+      const result1 = await indexTool.execute();
+      expect(result1.success).toBe(true);
+
+      // Add new file
+      await writeFile(join(testDir, 'newfile.ts'), 'const newFile = 2;');
+
+      // Second index should pick up new file
+      const result2 = await indexTool.execute();
+      expect(result2.success).toBe(true);
+      expect(result2.filesProcessed).toBe(1);
+      expect(result2.filesUpdated).toBe(1);
+    });
+
+    it('should handle file modifications', async () => {
+      const filePath = join(testDir, 'modified.ts');
+      await writeFile(filePath, 'const original = 1;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      // First index
+      const result1 = await indexTool.execute();
+      expect(result1.success).toBe(true);
+
+      // Modify the file (need small delay to ensure mtime changes)
+      await new Promise(resolve => setTimeout(resolve, 100));
+      await writeFile(filePath, 'const modified = 2; const another = 3;');
+
+      // Second index should pick up modification
+      const result2 = await indexTool.execute();
+      expect(result2.success).toBe(true);
+      expect(result2.filesProcessed).toBe(1);
+    });
+
+    it('should handle subdirectories', async () => {
+      await mkdir(join(testDir, 'src'), { recursive: true });
+      await mkdir(join(testDir, 'src', 'utils'), { recursive: true });
+
+      await writeFile(join(testDir, 'src', 'index.ts'), 'export const main = 1;');
+      await writeFile(join(testDir, 'src', 'utils', 'helper.ts'), 'export const helper = 2;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      const result = await indexTool.execute();
+
+      expect(result.success).toBe(true);
+      expect(result.filesProcessed).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should include filesDeleted in result', async () => {
+      const filePath = join(testDir, 'toDelete.ts');
+      await writeFile(filePath, 'const x = 1;');
+
+      await store.initialize();
+      await embedder.initialize();
+
+      // First index
+      await indexTool.execute();
+
+      // Delete the file
+      await rm(filePath);
+
+      // Second index should report deletion
+      const result = await indexTool.execute();
+      expect(result.success).toBe(true);
+      expect(result.filesDeleted).toBe(1);
+    });
   });
 });
 
@@ -147,7 +337,7 @@ describe('SearchCodebase', () => {
 
     embedder = new EmbeddingEngine(config);
     store = new VectorStore(config);
-    searchTool = new SearchCodebase(embedder, store);
+    searchTool = new SearchCodebase(embedder, store, config.dataDir);
   });
 
   afterEach(async () => {
@@ -577,32 +767,10 @@ describe('SearchCodebase - Integration', () => {
   let config: Config;
   let store: VectorStore;
   let searchTool: SearchCodebase;
-
-  // Mock embedder that doesn't require HuggingFace model download
-  const mockEmbedder = {
-    embed: (text: string): Promise<number[]> => {
-      // Simple hash-based mock embedding
-      const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
-      // Normalize
-      const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
-      return Promise.resolve(vector.map(v => v / magnitude));
-    },
-    embedQuery: (text: string): Promise<number[]> => {
-      const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
-      const magnitude = Math.sqrt(vector.reduce((sum, v) => sum + v * v, 0));
-      return Promise.resolve(vector.map(v => v / magnitude));
-    },
-    embedBatch: async (texts: string[]) => {
-      return Promise.all(texts.map(t => mockEmbedder.embed(t)));
-    },
-    initialize: async () => {},
-    isInitialized: () => true,
-    getDimensions: () => 384,
-  } as unknown as EmbeddingEngine;
+  let mockEmbedder: EmbeddingEngine;
 
   beforeEach(async () => {
+    mockEmbedder = createMockEmbedder();
     testDir = join(tmpdir(), `seu-claude-search-integration-${Date.now()}-${Math.random()}`);
     await mkdir(testDir, { recursive: true });
 
@@ -613,7 +781,7 @@ describe('SearchCodebase - Integration', () => {
     });
 
     store = new VectorStore(config);
-    searchTool = new SearchCodebase(mockEmbedder, store);
+    searchTool = new SearchCodebase(mockEmbedder, store, config.dataDir);
 
     await store.initialize();
   });
@@ -859,5 +1027,263 @@ describe('SearchCodebase - Integration', () => {
       expect(results[0].score).toBeGreaterThanOrEqual(0);
       expect(results[0].score).toBeLessThanOrEqual(1);
     }
+  });
+
+  describe('scoped search', () => {
+    it('should filter results by includePaths', async () => {
+      const testVector = await mockEmbedder.embed('test function');
+      const now = new Date();
+
+      await store.upsert([
+        {
+          id: 'src-chunk',
+          filePath: join(testDir, 'src/app.ts'),
+          relativePath: 'src/app.ts',
+          code: 'function srcFunc() {}',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'function',
+          name: 'srcFunc',
+          scope: 'src/app.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+        {
+          id: 'lib-chunk',
+          filePath: join(testDir, 'lib/util.ts'),
+          relativePath: 'lib/util.ts',
+          code: 'function libFunc() {}',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'function',
+          name: 'libFunc',
+          scope: 'lib/util.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+      ]);
+
+      const results = await searchTool.execute({
+        query: 'function',
+        limit: 10,
+        scope: {
+          includePaths: ['src/**'],
+        },
+      });
+
+      // Should only return results from src/
+      expect(results.length).toBe(1);
+      expect(results[0].relativePath).toBe('src/app.ts');
+    });
+
+    it('should filter results by excludePaths', async () => {
+      const testVector = await mockEmbedder.embed('test function');
+      const now = new Date();
+
+      await store.upsert([
+        {
+          id: 'main-chunk',
+          filePath: join(testDir, 'main.ts'),
+          relativePath: 'main.ts',
+          code: 'function mainFunc() {}',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'function',
+          name: 'mainFunc',
+          scope: 'main.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+        {
+          id: 'test-chunk',
+          filePath: join(testDir, 'main.test.ts'),
+          relativePath: 'main.test.ts',
+          code: 'function testFunc() {}',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'function',
+          name: 'testFunc',
+          scope: 'main.test.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+      ]);
+
+      const results = await searchTool.execute({
+        query: 'function',
+        limit: 10,
+        scope: {
+          excludePaths: ['**/*.test.ts'],
+        },
+      });
+
+      // Should exclude test files
+      expect(results.length).toBe(1);
+      expect(results[0].relativePath).toBe('main.ts');
+    });
+
+    it('should combine include and exclude paths', async () => {
+      const testVector = await mockEmbedder.embed('test');
+      const now = new Date();
+
+      await store.upsert([
+        {
+          id: 'src-main',
+          filePath: join(testDir, 'src/main.ts'),
+          relativePath: 'src/main.ts',
+          code: 'const main = 1;',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'block',
+          name: null,
+          scope: 'src/main.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+        {
+          id: 'src-test',
+          filePath: join(testDir, 'src/main.test.ts'),
+          relativePath: 'src/main.test.ts',
+          code: 'const test = 1;',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'block',
+          name: null,
+          scope: 'src/main.test.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+        {
+          id: 'lib-chunk',
+          filePath: join(testDir, 'lib/util.ts'),
+          relativePath: 'lib/util.ts',
+          code: 'const lib = 1;',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'block',
+          name: null,
+          scope: 'lib/util.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+      ]);
+
+      const results = await searchTool.execute({
+        query: 'const',
+        limit: 10,
+        scope: {
+          includePaths: ['src/**'],
+          excludePaths: ['**/*.test.ts'],
+        },
+      });
+
+      // Should only return src/main.ts (in src/, not a test file)
+      expect(results.length).toBe(1);
+      expect(results[0].relativePath).toBe('src/main.ts');
+    });
+
+    it('should return all results when scope is not specified', async () => {
+      const testVector = await mockEmbedder.embed('test');
+      const now = new Date();
+
+      await store.upsert([
+        {
+          id: 'chunk1',
+          filePath: join(testDir, 'a.ts'),
+          relativePath: 'a.ts',
+          code: 'const a = 1;',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'block',
+          name: null,
+          scope: 'a.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+        {
+          id: 'chunk2',
+          filePath: join(testDir, 'b.ts'),
+          relativePath: 'b.ts',
+          code: 'const b = 1;',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'block',
+          name: null,
+          scope: 'b.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+      ]);
+
+      const results = await searchTool.execute({
+        query: 'const',
+        limit: 10,
+      });
+
+      // Should return all results
+      expect(results.length).toBe(2);
+    });
+
+    it('should handle empty includePaths array', async () => {
+      const testVector = await mockEmbedder.embed('test');
+      const now = new Date();
+
+      await store.upsert([
+        {
+          id: 'chunk1',
+          filePath: join(testDir, 'file.ts'),
+          relativePath: 'file.ts',
+          code: 'const x = 1;',
+          startLine: 1,
+          endLine: 1,
+          language: 'typescript',
+          type: 'block',
+          name: null,
+          scope: 'file.ts',
+          docstring: null,
+          tokenEstimate: 5,
+          vector: testVector,
+          lastUpdated: now,
+        },
+      ]);
+
+      const results = await searchTool.execute({
+        query: 'const',
+        limit: 10,
+        scope: {
+          includePaths: [],
+        },
+      });
+
+      // Empty includePaths should return all results
+      expect(results.length).toBe(1);
+    });
   });
 });

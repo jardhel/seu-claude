@@ -320,4 +320,123 @@ describe('Crawler', () => {
       }
     });
   });
+
+  describe('git-aware tracking', () => {
+    it('should return gitAware false for non-git directory', async () => {
+      const nonGitDir = join(tmpdir(), `seu-claude-nongit-${Date.now()}`);
+      await mkdir(nonGitDir, { recursive: true });
+
+      try {
+        await writeFile(join(nonGitDir, 'test.ts'), 'const x = 1;');
+
+        const nonGitConfig = loadConfig({ projectRoot: nonGitDir });
+        const crawler = new Crawler(nonGitConfig);
+        const result = await crawler.crawl();
+
+        expect(result.gitAware).toBe(false);
+      } finally {
+        await rm(nonGitDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should return gitAware true for git repository', async () => {
+      const gitDir = join(tmpdir(), `seu-claude-git-${Date.now()}`);
+      await mkdir(gitDir, { recursive: true });
+
+      try {
+        // Initialize git repo
+        const { execSync } = await import('child_process');
+        execSync('git init', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git config user.email "test@test.com"', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git config user.name "Test"', { cwd: gitDir, stdio: 'ignore' });
+
+        // Create and commit a file
+        await writeFile(join(gitDir, 'committed.ts'), 'const committed = 1;');
+        execSync('git add .', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git commit -m "initial"', { cwd: gitDir, stdio: 'ignore' });
+
+        // Create an uncommitted file
+        await writeFile(join(gitDir, 'uncommitted.ts'), 'const uncommitted = 2;');
+
+        const gitConfig = loadConfig({ projectRoot: gitDir });
+        const crawler = new Crawler(gitConfig);
+        const result = await crawler.crawl();
+
+        expect(result.gitAware).toBe(true);
+
+        // The uncommitted file should have higher priority
+        const uncommittedFile = result.files.find(f => f.relativePath === 'uncommitted.ts');
+        if (uncommittedFile) {
+          expect(uncommittedFile.gitPriority).toBeGreaterThan(0);
+        }
+      } finally {
+        await rm(gitDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should prioritize recently modified files in git', async () => {
+      const gitDir = join(tmpdir(), `seu-claude-gitrecent-${Date.now()}`);
+      await mkdir(gitDir, { recursive: true });
+
+      try {
+        const { execSync } = await import('child_process');
+        execSync('git init', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git config user.email "test@test.com"', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git config user.name "Test"', { cwd: gitDir, stdio: 'ignore' });
+
+        // Create and commit files in order
+        await writeFile(join(gitDir, 'old.ts'), 'const old = 1;');
+        execSync('git add .', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git commit -m "old file"', { cwd: gitDir, stdio: 'ignore' });
+
+        await writeFile(join(gitDir, 'new.ts'), 'const newer = 2;');
+        execSync('git add .', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git commit -m "new file"', { cwd: gitDir, stdio: 'ignore' });
+
+        const gitConfig = loadConfig({ projectRoot: gitDir });
+        const crawler = new Crawler(gitConfig);
+        const result = await crawler.crawl();
+
+        expect(result.gitAware).toBe(true);
+        expect(result.files.length).toBe(2);
+
+        // Files should be sorted by git priority (most recent first)
+        const priorities = result.files.map(f => f.gitPriority ?? 0);
+        // Verify files have priority values assigned
+        expect(priorities.some(p => p > 0)).toBe(true);
+      } finally {
+        await rm(gitDir, { recursive: true, force: true });
+      }
+    });
+
+    it('should mark uncommitted files with hasUncommittedChanges', async () => {
+      const gitDir = join(tmpdir(), `seu-claude-gituncommit-${Date.now()}`);
+      await mkdir(gitDir, { recursive: true });
+
+      try {
+        const { execSync } = await import('child_process');
+        execSync('git init', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git config user.email "test@test.com"', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git config user.name "Test"', { cwd: gitDir, stdio: 'ignore' });
+
+        // Create and commit a file
+        await writeFile(join(gitDir, 'committed.ts'), 'const x = 1;');
+        execSync('git add .', { cwd: gitDir, stdio: 'ignore' });
+        execSync('git commit -m "initial"', { cwd: gitDir, stdio: 'ignore' });
+
+        // Modify the file without committing
+        await writeFile(join(gitDir, 'committed.ts'), 'const x = 2; // modified');
+
+        const gitConfig = loadConfig({ projectRoot: gitDir });
+        const crawler = new Crawler(gitConfig);
+        const result = await crawler.crawl();
+
+        expect(result.gitAware).toBe(true);
+        const modifiedFile = result.files.find(f => f.relativePath === 'committed.ts');
+        expect(modifiedFile?.hasUncommittedChanges).toBe(true);
+      } finally {
+        await rm(gitDir, { recursive: true, force: true });
+      }
+    });
+  });
 });

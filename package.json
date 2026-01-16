@@ -1,6 +1,6 @@
 {
   "name": "seu-claude",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "Local Codebase RAG MCP Server for Claude Code - Proactive semantic indexing with AST-based chunking",
   "type": "module",
   "main": "dist/index.js",
@@ -60,13 +60,13 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
     "@anthropic-ai/tokenizer": "^0.0.4",
     "@huggingface/transformers": "^3.0.0",
     "@lancedb/lancedb": "^0.5.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "fast-glob": "^3.3.2",
     "ignore": "^5.3.0",
+    "micromatch": "^4.0.8",
     "web-tree-sitter": "^0.22.6",
     "xxhash-wasm": "^1.0.2"
   },
@@ -74,6 +74,7 @@
     "@commitlint/cli": "^20.3.1",
     "@commitlint/config-conventional": "^20.3.1",
     "@types/jest": "^29.5.0",
+    "@types/micromatch": "^4.0.10",
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
     "@typescript-eslint/parser": "^6.13.0",

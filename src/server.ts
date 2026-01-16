@@ -13,6 +13,11 @@ import { IndexCodebase } from './tools/index-codebase.js';
 import { SearchCodebase } from './tools/search-codebase.js';
 import { ReadSemanticContext } from './tools/read-context.js';
 import { SearchXrefs } from './tools/search-xrefs.js';
+import { GetStats } from './tools/get-stats.js';
+import { GetTokenAnalytics } from './tools/get-token-analytics.js';
+import { GetMemoryProfile } from './tools/get-memory-profile.js';
+import { GetQueryAnalytics } from './tools/get-query-analytics.js';
+import { TokenAnalyticsCollector, MemoryProfiler, QueryAnalyticsCollector } from './stats/index.js';
 
 export class SeuClaudeServer {
   private server: Server;
@@ -23,6 +28,13 @@ export class SeuClaudeServer {
   private searchTool: SearchCodebase;
   private contextTool: ReadSemanticContext;
   private xrefsTool: SearchXrefs;
+  private statsTool: GetStats;
+  private tokenAnalyticsTool: GetTokenAnalytics;
+  private memoryProfileTool: GetMemoryProfile;
+  private queryAnalyticsTool: GetQueryAnalytics;
+  private tokenAnalytics: TokenAnalyticsCollector;
+  private memoryProfiler: MemoryProfiler;
+  private queryAnalytics: QueryAnalyticsCollector;
   private log = logger.child('server');
   private initialized = false;
 
@@ -31,9 +43,16 @@ export class SeuClaudeServer {
     this.embedder = new EmbeddingEngine(this.config);
     this.store = new VectorStore(this.config);
     this.indexTool = new IndexCodebase(this.config, this.embedder, this.store);
-    this.searchTool = new SearchCodebase(this.embedder, this.store);
+    this.searchTool = new SearchCodebase(this.embedder, this.store, this.config.dataDir);
     this.contextTool = new ReadSemanticContext(this.store);
     this.xrefsTool = new SearchXrefs(this.config);
+    this.statsTool = new GetStats(this.config);
+    this.tokenAnalyticsTool = new GetTokenAnalytics(this.config);
+    this.tokenAnalytics = new TokenAnalyticsCollector(this.config);
+    this.memoryProfiler = new MemoryProfiler(this.config);
+    this.memoryProfileTool = new GetMemoryProfile(this.memoryProfiler, this.config);
+    this.queryAnalytics = new QueryAnalyticsCollector(this.config);
+    this.queryAnalyticsTool = new GetQueryAnalytics(this.queryAnalytics, this.config);
 
     this.server = new Server(
       {
@@ -74,6 +93,14 @@ export class SeuClaudeServer {
             return await this.handleReadContext(args);
           case 'search_xrefs':
             return await this.handleSearchXrefs(args);
+          case 'get_stats':
+            return await this.handleGetStats(args);
+          case 'get_token_analytics':
+            return await this.handleGetTokenAnalytics(args);
+          case 'get_memory_profile':
+            return await this.handleGetMemoryProfile(args);
+          case 'get_query_analytics':
+            return await this.handleGetQueryAnalytics(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -141,6 +168,24 @@ export class SeuClaudeServer {
               description:
                 'Filter results by programming language (e.g., "typescript", "python", "rust").',
             },
+            scope: {
+              type: 'object',
+              description: 'Limit search to specific file paths using glob patterns.',
+              properties: {
+                include_paths: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description:
+                    'Glob patterns for paths to include. Example: ["src/**", "lib/**"]',
+                },
+                exclude_paths: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description:
+                    'Glob patterns for paths to exclude. Example: ["**/*.test.ts", "**/__tests__/**"]',
+                },
+              },
+            },
           },
           required: ['query'],
         },
@@ -203,6 +248,67 @@ export class SeuClaudeServer {
           required: ['symbol'],
         },
       },
+      {
+        name: 'get_stats',
+        description:
+          'Get comprehensive statistics about the indexed codebase including file counts, chunk counts, language breakdown, cross-reference counts, and storage usage. Use this to understand the current state of the index.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            verbose: {
+              type: 'boolean',
+              description: 'Include detailed storage breakdown. Default: false.',
+            },
+          },
+        },
+      },
+      {
+        name: 'get_token_analytics',
+        description:
+          'Get token consumption analytics showing how many tokens were used vs saved by using semantic search. Includes cost estimation and session statistics. Use this to understand the ROI of using seu-claude.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            format: {
+              type: 'string',
+              enum: ['summary', 'json', 'csv'],
+              description: 'Output format. summary (default), json, or csv for export.',
+            },
+          },
+        },
+      },
+      {
+        name: 'get_memory_profile',
+        description:
+          'Get memory usage statistics for the MCP server, including current heap usage, peak memory during indexing, and memory breakdown by language. Use this to monitor server health and optimize performance.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            format: {
+              type: 'string',
+              enum: ['summary', 'json', 'detailed'],
+              description:
+                "Output format: 'summary' for quick overview, 'detailed' for full markdown report, 'json' for raw data.",
+            },
+          },
+        },
+      },
+      {
+        name: 'get_query_analytics',
+        description:
+          'Get search query performance analytics including latency percentiles (p50/p90/p99), cache hit rates, and common query patterns. Use this to understand search performance and usage patterns.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            format: {
+              type: 'string',
+              enum: ['summary', 'json', 'detailed'],
+              description:
+                "Output format: 'summary' for quick overview, 'detailed' for full markdown report, 'json' for raw data.",
+            },
+          },
+        },
+      },
     ];
   }
 
@@ -229,7 +335,17 @@ export class SeuClaudeServer {
       this.config.projectRoot = path;
     }
 
+    // Track memory during indexing
+    const opId = this.memoryProfiler.startOperation('indexing', {
+      path: this.config.projectRoot,
+      force,
+    });
+
     const result = await this.indexTool.execute(force);
+
+    // End memory tracking
+    const memoryOp = this.memoryProfiler.endOperation(opId);
+    await this.memoryProfiler.persist();
 
     let text: string;
     if (result.success) {
@@ -253,6 +369,12 @@ export class SeuClaudeServer {
         );
       }
 
+      // Add memory info if available
+      if (memoryOp?.peakMemory) {
+        const peakMB = (memoryOp.peakMemory.heapUsed / 1024 / 1024).toFixed(1);
+        parts.push(`\n\nPeak memory: ${peakMB} MB`);
+      }
+
       text = parts.join('');
     } else {
       text = `Indexing failed: ${result.error}`;
@@ -270,14 +392,52 @@ export class SeuClaudeServer {
       throw new Error('query parameter is required');
     }
 
+    const query = args.query as string;
+    const filterType = args.filter_type as string | undefined;
+    const filterLanguage = args.filter_language as string | undefined;
+
+    // Parse scope parameter
+    const scopeArg = args.scope as
+      | { include_paths?: string[]; exclude_paths?: string[] }
+      | undefined;
+    const scope = scopeArg
+      ? {
+          includePaths: scopeArg.include_paths,
+          excludePaths: scopeArg.exclude_paths,
+        }
+      : undefined;
+
+    // Track latency for query analytics
+    const startTime = Date.now();
+
     const results = await this.searchTool.execute({
-      query: args.query as string,
+      query,
       limit: args.limit as number | undefined,
-      filterType: args.filter_type as string | undefined,
-      filterLanguage: args.filter_language as string | undefined,
+      filterType,
+      filterLanguage,
+      scope,
     });
 
+    const latencyMs = Date.now() - startTime;
     const text = this.searchTool.formatForClaude(results);
+
+    // Track token analytics for this query
+    try {
+      this.tokenAnalytics.recordQuery(query, text, results.length);
+    } catch {
+      // Don't fail the search if analytics fails
+      this.log.debug('Failed to record token analytics');
+    }
+
+    // Track query analytics
+    try {
+      this.queryAnalytics.recordQuery(query, latencyMs, results.length, {
+        type: filterType,
+        language: filterLanguage,
+      });
+    } catch {
+      this.log.debug('Failed to record query analytics');
+    }
 
     return {
       content: [{ type: 'text', text }],
@@ -326,13 +486,74 @@ export class SeuClaudeServer {
     };
   }
 
+  private async handleGetStats(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const verbose = (args?.verbose as boolean) ?? false;
+
+    const stats = await this.statsTool.execute({ verbose });
+    const text = this.statsTool.formatForClaude(stats, verbose);
+
+    return {
+      content: [{ type: 'text', text }],
+    };
+  }
+
+  private async handleGetTokenAnalytics(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const format = (args?.format as 'summary' | 'json' | 'csv') ?? 'summary';
+
+    const { formatted } = await this.tokenAnalyticsTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text: formatted }],
+    };
+  }
+
+  private async handleGetMemoryProfile(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const format = (args?.format as 'summary' | 'json' | 'detailed') ?? 'summary';
+
+    const text = await this.memoryProfileTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text }],
+    };
+  }
+
+  private async handleGetQueryAnalytics(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const format = (args?.format as 'summary' | 'json' | 'detailed') ?? 'summary';
+
+    const text = await this.queryAnalyticsTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text }],
+    };
+  }
+
   async start(): Promise<void> {
+    // Initialize analytics and profiling
+    await this.tokenAnalytics.initialize();
+    await this.memoryProfiler.load();
+    await this.queryAnalytics.load();
+    this.memoryProfiler.startSampling(5000); // Sample every 5 seconds
+
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     this.log.info('seu-claude MCP server started');
   }
 
   async stop(): Promise<void> {
+    // Stop sampling and save data
+    this.memoryProfiler.stopSampling();
+    await this.memoryProfiler.persist();
+    await this.tokenAnalytics.save();
+    await this.queryAnalytics.save();
+
     this.store.close();
     await this.server.close();
     this.log.info('seu-claude MCP server stopped');

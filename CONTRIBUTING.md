@@ -182,6 +182,38 @@ npm test -- --testPathPattern=parser
 - Include code examples where helpful
 - Keep documentation concise and clear
 
+## Release Process
+
+Releases are managed by maintainers using the release script:
+
+```bash
+npm run release          # Patch release (1.0.0 → 1.0.1)
+npm run release:minor    # Minor release (1.0.0 → 1.1.0)
+npm run release:major    # Major release (1.0.0 → 2.0.0)
+```
+
+### Pre-Release Checklist
+
+Before running the release script, ensure you have updated:
+
+1. **CHANGELOG.md** - Document all changes in the new version section:
+   - Added: New features
+   - Changed: Modifications to existing features
+   - Fixed: Bug fixes
+   - Technical Details: Test counts, new modules, etc.
+
+2. **ROADMAP.md** - Update version and phase status:
+   - Update "Latest Release" version at the top
+   - Mark completed phases as ✅ COMPLETE
+   - Update success metrics if goals were achieved
+
+3. **README.md** - Update if features changed:
+   - Tool count (currently 8 tools)
+   - New tool documentation in MCP Tools section
+   - Feature list updates
+
+The release script will prompt you to confirm documentation is updated before proceeding.
+
 ## Code Review Process
 
 1. All PRs require at least one review before merging

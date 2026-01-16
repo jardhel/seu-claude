@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals';
 import { EmbeddingEngine } from '../vector/embed.js';
 import { loadConfig, Config } from '../utils/config.js';
 import { tmpdir } from 'os';
 import { join } from 'path';
+import { mkdir, writeFile, rm } from 'fs/promises';
 
 // Skip integration tests in CI environment (no model available)
 const isCI = process.env.CI === 'true';
@@ -80,6 +81,122 @@ describe('EmbeddingEngine', () => {
         'Embedding engine not initialized. Call initialize() first.'
       );
     });
+  });
+});
+
+// Tests for bundled model detection (doesn't require actual model)
+describe('EmbeddingEngine - Bundled Model Detection', () => {
+  let testDir: string;
+  let config: Config;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `seu-claude-embed-bundled-test-${Date.now()}-${Math.random()}`);
+    await mkdir(testDir, { recursive: true });
+
+    config = loadConfig({
+      projectRoot: testDir,
+      dataDir: join(testDir, '.seu-claude'),
+      embeddingDimensions: 384,
+    });
+  });
+
+  afterEach(async () => {
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  it('should detect incomplete bundled model (missing files)', async () => {
+    // Create incomplete model directory structure
+    const modelsDir = join(testDir, 'models');
+    await mkdir(join(modelsDir, 'all-MiniLM-L6-v2'), { recursive: true });
+    // Only create config.json, not tokenizer.json - makes model incomplete
+    await writeFile(join(modelsDir, 'all-MiniLM-L6-v2', 'config.json'), '{}');
+
+    const engine = new EmbeddingEngine(config);
+    // Engine should still be created but won't find complete bundled model
+    expect(engine).toBeInstanceOf(EmbeddingEngine);
+    expect(engine.isInitialized()).toBe(false);
+  });
+
+  it('should handle non-existent models directory gracefully', async () => {
+    const engine = new EmbeddingEngine(config);
+    expect(engine).toBeInstanceOf(EmbeddingEngine);
+    expect(engine.getDimensions()).toBe(384);
+  });
+
+  it('should return configured dimensions when using custom config', async () => {
+    const customConfig = loadConfig({
+      projectRoot: testDir,
+      dataDir: join(testDir, '.seu-claude'),
+      embeddingDimensions: 256,
+    });
+
+    const engine = new EmbeddingEngine(customConfig);
+    expect(engine.getDimensions()).toBe(256);
+  });
+
+  it('should handle different supported model configurations', () => {
+    // Test with different model configurations
+    const modelConfigs = [
+      { embeddingDimensions: 384 },
+      { embeddingDimensions: 768 },
+      { embeddingDimensions: 128 },
+    ];
+
+    for (const modelConfig of modelConfigs) {
+      const testConfig = loadConfig({
+        projectRoot: testDir,
+        dataDir: join(testDir, '.seu-claude'),
+        ...modelConfig,
+      });
+
+      const engine = new EmbeddingEngine(testConfig);
+      expect(engine.getDimensions()).toBe(modelConfig.embeddingDimensions);
+    }
+  });
+});
+
+// Tests for initialization error handling (uses mock to trigger errors)
+describe('EmbeddingEngine - Error Handling', () => {
+  let testDir: string;
+  let config: Config;
+
+  beforeEach(async () => {
+    testDir = join(tmpdir(), `seu-claude-embed-error-test-${Date.now()}-${Math.random()}`);
+    await mkdir(testDir, { recursive: true });
+
+    config = loadConfig({
+      projectRoot: testDir,
+      dataDir: join(testDir, '.seu-claude'),
+      embeddingDimensions: 384,
+    });
+  });
+
+  afterEach(async () => {
+    await rm(testDir, { recursive: true, force: true });
+  });
+
+  it('should throw when embed called before initialize', async () => {
+    const engine = new EmbeddingEngine(config);
+
+    await expect(engine.embed('test')).rejects.toThrow(
+      'Embedding engine not initialized'
+    );
+  });
+
+  it('should throw when embedBatch called before initialize', async () => {
+    const engine = new EmbeddingEngine(config);
+
+    await expect(engine.embedBatch(['test1', 'test2'])).rejects.toThrow(
+      'Embedding engine not initialized'
+    );
+  });
+
+  it('should throw when embedQuery called before initialize', async () => {
+    const engine = new EmbeddingEngine(config);
+
+    await expect(engine.embedQuery('search query')).rejects.toThrow(
+      'Embedding engine not initialized'
+    );
   });
 });
 
