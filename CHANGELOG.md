@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-01-16
+
+### Added
+
+- **Incremental Indexing** - New `FileIndex` class tracks file hashes and mtimes to skip unchanged files during re-indexing
+- **Progress Reporting** - Callback-based progress reporting during indexing with phase tracking (crawling, analyzing, embedding, saving)
+- CLI now shows real-time progress during `seu-claude index` command
+- `IndexResult` now includes `filesSkipped`, `filesUpdated`, and `filesDeleted` counts
+
+### Changed
+
+- `index_codebase` MCP tool output now shows incremental statistics
+- Improved indexing performance by only processing changed files
+- Better memory efficiency during large codebase indexing
+
+### Technical Details
+
+- **Test Coverage**: 301 tests passing
+- **New Classes**: `FileIndex` for persistent file tracking
+- **New Types**: `IndexProgress`, `IndexPhase`, `ProgressCallback`
+
 ## [1.0.1] - 2026-01-15
 
 ### Changed

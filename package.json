@@ -1,6 +1,6 @@
 {
   "name": "seu-claude",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Local Codebase RAG MCP Server for Claude Code - Proactive semantic indexing with AST-based chunking",
   "type": "module",
   "main": "dist/index.js",

@@ -8,7 +8,7 @@
 
 **Status:** ✅ SHIPPED
 
-- All tests passing (285 tests)
+- All tests passing (301 tests)
 - 78%+ code coverage
 - Real-world validation complete
 - Documentation updated
@@ -16,9 +16,9 @@
 
 ### Phase 2: v1.1.0 - Performance & Polish (Week 2-3)
 
-- [ ] Incremental indexing optimization (mtime checking)
+- [x] Incremental indexing optimization (mtime checking via `FileIndex`)
 - [ ] Memory usage profiling
-- [ ] Better progress reporting during indexing
+- [x] Better progress reporting during indexing (callback-based)
 - [x] Cross-file reference tracking (via `search_xrefs`)
 - [x] Git-aware indexing (via `git-tracker`)
 

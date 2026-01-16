@@ -90,6 +90,9 @@ describe('IndexResult interface', () => {
       chunksCreated: 50,
       languages: { typescript: 5, python: 3, rust: 2 },
       durationMs: 1500,
+      filesSkipped: 5,
+      filesUpdated: 10,
+      filesDeleted: 2,
     };
 
     expect(result.success).toBe(true);
@@ -97,6 +100,9 @@ describe('IndexResult interface', () => {
     expect(result.chunksCreated).toBe(50);
     expect(result.languages).toEqual({ typescript: 5, python: 3, rust: 2 });
     expect(result.durationMs).toBe(1500);
+    expect(result.filesSkipped).toBe(5);
+    expect(result.filesUpdated).toBe(10);
+    expect(result.filesDeleted).toBe(2);
     expect(result.error).toBeUndefined();
   });
 
@@ -107,10 +113,14 @@ describe('IndexResult interface', () => {
       chunksCreated: 0,
       languages: {},
       durationMs: 100,
+      filesSkipped: 0,
+      filesUpdated: 0,
+      filesDeleted: 0,
       error: 'Something went wrong',
     };
 
     expect(result.success).toBe(false);
+    expect(result.filesSkipped).toBe(0);
     expect(result.error).toBe('Something went wrong');
   });
 });

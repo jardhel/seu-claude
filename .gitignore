@@ -4,14 +4,17 @@ node_modules/
 # Build output
 dist/
 
-# IDE
+# IDE & Editors
 .idea/
 .vscode/
 *.swp
 *.swo
-.DS_Store
 
-# Environment
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
 .env
 .env.local
 .env.*.local
@@ -24,7 +27,7 @@ npm-debug.log*
 # Test coverage
 coverage/
 
-# Local data (user-specific)
+# Local data
 .seu-claude/
 data/
 
@@ -40,12 +43,5 @@ tmp/
 temp/
 *.tmp
 
-# OS files
-Thumbs.db
-
-# Planning documents (local only)
-context-seu-claude.txt
-PLAN.md
-assets/demo.gif
-# Demo GIFs (too large for git)
-assets/demo-linkedin.gif
+# Local MCP configuration
+.mcp.json

@@ -1,5 +1,6 @@
 import { Crawler } from '../indexer/crawler.js';
 import { SemanticChunker, CodeChunk } from '../indexer/chunker.js';
+import { FileIndex } from '../indexer/file-index.js';
 import { EmbeddingEngine } from '../vector/embed.js';
 import { VectorStore, StoredChunk } from '../vector/store.js';
 import { Config } from '../utils/config.js';
@@ -13,8 +14,26 @@ export interface IndexResult {
   chunksCreated: number;
   languages: Record<string, number>;
   durationMs: number;
+  filesSkipped: number;
+  filesUpdated: number;
+  filesDeleted: number;
   error?: string;
 }
+
+export type IndexPhase = 'crawling' | 'analyzing' | 'embedding' | 'saving' | 'complete';
+
+export interface IndexProgress {
+  phase: IndexPhase;
+  message: string;
+  /** Current item being processed (e.g., file number) */
+  current?: number;
+  /** Total items to process */
+  total?: number;
+  /** Current file path being processed */
+  currentFile?: string;
+}
+
+export type ProgressCallback = (progress: IndexProgress) => void;
 
 export class IndexCodebase {
   private config: Config;
@@ -45,16 +64,26 @@ export class IndexCodebase {
     this.initialized = true;
   }
 
-  async execute(force = false): Promise<IndexResult> {
+  async execute(force = false, onProgress?: ProgressCallback): Promise<IndexResult> {
     const startTime = Date.now();
+    const report = (progress: IndexProgress) => {
+      if (onProgress) onProgress(progress);
+    };
 
     try {
       await this.initialize();
 
       this.log.info(`Starting indexing of ${this.config.projectRoot}${force ? ' (force)' : ''}`);
+      report({ phase: 'crawling', message: 'Scanning files...' });
+
+      // Initialize file index for incremental tracking
+      const fileIndex = new FileIndex(this.config.dataDir, this.config.projectRoot);
 
       if (force) {
         await this.store.clear();
+        await fileIndex.clear();
+      } else {
+        await fileIndex.load();
       }
 
       // Crawl the codebase
@@ -64,13 +93,78 @@ export class IndexCodebase {
         `Found ${crawlResult.totalFiles} files (${(crawlResult.totalSize / 1024 / 1024).toFixed(2)} MB)`
       );
 
-      let chunksCreated = 0;
-      const batchSize = 50; // Process files in batches for memory efficiency
-      const allChunks: CodeChunk[] = [];
+      report({
+        phase: 'crawling',
+        message: `Found ${crawlResult.totalFiles} files`,
+        total: crawlResult.totalFiles,
+      });
 
-      // Process files and create chunks
-      for (const file of crawlResult.files) {
+      // Handle deleted files
+      const deletedFiles = fileIndex.getDeletedFiles(crawlResult.files);
+      for (const relativePath of deletedFiles) {
+        const indexed = fileIndex.getFile(relativePath);
+        if (indexed) {
+          // Convert relative path to absolute for deletion
+          const absolutePath = join(this.config.projectRoot, relativePath);
+          await this.store.deleteByFilePath(absolutePath);
+          fileIndex.removeFile(relativePath);
+          this.log.debug(`Removed deleted file: ${relativePath}`);
+        }
+      }
+
+      // Get changed/new files
+      const changedFiles = fileIndex.getChangedFiles(crawlResult.files);
+      const skippedCount = crawlResult.totalFiles - changedFiles.length;
+
+      if (changedFiles.length === 0 && deletedFiles.length === 0) {
+        this.log.info('No changes detected, index is up to date');
+        return {
+          success: true,
+          filesProcessed: 0,
+          chunksCreated: 0,
+          languages: crawlResult.languages,
+          durationMs: Date.now() - startTime,
+          filesSkipped: skippedCount,
+          filesUpdated: 0,
+          filesDeleted: 0,
+        };
+      }
+
+      this.log.info(
+        `Processing ${changedFiles.length} changed files (${skippedCount} unchanged, ${deletedFiles.length} deleted)`
+      );
+
+      report({
+        phase: 'analyzing',
+        message: `Processing ${changedFiles.length} files`,
+        current: 0,
+        total: changedFiles.length,
+      });
+
+      let chunksCreated = 0;
+      const batchSize = 50;
+      const allChunks: CodeChunk[] = [];
+      const fileChunkCounts: Map<string, number> = new Map();
+      let processedCount = 0;
+
+      // Process changed files
+      for (const file of changedFiles) {
+        processedCount++;
+        report({
+          phase: 'analyzing',
+          message: `Analyzing ${file.relativePath}`,
+          current: processedCount,
+          total: changedFiles.length,
+          currentFile: file.relativePath,
+        });
+
         try {
+          // Delete old chunks for this file if it was previously indexed
+          const existingRecord = fileIndex.getFile(file.relativePath);
+          if (existingRecord) {
+            await this.store.deleteByFilePath(file.path);
+          }
+
           const content = await readFile(file.path, 'utf-8');
           const chunks = await this.chunker.chunkFile(
             file.path,
@@ -78,9 +172,17 @@ export class IndexCodebase {
             content,
             file.language
           );
+
+          // Track chunk count for this file
+          fileChunkCounts.set(file.relativePath, chunks.length);
           allChunks.push(...chunks);
 
           if (allChunks.length >= batchSize) {
+            report({
+              phase: 'embedding',
+              message: `Generating embeddings (${chunksCreated + allChunks.length} chunks)`,
+              current: chunksCreated + allChunks.length,
+            });
             await this.embedAndStore(allChunks);
             chunksCreated += allChunks.length;
             allChunks.length = 0;
@@ -92,9 +194,33 @@ export class IndexCodebase {
 
       // Process remaining chunks
       if (allChunks.length > 0) {
+        report({
+          phase: 'embedding',
+          message: `Generating final embeddings (${chunksCreated + allChunks.length} total chunks)`,
+          current: chunksCreated + allChunks.length,
+        });
         await this.embedAndStore(allChunks);
         chunksCreated += allChunks.length;
       }
+
+      report({
+        phase: 'saving',
+        message: 'Saving index...',
+      });
+
+      // Update file index with processed files
+      for (const file of changedFiles) {
+        const chunkCount = fileChunkCounts.get(file.relativePath) ?? 0;
+        fileIndex.updateFile(file.relativePath, {
+          hash: file.hash,
+          mtime: file.modifiedAt.getTime(),
+          indexedAt: Date.now(),
+          chunkCount,
+        });
+      }
+
+      // Save file index
+      await fileIndex.save();
 
       // Finalize cross-references and save the graph
       this.chunker.finalizeXrefs();
@@ -103,15 +229,25 @@ export class IndexCodebase {
       const durationMs = Date.now() - startTime;
 
       this.log.info(
-        `Indexing complete: ${chunksCreated} chunks from ${crawlResult.totalFiles} files in ${(durationMs / 1000).toFixed(1)}s`
+        `Indexing complete: ${chunksCreated} chunks from ${changedFiles.length} files in ${(durationMs / 1000).toFixed(1)}s`
       );
+
+      report({
+        phase: 'complete',
+        message: `Indexed ${chunksCreated} chunks from ${changedFiles.length} files`,
+        current: changedFiles.length,
+        total: changedFiles.length,
+      });
 
       return {
         success: true,
-        filesProcessed: crawlResult.totalFiles,
+        filesProcessed: changedFiles.length,
         chunksCreated,
         languages: crawlResult.languages,
         durationMs,
+        filesSkipped: skippedCount,
+        filesUpdated: changedFiles.length,
+        filesDeleted: deletedFiles.length,
       };
     } catch (err) {
       const error = err instanceof Error ? err.message : String(err);
@@ -123,6 +259,9 @@ export class IndexCodebase {
         chunksCreated: 0,
         languages: {},
         durationMs: Date.now() - startTime,
+        filesSkipped: 0,
+        filesUpdated: 0,
+        filesDeleted: 0,
         error,
       };
     }

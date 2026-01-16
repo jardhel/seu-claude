@@ -231,13 +231,32 @@ export class SeuClaudeServer {
 
     const result = await this.indexTool.execute(force);
 
-    const text = result.success
-      ? `Successfully indexed ${result.filesProcessed} files with ${result.chunksCreated} code chunks in ${(result.durationMs / 1000).toFixed(1)}s.\n\nLanguages: ${Object.entries(
-          result.languages
-        )
-          .map(([lang, count]) => `${lang}: ${count}`)
-          .join(', ')}`
-      : `Indexing failed: ${result.error}`;
+    let text: string;
+    if (result.success) {
+      const parts = [
+        `Successfully indexed ${result.filesProcessed} files with ${result.chunksCreated} code chunks in ${(result.durationMs / 1000).toFixed(1)}s.`,
+      ];
+
+      if (result.filesSkipped > 0 || result.filesDeleted > 0) {
+        const stats = [];
+        if (result.filesSkipped > 0) stats.push(`${result.filesSkipped} unchanged`);
+        if (result.filesUpdated > 0) stats.push(`${result.filesUpdated} updated`);
+        if (result.filesDeleted > 0) stats.push(`${result.filesDeleted} deleted`);
+        parts.push(`\n(${stats.join(', ')})`);
+      }
+
+      if (Object.keys(result.languages).length > 0) {
+        parts.push(
+          `\n\nLanguages: ${Object.entries(result.languages)
+            .map(([lang, count]) => `${lang}: ${count}`)
+            .join(', ')}`
+        );
+      }
+
+      text = parts.join('');
+    } else {
+      text = `Indexing failed: ${result.error}`;
+    }
 
     return {
       content: [{ type: 'text', text }],
