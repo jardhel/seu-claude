@@ -2,11 +2,7 @@ export { StatsCollector } from './collector.js';
 export type { IndexStats, LanguageStats, XrefStats, StorageStats } from './collector.js';
 
 export { TokenAnalyticsCollector } from './token-analytics.js';
-export type {
-  TokenAnalytics,
-  SessionStats,
-  QueryRecord,
-} from './token-analytics.js';
+export type { TokenAnalytics, SessionStats, QueryRecord } from './token-analytics.js';
 
 export { MemoryProfiler } from './memory-profiler.js';
 export type {

@@ -35,9 +35,7 @@ export class GetStats {
 
     // Basic info
     lines.push(`**Project Root:** ${stats.projectRoot}`);
-    lines.push(
-      `**Last Indexed:** ${stats.indexedAt ? stats.indexedAt.toISOString() : 'Never'}`
-    );
+    lines.push(`**Last Indexed:** ${stats.indexedAt ? stats.indexedAt.toISOString() : 'Never'}`);
     lines.push('');
 
     // Summary
@@ -52,9 +50,7 @@ export class GetStats {
       lines.push('| Language | Files | Chunks |');
       lines.push('|----------|-------|--------|');
 
-      const sortedLangs = Object.entries(stats.languages).sort(
-        (a, b) => b[1].chunks - a[1].chunks
-      );
+      const sortedLangs = Object.entries(stats.languages).sort((a, b) => b[1].chunks - a[1].chunks);
 
       for (const [lang, langStats] of sortedLangs) {
         lines.push(`| ${lang} | ${langStats.files} | ${langStats.chunks} |`);

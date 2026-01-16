@@ -50,9 +50,7 @@ export class GetTokenAnalytics {
           formatted = collector.formatForClaude();
       }
 
-      this.log.debug(
-        `Analytics retrieved: ${analytics?.totalQueries ?? 0} queries recorded`
-      );
+      this.log.debug(`Analytics retrieved: ${analytics?.totalQueries ?? 0} queries recorded`);
 
       return { analytics, formatted };
     } catch (err) {

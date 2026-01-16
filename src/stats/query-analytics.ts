@@ -205,9 +205,7 @@ export class QueryAnalyticsCollector {
       this.analytics.cacheMisses++;
     }
     this.analytics.cacheHitRate =
-      this.analytics.totalQueries > 0
-        ? this.analytics.cacheHits / this.analytics.totalQueries
-        : 0;
+      this.analytics.totalQueries > 0 ? this.analytics.cacheHits / this.analytics.totalQueries : 0;
 
     // Update filter usage
     if (filters?.type) {
@@ -232,7 +230,7 @@ export class QueryAnalyticsCollector {
   private updateLatencyHistogram(): void {
     if (this.queryHistory.length === 0) return;
 
-    const latencies = this.queryHistory.map((q) => q.latencyMs).sort((a, b) => a - b);
+    const latencies = this.queryHistory.map(q => q.latencyMs).sort((a, b) => a - b);
     const count = latencies.length;
 
     this.analytics.latencyHistogram = {
@@ -254,11 +252,12 @@ export class QueryAnalyticsCollector {
     // Extract pattern by normalizing the query
     const pattern = this.extractPattern(query);
 
-    const existing = this.analytics.commonPatterns.find((p) => p.pattern === pattern);
+    const existing = this.analytics.commonPatterns.find(p => p.pattern === pattern);
     if (existing) {
       existing.count++;
       // Running average
-      existing.avgLatencyMs = (existing.avgLatencyMs * (existing.count - 1) + latencyMs) / existing.count;
+      existing.avgLatencyMs =
+        (existing.avgLatencyMs * (existing.count - 1) + latencyMs) / existing.count;
       existing.avgResultsCount =
         (existing.avgResultsCount * (existing.count - 1) + resultsCount) / existing.count;
       if (existing.examples.length < PATTERN_EXAMPLES && !existing.examples.includes(query)) {

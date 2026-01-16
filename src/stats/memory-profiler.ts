@@ -272,7 +272,7 @@ export class MemoryProfiler {
    */
   recordLanguageMemory(language: string, filesProcessed: number, chunks: number): void {
     const currentHeap = this.getCurrentMemory().heapUsed;
-    const existing = this.profile.memoryByLanguage.find((m) => m.language === language);
+    const existing = this.profile.memoryByLanguage.find(m => m.language === language);
 
     if (existing) {
       existing.filesProcessed += filesProcessed;

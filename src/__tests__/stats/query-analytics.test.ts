@@ -134,9 +134,7 @@ describe('QueryAnalyticsCollector', () => {
       collector.recordQuery('function handleUser', 70, 4);
 
       const analytics = collector.getAnalytics();
-      const fnPattern = analytics.commonPatterns.find((p) =>
-        p.pattern.includes('function')
-      );
+      const fnPattern = analytics.commonPatterns.find(p => p.pattern.includes('function'));
       expect(fnPattern).toBeDefined();
     });
 

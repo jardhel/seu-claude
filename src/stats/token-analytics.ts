@@ -132,16 +132,13 @@ export class TokenAnalyticsCollector {
     this.analytics.updatedAt = Date.now();
 
     // Recalculate averages
-    this.analytics.avgTokensPerQuery =
-      this.analytics.totalTokensUsed / this.analytics.totalQueries;
+    this.analytics.avgTokensPerQuery = this.analytics.totalTokensUsed / this.analytics.totalQueries;
 
     const totalNaive = this.analytics.totalTokensUsed + this.analytics.totalTokensSaved;
     this.analytics.savingsPercentage =
       totalNaive > 0 ? (this.analytics.totalTokensSaved / totalNaive) * 100 : 0;
 
-    this.log.debug(
-      `Query recorded: ${resultsTokens} tokens (saved ${tokensSaved} vs naive)`
-    );
+    this.log.debug(`Query recorded: ${resultsTokens} tokens (saved ${tokensSaved} vs naive)`);
 
     return record;
   }
@@ -213,9 +210,11 @@ export class TokenAnalyticsCollector {
     if (this.currentSession && this.currentSession.queries.length > 0) {
       lines.push('### Current Session');
       lines.push(`- **Queries:** ${this.currentSession.queries.length}`);
-      lines.push(`- **Tokens Used:** ${this.formatNumber(
-        this.currentSession.totalQueryTokens + this.currentSession.totalResultsTokens
-      )}`);
+      lines.push(
+        `- **Tokens Used:** ${this.formatNumber(
+          this.currentSession.totalQueryTokens + this.currentSession.totalResultsTokens
+        )}`
+      );
       lines.push(`- **Tokens Saved:** ${this.formatNumber(this.currentSession.totalTokensSaved)}`);
       lines.push('');
     }
