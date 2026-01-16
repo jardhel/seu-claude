@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-01-16
+
+### Fixed
+
+- **Removed unused `@anthropic-ai/sdk` dependency** - Reduces install size and eliminates `node-domexception` deprecation warning from this source
+- Fixed release workflow to work with npm 2FA (local publish with interactive authentication)
+
+### Changed
+
+- Release workflow now validates build/tests in CI, npm publish done locally via `scripts/release.sh`
+- Added documentation checklist to release script
+
+### Notes
+
+- Remaining deprecation warnings (`boolean`, `node-domexception`) are from transitive dependencies in `@huggingface/transformers` and `@lancedb/lancedb` - will be resolved when upstream packages update
+
+## [1.1.0] - 2026-01-16
+
+### Added
+
+- 🎉 **Phase 2: Observability & Metrics** - Complete analytics suite for understanding usage
+- **Token Analytics** (`get_token_analytics` tool)
+  - Track token consumption per query and session
+  - Estimate cost savings vs naive file reading
+  - Export analytics (JSON format)
+- **Memory Profiling** (`get_memory_profile` tool)
+  - Real-time memory monitoring with operation tracking
+  - Peak memory tracking during indexing
+  - Memory sampling at configurable intervals
+  - Persist profiles to disk for analysis
+- **Query Analytics** (`get_query_analytics` tool)
+  - Search latency histograms (p50/p90/p95/p99)
+  - Cache hit rate tracking
+  - Query pattern analysis
+  - Per-query-type performance breakdown
+
+### Changed
+
+- **MCP Tools increased from 5 to 8** - New analytics tools added
+- Server now tracks query analytics automatically on every search
+- Improved analytics integration in search handler
+
+### Technical Details
+
+- **Test Coverage**: 370 tests passing (67 new tests for analytics)
+- **New Modules**: `TokenAnalyticsCollector`, `MemoryProfiler`, `QueryAnalyticsCollector`
+- **New Tools**: `GetTokenAnalytics`, `GetMemoryProfile`, `GetQueryAnalytics`
+
 ## [1.0.2] - 2026-01-16
 
 ### Added

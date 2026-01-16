@@ -33,6 +33,24 @@ echo -e "${YELLOW}Current version:${NC} v${CURRENT_VERSION}"
 echo -e "${YELLOW}Version bump:${NC} ${VERSION_TYPE}"
 echo ""
 
+# Pre-release documentation checklist
+echo -e "${BOLD}📋 Pre-release Documentation Checklist${NC}"
+echo -e "   Before releasing, ensure you have updated:"
+echo -e "   ${CYAN}□${NC} CHANGELOG.md - Document new features/fixes"
+echo -e "   ${CYAN}□${NC} ROADMAP.md - Update version and phase status"
+echo -e "   ${CYAN}□${NC} README.md - Update features/tools if changed"
+echo ""
+read -p "Have you updated the documentation? (y/N) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "${YELLOW}Please update documentation before releasing.${NC}"
+    echo -e "  - CHANGELOG.md: Add version section with changes"
+    echo -e "  - ROADMAP.md: Update 'Latest Release' and phase status"
+    echo -e "  - README.md: Update tool count, features if needed"
+    exit 1
+fi
+echo ""
+
 # Step 1: Pre-flight checks
 echo -e "${BOLD}[1/8] Pre-flight checks...${NC}"
 

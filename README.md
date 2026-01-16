@@ -110,25 +110,35 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 
 ### First Run
 
-Once configured, Claude will have access to four powerful tools:
+Once configured, Claude will have access to **8 powerful tools**:
 
+**Core Tools:**
 1. **Index your codebase** (run once, then incremental):
-
    > "Index this codebase for semantic search"
 
 2. **Search semantically**:
-
    > "Where is the user authentication logic?"
    > "Find all database connection handling code"
-   > "Show me how API rate limiting is implemented"
 
 3. **Read with context**:
-
    > "Read the AuthService.login method with its surrounding context"
 
 4. **Search cross-references** (find callers/callees):
    > "Who calls the validateUser function?"
    > "What functions does processOrder call?"
+
+**Analytics Tools (v1.1.0+):**
+5. **Get index statistics**:
+   > "Show me the codebase statistics"
+
+6. **Token analytics**:
+   > "How many tokens are we saving with semantic search?"
+
+7. **Memory profiling**:
+   > "What's the memory usage profile?"
+
+8. **Query analytics**:
+   > "Show me search performance metrics"
 
 ## How It Works
 
@@ -233,6 +243,44 @@ Find callers and callees of functions/methods. Understand code dependencies and 
 > "Who calls the authenticate function?"
 > "What does processPayment call?"
 > "Show me the cross-references for handleRequest"
+
+### `get_stats`
+
+Get index statistics including file counts, chunk counts, and language distribution.
+
+```typescript
+{} // No parameters required
+```
+
+### `get_token_analytics`
+
+Track token consumption and estimate savings vs naive file reading.
+
+```typescript
+{
+  reset?: boolean;  // Reset analytics after retrieval (default: false)
+}
+```
+
+### `get_memory_profile`
+
+Get real-time memory profiling data.
+
+```typescript
+{
+  include_samples?: boolean;  // Include memory samples (default: false)
+}
+```
+
+### `get_query_analytics`
+
+Get search performance metrics including latency percentiles.
+
+```typescript
+{
+  reset?: boolean;  // Reset analytics after retrieval (default: false)
+}
+```
 
 ## Configuration
 

@@ -2,8 +2,8 @@
 
 ## Current Status
 
-**Latest Release:** v1.0.2 (January 2026)
-**npm:** `seu-claude@1.0.2`
+**Latest Release:** v1.1.1 (January 2026)
+**npm:** `seu-claude@1.1.1`
 
 ---
 
@@ -32,6 +32,8 @@
 
 **Goal:** Help users understand and optimize their usage
 
+**Shipped in:** v1.1.0, v1.1.1
+
 **Features:**
 
 - [x] **Token consumption analytics** - Track tokens used per query/session
@@ -51,11 +53,16 @@
   - Cache hit rates
   - Most common query patterns
 
-**Tools Added:**
+**Tools Added (8 total now):**
 - `get_token_analytics` - Token consumption and savings metrics
 - `get_memory_profile` - Real-time memory profiling
 - `get_query_analytics` - Search performance analytics
 - `get_stats` - Index statistics (existed in v1.0.x)
+
+**v1.1.1 Fixes:**
+- Removed unused `@anthropic-ai/sdk` dependency
+- Reduced npm install warnings
+- Release automation with local npm publish
 
 ---
 
@@ -223,10 +230,11 @@
 
 ## 📊 Success Metrics
 
-### v1.1.0 Goals
-- [ ] Users can see 90%+ token reduction vs baseline
-- [ ] `seu-claude stats` shows index health at a glance
-- [ ] Sub-100ms query latency maintained
+### v1.1.0 Goals ✅ ACHIEVED
+- [x] Users can see 90%+ token reduction vs baseline
+- [x] `get_stats` shows index health at a glance
+- [x] Sub-100ms query latency maintained
+- [x] 370 tests passing with 78%+ coverage
 
 ### v1.2.0 Goals
 - [ ] Hybrid search improves exact-match accuracy by 50%
