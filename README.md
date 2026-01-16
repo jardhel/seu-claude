@@ -53,6 +53,9 @@ npx seu-claude setup
 
 # Or if installed globally
 seu-claude setup
+
+# Optional (Claude Code): also install helper subagents
+npx seu-claude setup --subagents
 ```
 
 This will automatically:
@@ -129,6 +132,21 @@ Once configured, Claude will have access to four powerful tools:
 4. **Search cross-references** (find callers/callees):
    > "Who calls the validateUser function?"
    > "What functions does processOrder call?"
+
+### Optional: Claude Code subagents (recommended)
+
+To further reduce main-context clutter, install project-scoped Claude Code subagents into `.claude/agents/` by running `seu-claude setup --subagents` (it won’t overwrite existing files):
+
+- `seu-researcher` - Locate implementations and explain “where/how” with concise pointers
+- `seu-context-summarizer` - Summarize a file/symbol with minimal quoting
+- `seu-xref-explorer` - Map callers/callees and key call paths
+
+**Example prompts:**
+
+> "Use the seu-researcher subagent to find where auth tokens are validated"
+> "Use the seu-xref-explorer subagent to show who calls handleRequest"
+
+Note: Claude Code background subagents cannot use MCP tools, so run these in the foreground.
 
 ## How It Works
 
