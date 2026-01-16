@@ -28,39 +28,38 @@
 
 ---
 
-### Phase 2: v1.1.0 - Observability & Metrics 🔜 NEXT
+### Phase 2: v1.1.0 - Observability & Metrics ✅ COMPLETE
 
 **Goal:** Help users understand and optimize their usage
 
 **Features:**
 
-- [ ] **Token consumption analytics** - Track tokens used per query/session
+- [x] **Token consumption analytics** - Track tokens used per query/session
   - Before/after comparison metrics
   - Cost estimation dashboard
   - Export reports (JSON, CSV)
-- [ ] **Memory usage profiling** - Real-time memory monitoring
+- [x] **Memory usage profiling** - Real-time memory monitoring
   - Peak memory during indexing
   - Idle memory footprint
   - Per-language memory breakdown
-- [ ] **Index statistics dashboard**
+- [x] **Index statistics dashboard**
   - Files indexed, chunks created, index size
   - Language distribution charts
   - Most frequently searched symbols
-- [ ] **Query analytics**
-  - Search latency histograms
+- [x] **Query analytics**
+  - Search latency histograms (p50/p90/p95/p99)
   - Cache hit rates
   - Most common query patterns
 
-**Technical Tasks:**
-
-- [ ] Add telemetry module (opt-in, local-only)
-- [ ] Create `seu-claude stats` CLI command
-- [ ] Add `get_stats` MCP tool for Claude integration
-- [ ] JSON export for all metrics
+**Tools Added:**
+- `get_token_analytics` - Token consumption and savings metrics
+- `get_memory_profile` - Real-time memory profiling
+- `get_query_analytics` - Search performance analytics
+- `get_stats` - Index statistics (existed in v1.0.x)
 
 ---
 
-### Phase 3: v1.2.0 - Enhanced Search
+### Phase 3: v1.2.0 - Enhanced Search 🔜 NEXT
 
 **Goal:** Make searches smarter and more accurate
 
@@ -186,33 +185,38 @@
   - REST API for external tools
   - WebSocket for real-time updates
   - Webhook notifications
+- [ ] **Metrics & Monitoring Integration**
+  - Prometheus exporter (`/metrics` endpoint)
+  - Pre-built Grafana dashboards
+  - OpenTelemetry (OTLP) support
+  - StatsD integration
+  - Metrics include: query latency, cache hit rates, token savings, memory usage
 
 ---
 
-## 🎯 Priority Matrix for v1.1.0
+## 🎯 Priority Matrix for v1.2.0 (Enhanced Search)
 
 ### HIGH PRIORITY (Ship first)
 
 | Feature | Impact | Effort |
 |---------|--------|--------|
-| Token consumption analytics | High - validates ROI | Medium |
-| `seu-claude stats` CLI | High - immediate visibility | Low |
-| Index statistics | Medium - helps debugging | Low |
+| Hybrid search (BM25 + semantic) | High - accuracy | High |
+| Scoped search (directory/pattern) | Medium - utility | Low |
+| Fuzzy symbol search | Medium - UX | Medium |
 
 ### MEDIUM PRIORITY
 
 | Feature | Impact | Effort |
 |---------|--------|--------|
-| Memory profiling | Medium - optimization | Medium |
-| Query analytics | Medium - UX improvement | Medium |
-| JSON export | Medium - integration | Low |
+| Code similarity detection | Medium - insights | High |
+| Search ranking improvements | Medium - quality | Medium |
 
-### LOWER PRIORITY (v1.2.0+)
+### LOWER PRIORITY (v1.3.0+)
 
 | Feature | Impact | Effort |
 |---------|--------|--------|
-| Hybrid search | High - accuracy | High |
-| Real-time watching | Medium - DX | High |
+| Real-time file watching | Medium - DX | High |
+| Query caching | Low - performance | Medium |
 | VS Code extension | High - adoption | Very High |
 
 ---

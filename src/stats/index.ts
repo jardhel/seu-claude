@@ -15,3 +15,11 @@ export type {
   OperationMemory,
   MemoryByLanguage,
 } from './memory-profiler.js';
+
+export { QueryAnalyticsCollector } from './query-analytics.js';
+export type {
+  QueryAnalytics,
+  QueryPerformance,
+  LatencyHistogram,
+  QueryPattern,
+} from './query-analytics.js';

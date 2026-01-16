@@ -16,7 +16,8 @@ import { SearchXrefs } from './tools/search-xrefs.js';
 import { GetStats } from './tools/get-stats.js';
 import { GetTokenAnalytics } from './tools/get-token-analytics.js';
 import { GetMemoryProfile } from './tools/get-memory-profile.js';
-import { TokenAnalyticsCollector, MemoryProfiler } from './stats/index.js';
+import { GetQueryAnalytics } from './tools/get-query-analytics.js';
+import { TokenAnalyticsCollector, MemoryProfiler, QueryAnalyticsCollector } from './stats/index.js';
 
 export class SeuClaudeServer {
   private server: Server;
@@ -30,8 +31,10 @@ export class SeuClaudeServer {
   private statsTool: GetStats;
   private tokenAnalyticsTool: GetTokenAnalytics;
   private memoryProfileTool: GetMemoryProfile;
+  private queryAnalyticsTool: GetQueryAnalytics;
   private tokenAnalytics: TokenAnalyticsCollector;
   private memoryProfiler: MemoryProfiler;
+  private queryAnalytics: QueryAnalyticsCollector;
   private log = logger.child('server');
   private initialized = false;
 
@@ -48,6 +51,8 @@ export class SeuClaudeServer {
     this.tokenAnalytics = new TokenAnalyticsCollector(this.config);
     this.memoryProfiler = new MemoryProfiler(this.config);
     this.memoryProfileTool = new GetMemoryProfile(this.memoryProfiler, this.config);
+    this.queryAnalytics = new QueryAnalyticsCollector(this.config);
+    this.queryAnalyticsTool = new GetQueryAnalytics(this.queryAnalytics, this.config);
 
     this.server = new Server(
       {
@@ -94,6 +99,8 @@ export class SeuClaudeServer {
             return await this.handleGetTokenAnalytics(args);
           case 'get_memory_profile':
             return await this.handleGetMemoryProfile(args);
+          case 'get_query_analytics':
+            return await this.handleGetQueryAnalytics(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -268,6 +275,22 @@ export class SeuClaudeServer {
           },
         },
       },
+      {
+        name: 'get_query_analytics',
+        description:
+          'Get search query performance analytics including latency percentiles (p50/p90/p99), cache hit rates, and common query patterns. Use this to understand search performance and usage patterns.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            format: {
+              type: 'string',
+              enum: ['summary', 'json', 'detailed'],
+              description:
+                "Output format: 'summary' for quick overview, 'detailed' for full markdown report, 'json' for raw data.",
+            },
+          },
+        },
+      },
     ];
   }
 
@@ -352,13 +375,20 @@ export class SeuClaudeServer {
     }
 
     const query = args.query as string;
+    const filterType = args.filter_type as string | undefined;
+    const filterLanguage = args.filter_language as string | undefined;
+
+    // Track latency for query analytics
+    const startTime = Date.now();
+
     const results = await this.searchTool.execute({
       query,
       limit: args.limit as number | undefined,
-      filterType: args.filter_type as string | undefined,
-      filterLanguage: args.filter_language as string | undefined,
+      filterType,
+      filterLanguage,
     });
 
+    const latencyMs = Date.now() - startTime;
     const text = this.searchTool.formatForClaude(results);
 
     // Track token analytics for this query
@@ -367,6 +397,16 @@ export class SeuClaudeServer {
     } catch {
       // Don't fail the search if analytics fails
       this.log.debug('Failed to record token analytics');
+    }
+
+    // Track query analytics
+    try {
+      this.queryAnalytics.recordQuery(query, latencyMs, results.length, {
+        type: filterType,
+        language: filterLanguage,
+      });
+    } catch {
+      this.log.debug('Failed to record query analytics');
     }
 
     return {
@@ -453,10 +493,23 @@ export class SeuClaudeServer {
     };
   }
 
+  private async handleGetQueryAnalytics(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const format = (args?.format as 'summary' | 'json' | 'detailed') ?? 'summary';
+
+    const text = await this.queryAnalyticsTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text }],
+    };
+  }
+
   async start(): Promise<void> {
     // Initialize analytics and profiling
     await this.tokenAnalytics.initialize();
     await this.memoryProfiler.load();
+    await this.queryAnalytics.load();
     this.memoryProfiler.startSampling(5000); // Sample every 5 seconds
 
     const transport = new StdioServerTransport();
@@ -469,6 +522,7 @@ export class SeuClaudeServer {
     this.memoryProfiler.stopSampling();
     await this.memoryProfiler.persist();
     await this.tokenAnalytics.save();
+    await this.queryAnalytics.save();
 
     this.store.close();
     await this.server.close();
