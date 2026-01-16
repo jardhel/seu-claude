@@ -127,7 +127,7 @@ describe('TokenAnalyticsCollector', () => {
       await collector.initialize();
     });
 
-    it('should return message when no analytics', async () => {
+    it('should return message when no analytics', () => {
       const freshCollector = new TokenAnalyticsCollector(config);
       const result = freshCollector.formatForClaude();
       expect(result).toBe('No analytics data available.');

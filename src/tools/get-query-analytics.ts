@@ -36,7 +36,7 @@ export class GetQueryAnalytics {
     _config: Config
   ) {}
 
-  async execute(args: GetQueryAnalyticsArgs): Promise<string> {
+  execute(args: GetQueryAnalyticsArgs): Promise<string> {
     const format = args.format || 'summary';
 
     logger.debug('Retrieving query analytics', { format });
@@ -51,11 +51,11 @@ export class GetQueryAnalytics {
         cacheHitRate: analytics.cacheHitRate,
       });
 
-      return result;
+      return Promise.resolve(result);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       logger.error('Failed to retrieve query analytics', { error: message });
-      return `Error retrieving query analytics: ${message}`;
+      return Promise.resolve(`Error retrieving query analytics: ${message}`);
     }
   }
 }

@@ -36,7 +36,7 @@ export class GetMemoryProfile {
     _config: Config
   ) {}
 
-  async execute(args: GetMemoryProfileArgs): Promise<string> {
+  execute(args: GetMemoryProfileArgs): Promise<string> {
     const format = args.format || 'summary';
 
     logger.debug('Retrieving memory profile', { format });
@@ -52,11 +52,11 @@ export class GetMemoryProfile {
         stats: this.profiler.getStats(),
       });
 
-      return result;
+      return Promise.resolve(result);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       logger.error('Failed to retrieve memory profile', { error: message });
-      return `Error retrieving memory profile: ${message}`;
+      return Promise.resolve(`Error retrieving memory profile: ${message}`);
     }
   }
 }

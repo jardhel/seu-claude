@@ -140,9 +140,9 @@ export class MemoryProfiler {
   async persist(): Promise<void> {
     try {
       // Ensure directory exists
-      const { mkdir } = await import('fs/promises');
-      const { dirname } = await import('path');
-      await mkdir(dirname(this.persistPath), { recursive: true });
+      const fsPromises = await import('fs/promises');
+      const pathModule = await import('path');
+      await fsPromises.mkdir(pathModule.dirname(this.persistPath), { recursive: true });
 
       this.profile.updatedAt = Date.now();
       await writeFile(this.persistPath, JSON.stringify(this.profile, null, 2));

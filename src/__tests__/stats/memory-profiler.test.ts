@@ -262,7 +262,9 @@ describe('MemoryProfiler', () => {
       profiler.startSampling(100);
 
       // Wait for a few samples
-      await new Promise(resolve => setTimeout(resolve, 350));
+      await new Promise<void>(resolve => {
+        setTimeout(resolve, 350);
+      });
 
       profiler.stopSampling();
 
