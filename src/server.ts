@@ -13,6 +13,7 @@ import { IndexCodebase } from './tools/index-codebase.js';
 import { SearchCodebase } from './tools/search-codebase.js';
 import { ReadSemanticContext } from './tools/read-context.js';
 import { SearchXrefs } from './tools/search-xrefs.js';
+import { GetStats } from './tools/get-stats.js';
 
 export class SeuClaudeServer {
   private server: Server;
@@ -23,6 +24,7 @@ export class SeuClaudeServer {
   private searchTool: SearchCodebase;
   private contextTool: ReadSemanticContext;
   private xrefsTool: SearchXrefs;
+  private statsTool: GetStats;
   private log = logger.child('server');
   private initialized = false;
 
@@ -34,6 +36,7 @@ export class SeuClaudeServer {
     this.searchTool = new SearchCodebase(this.embedder, this.store);
     this.contextTool = new ReadSemanticContext(this.store);
     this.xrefsTool = new SearchXrefs(this.config);
+    this.statsTool = new GetStats(this.config);
 
     this.server = new Server(
       {
@@ -74,6 +77,8 @@ export class SeuClaudeServer {
             return await this.handleReadContext(args);
           case 'search_xrefs':
             return await this.handleSearchXrefs(args);
+          case 'get_stats':
+            return await this.handleGetStats(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -203,6 +208,20 @@ export class SeuClaudeServer {
           required: ['symbol'],
         },
       },
+      {
+        name: 'get_stats',
+        description:
+          'Get comprehensive statistics about the indexed codebase including file counts, chunk counts, language breakdown, cross-reference counts, and storage usage. Use this to understand the current state of the index.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            verbose: {
+              type: 'boolean',
+              description: 'Include detailed storage breakdown. Default: false.',
+            },
+          },
+        },
+      },
     ];
   }
 
@@ -323,6 +342,19 @@ export class SeuClaudeServer {
 
     return {
       content: [{ type: 'text', text: result }],
+    };
+  }
+
+  private async handleGetStats(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const verbose = (args?.verbose as boolean) ?? false;
+
+    const stats = await this.statsTool.execute({ verbose });
+    const text = this.statsTool.formatForClaude(stats, verbose);
+
+    return {
+      content: [{ type: 'text', text }],
     };
   }
 

@@ -20,6 +20,12 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (process.argv[2] === 'stats') {
+    const { runStats } = await import('./cli-stats.js');
+    await runStats();
+    return;
+  }
+
   // Now load the server and its dependencies
   const { SeuClaudeServer } = await import('./server.js');
   const { logger } = await import('./utils/logger.js');
