@@ -14,6 +14,8 @@ import { SearchCodebase } from './tools/search-codebase.js';
 import { ReadSemanticContext } from './tools/read-context.js';
 import { SearchXrefs } from './tools/search-xrefs.js';
 import { GetStats } from './tools/get-stats.js';
+import { GetTokenAnalytics } from './tools/get-token-analytics.js';
+import { TokenAnalyticsCollector } from './stats/index.js';
 
 export class SeuClaudeServer {
   private server: Server;
@@ -25,6 +27,8 @@ export class SeuClaudeServer {
   private contextTool: ReadSemanticContext;
   private xrefsTool: SearchXrefs;
   private statsTool: GetStats;
+  private tokenAnalyticsTool: GetTokenAnalytics;
+  private tokenAnalytics: TokenAnalyticsCollector;
   private log = logger.child('server');
   private initialized = false;
 
@@ -37,6 +41,8 @@ export class SeuClaudeServer {
     this.contextTool = new ReadSemanticContext(this.store);
     this.xrefsTool = new SearchXrefs(this.config);
     this.statsTool = new GetStats(this.config);
+    this.tokenAnalyticsTool = new GetTokenAnalytics(this.config);
+    this.tokenAnalytics = new TokenAnalyticsCollector(this.config);
 
     this.server = new Server(
       {
@@ -79,6 +85,8 @@ export class SeuClaudeServer {
             return await this.handleSearchXrefs(args);
           case 'get_stats':
             return await this.handleGetStats(args);
+          case 'get_token_analytics':
+            return await this.handleGetTokenAnalytics(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -222,6 +230,21 @@ export class SeuClaudeServer {
           },
         },
       },
+      {
+        name: 'get_token_analytics',
+        description:
+          'Get token consumption analytics showing how many tokens were used vs saved by using semantic search. Includes cost estimation and session statistics. Use this to understand the ROI of using seu-claude.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            format: {
+              type: 'string',
+              enum: ['summary', 'json', 'csv'],
+              description: 'Output format. summary (default), json, or csv for export.',
+            },
+          },
+        },
+      },
     ];
   }
 
@@ -289,14 +312,23 @@ export class SeuClaudeServer {
       throw new Error('query parameter is required');
     }
 
+    const query = args.query as string;
     const results = await this.searchTool.execute({
-      query: args.query as string,
+      query,
       limit: args.limit as number | undefined,
       filterType: args.filter_type as string | undefined,
       filterLanguage: args.filter_language as string | undefined,
     });
 
     const text = this.searchTool.formatForClaude(results);
+
+    // Track token analytics for this query
+    try {
+      this.tokenAnalytics.recordQuery(query, text, results.length);
+    } catch {
+      // Don't fail the search if analytics fails
+      this.log.debug('Failed to record token analytics');
+    }
 
     return {
       content: [{ type: 'text', text }],
@@ -358,13 +390,31 @@ export class SeuClaudeServer {
     };
   }
 
+  private async handleGetTokenAnalytics(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const format = (args?.format as 'summary' | 'json' | 'csv') ?? 'summary';
+
+    const { formatted } = await this.tokenAnalyticsTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text: formatted }],
+    };
+  }
+
   async start(): Promise<void> {
+    // Initialize token analytics
+    await this.tokenAnalytics.initialize();
+
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     this.log.info('seu-claude MCP server started');
   }
 
   async stop(): Promise<void> {
+    // Save token analytics before stopping
+    await this.tokenAnalytics.save();
+
     this.store.close();
     await this.server.close();
     this.log.info('seu-claude MCP server stopped');
