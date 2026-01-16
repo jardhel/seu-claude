@@ -39,7 +39,7 @@ export class FileIndex {
   async load(): Promise<void> {
     try {
       const content = await readFile(this.filePath, 'utf-8');
-      const data: FileIndexData = JSON.parse(content);
+      const data = JSON.parse(content) as FileIndexData;
 
       if (data.version !== FILE_INDEX_VERSION) {
         this.log.warn(
