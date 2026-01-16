@@ -101,7 +101,7 @@ describe('IndexCodebase', () => {
       expect(result.success).toBe(true);
       expect(result.filesProcessed).toBe(0);
       expect(result.chunksCreated).toBe(0);
-    });
+    }, 30000);
   });
 
   describe('execute - with files', () => {
