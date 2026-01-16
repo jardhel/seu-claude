@@ -59,7 +59,6 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
     "@anthropic-ai/tokenizer": "^0.0.4",
     "@huggingface/transformers": "^3.0.0",
     "@lancedb/lancedb": "^0.5.0",
