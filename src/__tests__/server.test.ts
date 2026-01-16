@@ -240,13 +240,13 @@ describe('SeuClaudeServer - search_xrefs Tool', () => {
 });
 
 describe('SeuClaudeServer - Tool Schema Completeness', () => {
-  it('should define all six tools', () => {
+  it('should define all seven tools', () => {
     const server = new SeuClaudeServer();
     const tools = (
       server as unknown as { getToolDefinitions: () => unknown[] }
     ).getToolDefinitions();
 
-    expect(tools).toHaveLength(6);
+    expect(tools).toHaveLength(7);
 
     const toolNames = tools.map((t: unknown) => (t as { name: string }).name);
     expect(toolNames).toContain('index_codebase');
@@ -255,6 +255,7 @@ describe('SeuClaudeServer - Tool Schema Completeness', () => {
     expect(toolNames).toContain('search_xrefs');
     expect(toolNames).toContain('get_stats');
     expect(toolNames).toContain('get_token_analytics');
+    expect(toolNames).toContain('get_memory_profile');
   });
 
   it('should have descriptions for all tools', () => {

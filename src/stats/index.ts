@@ -7,3 +7,11 @@ export type {
   SessionStats,
   QueryRecord,
 } from './token-analytics.js';
+
+export { MemoryProfiler } from './memory-profiler.js';
+export type {
+  MemoryProfile,
+  MemorySample,
+  OperationMemory,
+  MemoryByLanguage,
+} from './memory-profiler.js';

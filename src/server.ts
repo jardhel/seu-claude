@@ -15,7 +15,8 @@ import { ReadSemanticContext } from './tools/read-context.js';
 import { SearchXrefs } from './tools/search-xrefs.js';
 import { GetStats } from './tools/get-stats.js';
 import { GetTokenAnalytics } from './tools/get-token-analytics.js';
-import { TokenAnalyticsCollector } from './stats/index.js';
+import { GetMemoryProfile } from './tools/get-memory-profile.js';
+import { TokenAnalyticsCollector, MemoryProfiler } from './stats/index.js';
 
 export class SeuClaudeServer {
   private server: Server;
@@ -28,7 +29,9 @@ export class SeuClaudeServer {
   private xrefsTool: SearchXrefs;
   private statsTool: GetStats;
   private tokenAnalyticsTool: GetTokenAnalytics;
+  private memoryProfileTool: GetMemoryProfile;
   private tokenAnalytics: TokenAnalyticsCollector;
+  private memoryProfiler: MemoryProfiler;
   private log = logger.child('server');
   private initialized = false;
 
@@ -43,6 +46,8 @@ export class SeuClaudeServer {
     this.statsTool = new GetStats(this.config);
     this.tokenAnalyticsTool = new GetTokenAnalytics(this.config);
     this.tokenAnalytics = new TokenAnalyticsCollector(this.config);
+    this.memoryProfiler = new MemoryProfiler(this.config);
+    this.memoryProfileTool = new GetMemoryProfile(this.memoryProfiler, this.config);
 
     this.server = new Server(
       {
@@ -87,6 +92,8 @@ export class SeuClaudeServer {
             return await this.handleGetStats(args);
           case 'get_token_analytics':
             return await this.handleGetTokenAnalytics(args);
+          case 'get_memory_profile':
+            return await this.handleGetMemoryProfile(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -245,6 +252,22 @@ export class SeuClaudeServer {
           },
         },
       },
+      {
+        name: 'get_memory_profile',
+        description:
+          'Get memory usage statistics for the MCP server, including current heap usage, peak memory during indexing, and memory breakdown by language. Use this to monitor server health and optimize performance.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            format: {
+              type: 'string',
+              enum: ['summary', 'json', 'detailed'],
+              description:
+                "Output format: 'summary' for quick overview, 'detailed' for full markdown report, 'json' for raw data.",
+            },
+          },
+        },
+      },
     ];
   }
 
@@ -271,7 +294,17 @@ export class SeuClaudeServer {
       this.config.projectRoot = path;
     }
 
+    // Track memory during indexing
+    const opId = this.memoryProfiler.startOperation('indexing', {
+      path: this.config.projectRoot,
+      force,
+    });
+
     const result = await this.indexTool.execute(force);
+
+    // End memory tracking
+    const memoryOp = this.memoryProfiler.endOperation(opId);
+    await this.memoryProfiler.persist();
 
     let text: string;
     if (result.success) {
@@ -293,6 +326,12 @@ export class SeuClaudeServer {
             .map(([lang, count]) => `${lang}: ${count}`)
             .join(', ')}`
         );
+      }
+
+      // Add memory info if available
+      if (memoryOp?.peakMemory) {
+        const peakMB = (memoryOp.peakMemory.heapUsed / 1024 / 1024).toFixed(1);
+        parts.push(`\n\nPeak memory: ${peakMB} MB`);
       }
 
       text = parts.join('');
@@ -402,9 +441,23 @@ export class SeuClaudeServer {
     };
   }
 
+  private async handleGetMemoryProfile(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    const format = (args?.format as 'summary' | 'json' | 'detailed') ?? 'summary';
+
+    const text = await this.memoryProfileTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text }],
+    };
+  }
+
   async start(): Promise<void> {
-    // Initialize token analytics
+    // Initialize analytics and profiling
     await this.tokenAnalytics.initialize();
+    await this.memoryProfiler.load();
+    this.memoryProfiler.startSampling(5000); // Sample every 5 seconds
 
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
@@ -412,7 +465,9 @@ export class SeuClaudeServer {
   }
 
   async stop(): Promise<void> {
-    // Save token analytics before stopping
+    // Stop sampling and save data
+    this.memoryProfiler.stopSampling();
+    await this.memoryProfiler.persist();
     await this.tokenAnalytics.save();
 
     this.store.close();
