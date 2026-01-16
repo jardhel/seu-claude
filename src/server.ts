@@ -43,7 +43,7 @@ export class SeuClaudeServer {
     this.embedder = new EmbeddingEngine(this.config);
     this.store = new VectorStore(this.config);
     this.indexTool = new IndexCodebase(this.config, this.embedder, this.store);
-    this.searchTool = new SearchCodebase(this.embedder, this.store);
+    this.searchTool = new SearchCodebase(this.embedder, this.store, this.config.dataDir);
     this.contextTool = new ReadSemanticContext(this.store);
     this.xrefsTool = new SearchXrefs(this.config);
     this.statsTool = new GetStats(this.config);
@@ -167,6 +167,24 @@ export class SeuClaudeServer {
               type: 'string',
               description:
                 'Filter results by programming language (e.g., "typescript", "python", "rust").',
+            },
+            scope: {
+              type: 'object',
+              description: 'Limit search to specific file paths using glob patterns.',
+              properties: {
+                include_paths: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description:
+                    'Glob patterns for paths to include. Example: ["src/**", "lib/**"]',
+                },
+                exclude_paths: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description:
+                    'Glob patterns for paths to exclude. Example: ["**/*.test.ts", "**/__tests__/**"]',
+                },
+              },
             },
           },
           required: ['query'],
@@ -378,6 +396,17 @@ export class SeuClaudeServer {
     const filterType = args.filter_type as string | undefined;
     const filterLanguage = args.filter_language as string | undefined;
 
+    // Parse scope parameter
+    const scopeArg = args.scope as
+      | { include_paths?: string[]; exclude_paths?: string[] }
+      | undefined;
+    const scope = scopeArg
+      ? {
+          includePaths: scopeArg.include_paths,
+          excludePaths: scopeArg.exclude_paths,
+        }
+      : undefined;
+
     // Track latency for query analytics
     const startTime = Date.now();
 
@@ -386,6 +415,7 @@ export class SeuClaudeServer {
       limit: args.limit as number | undefined,
       filterType,
       filterLanguage,
+      scope,
     });
 
     const latencyMs = Date.now() - startTime;

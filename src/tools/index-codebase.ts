@@ -3,6 +3,7 @@ import { SemanticChunker, CodeChunk } from '../indexer/chunker.js';
 import { FileIndex } from '../indexer/file-index.js';
 import { EmbeddingEngine } from '../vector/embed.js';
 import { VectorStore, StoredChunk } from '../vector/store.js';
+import { BM25Engine } from '../search/bm25.js';
 import { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
 import { readFile, writeFile, mkdir } from 'fs/promises';
@@ -41,6 +42,7 @@ export class IndexCodebase {
   private chunker: SemanticChunker;
   private embedder: EmbeddingEngine;
   private store: VectorStore;
+  private bm25Engine: BM25Engine;
   private log = logger.child('index-codebase');
   private initialized = false;
 
@@ -55,6 +57,7 @@ export class IndexCodebase {
     this.chunker = new SemanticChunker(config, languagesDir);
     this.embedder = embedder;
     this.store = store;
+    this.bm25Engine = new BM25Engine();
   }
 
   async initialize(): Promise<void> {
@@ -82,8 +85,10 @@ export class IndexCodebase {
       if (force) {
         await this.store.clear();
         await fileIndex.clear();
+        this.bm25Engine.clear();
       } else {
         await fileIndex.load();
+        await this.loadBM25Index();
       }
 
       // Crawl the codebase
@@ -107,6 +112,8 @@ export class IndexCodebase {
           // Convert relative path to absolute for deletion
           const absolutePath = join(this.config.projectRoot, relativePath);
           await this.store.deleteByFilePath(absolutePath);
+          // Remove BM25 documents for this file (uses chunk IDs pattern)
+          this.removeBM25DocsForFile(relativePath);
           fileIndex.removeFile(relativePath);
           this.log.debug(`Removed deleted file: ${relativePath}`);
         }
@@ -163,6 +170,8 @@ export class IndexCodebase {
           const existingRecord = fileIndex.getFile(file.relativePath);
           if (existingRecord) {
             await this.store.deleteByFilePath(file.path);
+            // Remove old BM25 documents for this file
+            this.removeBM25DocsForFile(file.relativePath);
           }
 
           const content = await readFile(file.path, 'utf-8');
@@ -226,6 +235,9 @@ export class IndexCodebase {
       this.chunker.finalizeXrefs();
       await this.saveXrefGraph();
 
+      // Save BM25 index for keyword search
+      await this.saveBM25Index();
+
       const durationMs = Date.now() - startTime;
 
       this.log.info(
@@ -282,6 +294,25 @@ export class IndexCodebase {
     // Store in vector database
     await this.store.upsert(storedChunks);
 
+    // Add chunks to BM25 index for keyword search
+    for (const chunk of chunks) {
+      const chunkId = this.getChunkId(chunk);
+      this.bm25Engine.addDocument({
+        id: chunkId,
+        text: chunk.code,
+        metadata: {
+          filePath: chunk.filePath,
+          relativePath: chunk.relativePath,
+          startLine: chunk.startLine,
+          endLine: chunk.endLine,
+          type: chunk.type,
+          name: chunk.name,
+          scope: chunk.scope,
+          language: chunk.language,
+        },
+      });
+    }
+
     this.log.debug(`Embedded and stored ${chunks.length} chunks`);
   }
 
@@ -302,5 +333,62 @@ export class IndexCodebase {
 
     await writeFile(xrefPath, JSON.stringify(data, null, 2));
     this.log.info(`Saved cross-reference graph: ${graph.definitions.size} definitions`);
+  }
+
+  /**
+   * Load BM25 index from disk
+   */
+  private async loadBM25Index(): Promise<void> {
+    const bm25Path = join(this.config.dataDir, 'bm25-index.json');
+
+    try {
+      const content = await readFile(bm25Path, 'utf-8');
+      this.bm25Engine.deserialize(content);
+      const stats = this.bm25Engine.getStats();
+      this.log.debug(`Loaded BM25 index: ${stats.totalDocs} documents`);
+    } catch {
+      // Index doesn't exist yet, start fresh
+      this.log.debug('No existing BM25 index found, starting fresh');
+    }
+  }
+
+  /**
+   * Save BM25 index to disk
+   */
+  private async saveBM25Index(): Promise<void> {
+    const bm25Path = join(this.config.dataDir, 'bm25-index.json');
+
+    // Ensure data directory exists
+    await mkdir(dirname(bm25Path), { recursive: true });
+
+    const serialized = this.bm25Engine.serialize();
+    await writeFile(bm25Path, serialized);
+
+    const stats = this.bm25Engine.getStats();
+    this.log.info(`Saved BM25 index: ${stats.totalDocs} documents, ${stats.totalTerms} terms`);
+  }
+
+  /**
+   * Remove BM25 documents for a given file
+   * BM25 documents are tracked using IDs formatted as relativePath:startLine:endLine
+   */
+  private removeBM25DocsForFile(relativePath: string): void {
+    const prefix = `${relativePath}:`;
+    const removed = this.bm25Engine.removeDocumentsByPrefix(prefix);
+    this.log.debug(`Removed ${removed} BM25 documents for file: ${relativePath}`);
+  }
+
+  /**
+   * Generate a unique chunk ID for BM25 indexing
+   */
+  private getChunkId(chunk: CodeChunk): string {
+    return `${chunk.relativePath}:${chunk.startLine}:${chunk.endLine}`;
+  }
+
+  /**
+   * Get the BM25 engine instance (for use by search tools)
+   */
+  getBM25Engine(): BM25Engine {
+    return this.bm25Engine;
   }
 }

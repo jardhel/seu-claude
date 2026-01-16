@@ -182,6 +182,62 @@ describe('StatsCollector', () => {
       expect(stats.languages.other.files).toBe(1);
       expect(stats.languages.other.chunks).toBe(2);
     });
+
+    it('should handle corrupted xref graph gracefully', async () => {
+      await writeFile(join(dataDir, 'xref-graph.json'), 'invalid json content {{{{');
+
+      const stats = await collector.collect();
+
+      expect(stats.xrefs.totalDefinitions).toBe(0);
+      expect(stats.xrefs.totalCallSites).toBe(0);
+    });
+
+    it('should calculate lancedb directory size', async () => {
+      // Create lancedb directory with some test files
+      const lancedbPath = join(dataDir, 'lancedb');
+      await mkdir(lancedbPath, { recursive: true });
+      await writeFile(join(lancedbPath, 'test-data.bin'), 'x'.repeat(1024));
+      await writeFile(join(lancedbPath, 'metadata.json'), '{"version":1}');
+
+      const stats = await collector.collect();
+
+      // Should calculate the size of files in lancedb directory
+      expect(stats.storage.vectorDbSize).toBeGreaterThan(0);
+      expect(stats.storage.vectorDbSize).toBeGreaterThanOrEqual(1024);
+    });
+
+    it('should handle nested directories in lancedb', async () => {
+      // Create nested lancedb directory structure
+      const lancedbPath = join(dataDir, 'lancedb');
+      const nestedDir = join(lancedbPath, 'tables', 'chunks');
+      await mkdir(nestedDir, { recursive: true });
+      await writeFile(join(lancedbPath, 'root.bin'), 'root');
+      await writeFile(join(nestedDir, 'data.bin'), 'nested data content');
+
+      const stats = await collector.collect();
+
+      // Should include sizes from nested directories
+      expect(stats.storage.vectorDbSize).toBeGreaterThan(0);
+    });
+
+    it('should handle xref graph with empty or malformed callSites', async () => {
+      await writeFile(
+        join(dataDir, 'xref-graph.json'),
+        JSON.stringify({
+          definitions: { foo: { file: 'test.ts', line: 1 } },
+          callSites: {
+            foo: 'not-an-array', // Malformed - should be an array
+            bar: null,
+          },
+        })
+      );
+
+      const stats = await collector.collect();
+
+      expect(stats.xrefs.totalDefinitions).toBe(1);
+      // Should handle non-array callSites gracefully
+      expect(stats.xrefs.totalCallSites).toBe(0);
+    });
   });
 
   describe('formatBytes', () => {
