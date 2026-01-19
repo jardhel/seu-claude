@@ -21,7 +21,7 @@
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
-    "format": "prettier --write src/**/*.ts",
+    "format": "prettier --write 'src/**/*.ts'",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "benchmark": "npx tsx benchmarks/performance.ts",
@@ -69,6 +69,12 @@
     "micromatch": "^4.0.8",
     "web-tree-sitter": "^0.22.6",
     "xxhash-wasm": "^1.0.2"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^20.3.1",

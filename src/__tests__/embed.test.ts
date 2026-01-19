@@ -178,9 +178,7 @@ describe('EmbeddingEngine - Error Handling', () => {
   it('should throw when embed called before initialize', async () => {
     const engine = new EmbeddingEngine(config);
 
-    await expect(engine.embed('test')).rejects.toThrow(
-      'Embedding engine not initialized'
-    );
+    await expect(engine.embed('test')).rejects.toThrow('Embedding engine not initialized');
   });
 
   it('should throw when embedBatch called before initialize', async () => {

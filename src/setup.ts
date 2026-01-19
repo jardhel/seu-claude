@@ -283,7 +283,9 @@ export async function runSetup(options?: SetupOptions): Promise<void> {
       if (resolvedOptions.installSubagents) {
         console.log('4. (Claude Code) Try: "Use the seu-researcher subagent to locate X"');
       } else {
-        console.log('4. (Claude Code) Optional: re-run with `setup --subagents` to install helpers');
+        console.log(
+          '4. (Claude Code) Optional: re-run with `setup --subagents` to install helpers'
+        );
       }
     }
     console.log('\n📚 Docs: https://github.com/jardhel/seu-claude#readme');

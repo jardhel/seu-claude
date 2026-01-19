@@ -76,9 +76,7 @@ describe('SearchSymbols', () => {
       expect(result.success).toBe(true);
       expect(result.matches.length).toBeGreaterThan(0);
       // Should find user-related symbols
-      const hasUserMatch = result.matches.some(m =>
-        m.symbol.toLowerCase().includes('user')
-      );
+      const hasUserMatch = result.matches.some(m => m.symbol.toLowerCase().includes('user'));
       expect(hasUserMatch).toBe(true);
     });
 

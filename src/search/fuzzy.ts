@@ -180,12 +180,7 @@ export class FuzzyMatcher {
    * @param types - Optional filter by symbol types
    * @returns Sorted array of matching symbols with scores
    */
-  search(
-    query: string,
-    limit = 10,
-    threshold = 0.3,
-    types?: string[]
-  ): FuzzyMatchResult[] {
+  search(query: string, limit = 10, threshold = 0.3, types?: string[]): FuzzyMatchResult[] {
     if (!query) return [];
 
     const normalizedQuery = normalizeSymbol(query);
@@ -214,10 +209,14 @@ export class FuzzyMatcher {
       const directSimilarity = calculateSimilarity(queryLower, symbolLower);
 
       // Check for substring match (boost score if query is contained)
-      const substringBoost = symbolLower.includes(queryLower) || normalized.includes(normalizedQuery) ? 0.2 : 0;
+      const substringBoost =
+        symbolLower.includes(queryLower) || normalized.includes(normalizedQuery) ? 0.2 : 0;
 
       // Use the best score
-      const score = Math.min(1.0, Math.max(normalizedSimilarity, directSimilarity) + substringBoost);
+      const score = Math.min(
+        1.0,
+        Math.max(normalizedSimilarity, directSimilarity) + substringBoost
+      );
 
       if (score >= threshold) {
         results.push({ symbol, score, metadata });

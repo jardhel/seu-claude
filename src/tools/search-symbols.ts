@@ -68,8 +68,10 @@ export class SearchSymbols {
    * Get the tool description for MCP
    */
   getDescription(): string {
-    return 'Search for functions, classes, and other symbols with fuzzy matching. ' +
-      'Handles typos, case variations, and CamelCase/snake_case differences.';
+    return (
+      'Search for functions, classes, and other symbols with fuzzy matching. ' +
+      'Handles typos, case variations, and CamelCase/snake_case differences.'
+    );
   }
 
   /**
@@ -85,14 +87,16 @@ export class SearchSymbols {
         },
         fuzzy_threshold: {
           type: 'number',
-          description: 'Minimum similarity score (0-1). Lower values return more results. Default: 0.4',
+          description:
+            'Minimum similarity score (0-1). Lower values return more results. Default: 0.4',
           minimum: 0,
           maximum: 1,
         },
         types: {
           type: 'array',
           items: { type: 'string' },
-          description: 'Filter by symbol types (e.g., ["function", "class", "method", "interface"])',
+          description:
+            'Filter by symbol types (e.g., ["function", "class", "method", "interface"])',
         },
         limit: {
           type: 'number',
@@ -130,12 +134,7 @@ export class SearchSymbols {
    * Execute the search
    */
   async execute(input: SearchSymbolsInput): Promise<SearchSymbolsResult> {
-    const {
-      pattern,
-      fuzzy_threshold = 0.4,
-      types,
-      limit = 10,
-    } = input;
+    const { pattern, fuzzy_threshold = 0.4, types, limit = 10 } = input;
 
     // Handle empty pattern
     if (!pattern || pattern.trim() === '') {
@@ -150,12 +149,7 @@ export class SearchSymbols {
       const matcher = await this.loadIndex();
 
       // Perform the search
-      const results = matcher.search(
-        pattern.trim(),
-        limit,
-        fuzzy_threshold,
-        types
-      );
+      const results = matcher.search(pattern.trim(), limit, fuzzy_threshold, types);
 
       // Transform results to output format
       const matches: SymbolMatch[] = results.map(r => ({

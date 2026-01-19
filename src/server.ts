@@ -180,8 +180,7 @@ export class SeuClaudeServer {
                 include_paths: {
                   type: 'array',
                   items: { type: 'string' },
-                  description:
-                    'Glob patterns for paths to include. Example: ["src/**", "lib/**"]',
+                  description: 'Glob patterns for paths to include. Example: ["src/**", "lib/**"]',
                 },
                 exclude_paths: {
                   type: 'array',
@@ -317,7 +316,7 @@ export class SeuClaudeServer {
       {
         name: 'search_symbols',
         description:
-          'Search for functions, classes, and other symbols with fuzzy matching. Handles typos, case variations, and CamelCase/snake_case differences. Use this to find specific functions or classes even if you\'re not sure of the exact name.',
+          "Search for functions, classes, and other symbols with fuzzy matching. Handles typos, case variations, and CamelCase/snake_case differences. Use this to find specific functions or classes even if you're not sure of the exact name.",
         inputSchema: {
           type: 'object',
           properties: {

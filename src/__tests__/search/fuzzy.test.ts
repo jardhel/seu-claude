@@ -5,11 +5,7 @@
  * CamelCase/snake_case normalization.
  */
 
-import {
-  FuzzyMatcher,
-  normalizeSymbol,
-  levenshteinDistance,
-} from '../../search/fuzzy.js';
+import { FuzzyMatcher, normalizeSymbol, levenshteinDistance } from '../../search/fuzzy.js';
 
 describe('FuzzyMatcher', () => {
   describe('levenshteinDistance', () => {
@@ -116,7 +112,11 @@ describe('FuzzyMatcher', () => {
         matcher.addSymbol('getOrderById', { filePath: 'order.ts', type: 'function', line: 20 });
         matcher.addSymbol('UserService', { filePath: 'service.ts', type: 'class', line: 1 });
         matcher.addSymbol('authenticate', { filePath: 'auth.ts', type: 'function', line: 5 });
-        matcher.addSymbol('validateUser', { filePath: 'validation.ts', type: 'function', line: 15 });
+        matcher.addSymbol('validateUser', {
+          filePath: 'validation.ts',
+          type: 'function',
+          line: 15,
+        });
         matcher.addSymbol('get_user_by_name', {
           filePath: 'user.ts',
           type: 'function',
