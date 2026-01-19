@@ -239,6 +239,7 @@ Search across your indexed code with multiple modes.
     include_paths?: string[];  // e.g., ["src/**", "lib/**"]
     exclude_paths?: string[];  // e.g., ["**/*.test.ts"]
   };
+  use_ranking?: boolean;   // Enable improved ranking (default: true)
 }
 ```
 
@@ -246,6 +247,12 @@ Search across your indexed code with multiple modes.
 - `semantic` - Vector-based similarity search (default)
 - `keyword` - BM25 keyword search for exact matches
 - `hybrid` - Combines both for best accuracy
+
+**Search Ranking (v1.2.0+):**
+When `use_ranking` is enabled (default), results are re-ranked using multiple factors:
+- Semantic/keyword score (weighted based on mode)
+- Export/public symbol detection (boosts exported functions/classes)
+- Entry point file detection (boosts index.ts, main.py, app.ts, etc.)
 
 ### `read_semantic_context`
 

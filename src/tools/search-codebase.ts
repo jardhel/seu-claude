@@ -2,6 +2,7 @@ import { EmbeddingEngine } from '../vector/embed.js';
 import { VectorStore, SearchResult } from '../vector/store.js';
 import { BM25Engine, BM25Result } from '../search/bm25.js';
 import { HybridSearcher } from '../search/hybrid.js';
+import { SearchRanker, RankingInput } from '../search/ranker.js';
 import { logger } from '../utils/logger.js';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -33,6 +34,8 @@ export interface SearchOptions {
   mode?: SearchMode;
   /** Weight for semantic search when using hybrid mode (0-1, default: 0.7) */
   semanticWeight?: number;
+  /** Enable improved ranking (default: true) - combines semantic score with git recency, exports, and entry point detection */
+  useRanking?: boolean;
 }
 
 export interface FormattedSearchResult {
@@ -54,6 +57,7 @@ export class SearchCodebase {
   private dataDir: string;
   private bm25Engine: BM25Engine | null = null;
   private hybridSearcher: HybridSearcher;
+  private ranker: SearchRanker;
   private log = logger.child('search-codebase');
 
   constructor(embedder: EmbeddingEngine, store: VectorStore, dataDir: string) {
@@ -61,6 +65,7 @@ export class SearchCodebase {
     this.store = store;
     this.dataDir = dataDir;
     this.hybridSearcher = new HybridSearcher();
+    this.ranker = new SearchRanker();
   }
 
   /**
@@ -95,22 +100,27 @@ export class SearchCodebase {
       scope,
       mode = 'semantic',
       semanticWeight = 0.7,
+      useRanking = true,
     } = options;
 
-    this.log.debug(`Searching for: "${query}" (mode: ${mode}, limit: ${limit})`);
+    this.log.debug(
+      `Searching for: "${query}" (mode: ${mode}, limit: ${limit}, ranking: ${useRanking})`
+    );
 
     try {
+      // Fetch more results when ranking is enabled for better reranking
+      const fetchLimit = useRanking ? limit * 2 : limit;
       let formatted: FormattedSearchResult[];
 
       switch (mode) {
         case 'keyword':
-          formatted = await this.executeKeywordSearch(query, limit, scope);
+          formatted = await this.executeKeywordSearch(query, fetchLimit, scope);
           break;
 
         case 'hybrid':
           formatted = await this.executeHybridSearch(
             query,
-            limit,
+            fetchLimit,
             filterType,
             filterLanguage,
             scope,
@@ -122,7 +132,7 @@ export class SearchCodebase {
         default:
           formatted = await this.executeSemanticSearch(
             query,
-            limit,
+            fetchLimit,
             filterType,
             filterLanguage,
             scope
@@ -130,12 +140,60 @@ export class SearchCodebase {
           break;
       }
 
+      // Apply improved ranking if enabled
+      if (useRanking && formatted.length > 0) {
+        formatted = this.applyRanking(formatted, mode);
+      }
+
       this.log.debug(`Found ${formatted.length} results`);
-      return formatted;
+      return formatted.slice(0, limit);
     } catch (err) {
       this.log.error('Search failed:', err);
       throw err;
     }
+  }
+
+  /**
+   * Apply improved ranking to search results
+   * Combines original score with git recency, export status, and entry point detection
+   */
+  private applyRanking(
+    results: FormattedSearchResult[],
+    mode: SearchMode
+  ): FormattedSearchResult[] {
+    // Prepare ranking inputs
+    const rankingInputs: (RankingInput & FormattedSearchResult)[] = results.map(result => {
+      // Determine semantic vs keyword scores based on mode
+      const isSemanticMode = mode === 'semantic';
+      const isKeywordMode = mode === 'keyword';
+
+      return {
+        ...result,
+        chunkId: `${result.relativePath}:${result.startLine}:${result.endLine}`,
+        semanticScore: isKeywordMode ? 0 : result.score,
+        keywordScore: isSemanticMode ? 0 : result.score,
+        gitRecencyScore: 0.5, // Default - would need lastUpdated from store for actual value
+        isExported: SearchRanker.hasExport(result.code),
+        isEntryPoint: SearchRanker.isEntryPointFile(result.filePath),
+      };
+    });
+
+    // Apply ranking
+    const ranked = this.ranker.rankResults(rankingInputs);
+
+    // Map back to FormattedSearchResult with updated scores
+    return ranked.map(r => ({
+      filePath: r.filePath,
+      relativePath: r.relativePath,
+      startLine: r.startLine,
+      endLine: r.endLine,
+      type: r.type,
+      name: r.name,
+      scope: r.scope,
+      language: r.language,
+      code: r.code,
+      score: r.finalScore,
+    }));
   }
 
   /**

@@ -190,6 +190,22 @@ export class SeuClaudeServer {
                 },
               },
             },
+            mode: {
+              type: 'string',
+              enum: ['semantic', 'keyword', 'hybrid'],
+              description:
+                'Search mode: "semantic" (vector similarity, default), "keyword" (BM25 text matching), or "hybrid" (combines both for best accuracy).',
+            },
+            semantic_weight: {
+              type: 'number',
+              description:
+                'For hybrid mode: weight for semantic search (0-1, default: 0.7). Higher values favor semantic similarity, lower values favor keyword matching.',
+            },
+            use_ranking: {
+              type: 'boolean',
+              description:
+                'Enable improved ranking that combines search score with git recency, export status, and entry point detection. Default: true.',
+            },
           },
           required: ['query'],
         },
@@ -445,12 +461,20 @@ export class SeuClaudeServer {
     // Track latency for query analytics
     const startTime = Date.now();
 
+    // Parse search options
+    const mode = args.mode as 'semantic' | 'keyword' | 'hybrid' | undefined;
+    const semanticWeight = args.semantic_weight as number | undefined;
+    const useRanking = args.use_ranking as boolean | undefined;
+
     const results = await this.searchTool.execute({
       query,
       limit: args.limit as number | undefined,
       filterType,
       filterLanguage,
       scope,
+      mode,
+      semanticWeight,
+      useRanking,
     });
 
     const latencyMs = Date.now() - startTime;

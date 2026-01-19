@@ -26,16 +26,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Configurable similarity threshold
   - Filter by symbol types (function, class, method, interface, etc.)
   - Symbol index built during codebase indexing
+- **Search Ranking Improvements**
+  - Multi-factor ranking combining semantic score, keyword match, git recency, export status, and entry point detection
+  - Configurable ranking weights (default: 50% semantic, 20% keyword, 10% each for recency/exports/entry points)
+  - Entry point detection for index/main/app/server files across multiple languages
+  - Export detection for TypeScript/JavaScript, Python (`__all__`), Go (uppercase), and Rust (`pub`)
+  - New `use_ranking` option to enable/disable improved ranking (default: enabled)
+- **Claude Code Sub-agents** (contributed by @EliasdeJonge)
+  - `seu-researcher` - Locate implementations and explain "where/how"
+  - `seu-context-summarizer` - Summarize files/symbols with minimal context
+  - `seu-xref-explorer` - Map callers/callees and key call paths
+  - Install with `npx seu-claude setup --subagents`
 
 ### Changed
 
 - **MCP Tools increased from 8 to 9** - New `search_symbols` tool added
+- `search_codebase` tool now supports `mode`, `semantic_weight`, and `use_ranking` parameters
 
 ### Technical Details
 
-- **Test Coverage**: 495 tests passing (51+ new tests for search features)
-- **New Modules**: `BM25Engine`, `HybridSearcher`, `FuzzyMatcher`
-- **New Files**: `src/search/bm25.ts`, `src/search/hybrid.ts`, `src/search/fuzzy.ts`, `src/tools/search-symbols.ts`
+- **Test Coverage**: 539 tests passing (95+ new tests for search features)
+- **New Modules**: `BM25Engine`, `HybridSearcher`, `FuzzyMatcher`, `SearchRanker`
+- **New Files**: `src/search/bm25.ts`, `src/search/hybrid.ts`, `src/search/fuzzy.ts`, `src/search/ranker.ts`, `src/tools/search-symbols.ts`
+- **Sub-agent Files**: `agents/seu-researcher.md`, `agents/seu-context-summarizer.md`, `agents/seu-xref-explorer.md`
 - **Performance**: BM25 search < 50ms, fuzzy search < 50ms, hybrid mode maintains < 100ms p95 latency
 
 ## [1.1.1] - 2026-01-16

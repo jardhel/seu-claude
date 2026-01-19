@@ -11,3 +11,10 @@ export {
   type SymbolMetadata,
   type FuzzyMatchResult,
 } from './fuzzy.js';
+export {
+  SearchRanker,
+  type RankingWeights,
+  type RankingFactors,
+  type RankingInput,
+  type RankedResult,
+} from './ranker.js';

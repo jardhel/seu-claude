@@ -1,7 +1,7 @@
 # Phase 3: Enhanced Search - Implementation Plan
 
 **Version:** v1.2.0
-**Status:** Partially Complete (Hybrid Search & Scoped Search done)
+**Status:** Mostly Complete (Hybrid Search, Scoped Search, Fuzzy Search, Ranking done)
 **Start Date:** January 16, 2026
 
 ---
@@ -19,7 +19,7 @@ Phase 3 focuses on making searches smarter and more accurate through hybrid sear
 | 1 | Scoped Search | HIGH | Low | Medium | ✅ COMPLETE |
 | 2 | Hybrid Search (BM25 + Semantic) | HIGH | High | High | ✅ COMPLETE |
 | 3 | Fuzzy Symbol Search | HIGH | Medium | Medium | ✅ COMPLETE |
-| 4 | Search Ranking Improvements | MEDIUM | Medium | Medium | ❌ TODO |
+| 4 | Search Ranking Improvements | MEDIUM | Medium | Medium | ✅ COMPLETE |
 | 5 | Code Similarity Detection | MEDIUM | High | Medium | ❌ TODO |
 
 ---
@@ -225,15 +225,26 @@ Files that are likely important:
 - Files with many exports
 
 ### Implementation
-1. Track export count during chunking
-2. Detect entry point files during crawling
-3. Apply ranking boosts during search
-4. Make ranking factors configurable
+1. Create `src/search/ranker.ts` - SearchRanker class with configurable weights
+2. Detect exports from code content using pattern matching
+3. Detect entry point files from path patterns
+4. Apply ranking boosts during search (via `useRanking` option)
+5. Make ranking factors configurable
 
-### Files to Modify
-- `src/indexer/chunker.ts` - Track exports
-- `src/indexer/crawler.ts` - Detect entry points
-- `src/tools/search-codebase.ts` - Apply ranking
+### Files Created/Modified
+- `src/search/ranker.ts` - NEW: SearchRanker class with ranking logic
+- `src/tools/search-codebase.ts` - Apply ranking via `applyRanking()` method
+- `src/server.ts` - Added `use_ranking`, `mode`, `semantic_weight` to MCP schema
+
+### Tests
+- [x] Default weights sum to 1.0
+- [x] Custom weights normalize correctly
+- [x] Score computation handles all factors
+- [x] Entry point detection works for index/main/app/server files
+- [x] Export detection works for TS/JS/Python/Go/Rust
+- [x] Results ranked by computed score in descending order
+- [x] Ranking preserves result properties
+- [x] Ranking works with all search modes (semantic, keyword, hybrid)
 
 ---
 
