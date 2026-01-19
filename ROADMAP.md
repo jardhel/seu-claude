@@ -66,15 +66,17 @@
 
 ---
 
-### Phase 3: v1.2.0 - Enhanced Search 🔜 NEXT
+### Phase 3: v1.2.0 - Enhanced Search 🚧 IN PROGRESS
 
 **Goal:** Make searches smarter and more accurate
 
 **Features:**
 
-- [ ] **Hybrid search** - Combine keyword (BM25) + semantic search
+- [x] **Hybrid search** - Combine keyword (BM25) + semantic search ✅ COMPLETE
   - Configurable weighting between keyword and semantic
   - Better handling of exact matches (function names, variables)
+  - Three search modes: `semantic`, `keyword`, `hybrid`
+  - BM25 inverted index with persistence
 - [ ] **Code similarity detection**
   - Find duplicate/similar code patterns
   - Detect copy-paste code across files
@@ -83,10 +85,11 @@
   - Boost recently modified files
   - Prioritize by git blame recency
   - Factor in file importance (entry points, exports)
-- [ ] **Fuzzy symbol search**
+- [x] **Fuzzy symbol search** ✅ COMPLETE
   - Typo-tolerant function/class name search
   - CamelCase/snake_case normalization
-- [ ] **Scoped search**
+  - New `search_symbols` MCP tool
+- [x] **Scoped search** ✅ COMPLETE
   - Search within specific directories
   - Filter by file patterns (e.g., `*.test.ts`)
   - Exclude paths from search

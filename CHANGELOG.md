@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-01-19
+
+### Added
+
+- 🎉 **Phase 3: Enhanced Search** - Smarter, more accurate code search
+- **Hybrid Search (BM25 + Semantic)**
+  - New BM25 keyword search engine with inverted index
+  - Configurable search modes: `semantic`, `keyword`, `hybrid`
+  - Score fusion with adjustable weighting (default: 70% semantic, 30% keyword)
+  - Reciprocal Rank Fusion (RRF) alternative combination method
+  - BM25 index persisted to `~/.seu-claude/bm25-index.json`
+- **Scoped Search**
+  - Limit searches to specific directories with `include_paths`
+  - Exclude files/directories with `exclude_paths`
+  - Full glob pattern support (e.g., `src/**/*.ts`, `!**/*.test.ts`)
+- **Fuzzy Symbol Search** (`search_symbols` tool)
+  - Typo-tolerant function/class name search using Levenshtein distance
+  - CamelCase/snake_case normalization for cross-format matching
+  - Configurable similarity threshold
+  - Filter by symbol types (function, class, method, interface, etc.)
+  - Symbol index built during codebase indexing
+
+### Changed
+
+- **MCP Tools increased from 8 to 9** - New `search_symbols` tool added
+
+### Technical Details
+
+- **Test Coverage**: 495 tests passing (51+ new tests for search features)
+- **New Modules**: `BM25Engine`, `HybridSearcher`, `FuzzyMatcher`
+- **New Files**: `src/search/bm25.ts`, `src/search/hybrid.ts`, `src/search/fuzzy.ts`, `src/tools/search-symbols.ts`
+- **Performance**: BM25 search < 50ms, fuzzy search < 50ms, hybrid mode maintains < 100ms p95 latency
+
 ## [1.1.1] - 2026-01-16
 
 ### Fixed

@@ -4,6 +4,7 @@ import { FileIndex } from '../indexer/file-index.js';
 import { EmbeddingEngine } from '../vector/embed.js';
 import { VectorStore, StoredChunk } from '../vector/store.js';
 import { BM25Engine } from '../search/bm25.js';
+import { FuzzyMatcher } from '../search/fuzzy.js';
 import { Config } from '../utils/config.js';
 import { logger } from '../utils/logger.js';
 import { readFile, writeFile, mkdir } from 'fs/promises';
@@ -43,6 +44,7 @@ export class IndexCodebase {
   private embedder: EmbeddingEngine;
   private store: VectorStore;
   private bm25Engine: BM25Engine;
+  private fuzzyMatcher: FuzzyMatcher;
   private log = logger.child('index-codebase');
   private initialized = false;
 
@@ -58,6 +60,7 @@ export class IndexCodebase {
     this.embedder = embedder;
     this.store = store;
     this.bm25Engine = new BM25Engine();
+    this.fuzzyMatcher = new FuzzyMatcher();
   }
 
   async initialize(): Promise<void> {
@@ -86,9 +89,11 @@ export class IndexCodebase {
         await this.store.clear();
         await fileIndex.clear();
         this.bm25Engine.clear();
+        this.fuzzyMatcher.clear();
       } else {
         await fileIndex.load();
         await this.loadBM25Index();
+        await this.loadFuzzyIndex();
       }
 
       // Crawl the codebase
@@ -114,6 +119,8 @@ export class IndexCodebase {
           await this.store.deleteByFilePath(absolutePath);
           // Remove BM25 documents for this file (uses chunk IDs pattern)
           this.removeBM25DocsForFile(relativePath);
+          // Remove fuzzy symbols for this file
+          this.removeFuzzySymbolsForFile(relativePath);
           fileIndex.removeFile(relativePath);
           this.log.debug(`Removed deleted file: ${relativePath}`);
         }
@@ -172,6 +179,8 @@ export class IndexCodebase {
             await this.store.deleteByFilePath(file.path);
             // Remove old BM25 documents for this file
             this.removeBM25DocsForFile(file.relativePath);
+            // Remove old fuzzy symbols for this file
+            this.removeFuzzySymbolsForFile(file.relativePath);
           }
 
           const content = await readFile(file.path, 'utf-8');
@@ -237,6 +246,9 @@ export class IndexCodebase {
 
       // Save BM25 index for keyword search
       await this.saveBM25Index();
+
+      // Save fuzzy symbol index
+      await this.saveFuzzyIndex();
 
       const durationMs = Date.now() - startTime;
 
@@ -311,6 +323,19 @@ export class IndexCodebase {
           language: chunk.language,
         },
       });
+
+      // Add named symbols to fuzzy index
+      if (chunk.name && this.isIndexableType(chunk.type)) {
+        const symbolId = `${chunk.relativePath}:${chunk.name}`;
+        this.fuzzyMatcher.addSymbol(symbolId, {
+          filePath: chunk.filePath,
+          type: chunk.type,
+          line: chunk.startLine,
+          relativePath: chunk.relativePath,
+          name: chunk.name,
+          scope: chunk.scope,
+        });
+      }
     }
 
     this.log.debug(`Embedded and stored ${chunks.length} chunks`);
@@ -390,5 +415,83 @@ export class IndexCodebase {
    */
   getBM25Engine(): BM25Engine {
     return this.bm25Engine;
+  }
+
+  /**
+   * Get the FuzzyMatcher instance (for use by search tools)
+   */
+  getFuzzyMatcher(): FuzzyMatcher {
+    return this.fuzzyMatcher;
+  }
+
+  /**
+   * Load fuzzy symbol index from disk
+   */
+  private async loadFuzzyIndex(): Promise<void> {
+    const fuzzyPath = join(this.config.dataDir, 'fuzzy-index.json');
+
+    try {
+      const content = await readFile(fuzzyPath, 'utf-8');
+      this.fuzzyMatcher.deserialize(content);
+      this.log.debug(`Loaded fuzzy index: ${this.fuzzyMatcher.size} symbols`);
+    } catch {
+      // Index doesn't exist yet, start fresh
+      this.log.debug('No existing fuzzy index found, starting fresh');
+    }
+  }
+
+  /**
+   * Save fuzzy symbol index to disk
+   */
+  private async saveFuzzyIndex(): Promise<void> {
+    const fuzzyPath = join(this.config.dataDir, 'fuzzy-index.json');
+
+    // Ensure data directory exists
+    await mkdir(dirname(fuzzyPath), { recursive: true });
+
+    const serialized = this.fuzzyMatcher.serialize();
+    await writeFile(fuzzyPath, serialized);
+
+    this.log.info(`Saved fuzzy index: ${this.fuzzyMatcher.size} symbols`);
+  }
+
+  /**
+   * Remove fuzzy symbols for a given file
+   */
+  private removeFuzzySymbolsForFile(relativePath: string): void {
+    const prefix = `${relativePath}:`;
+    const symbols = this.fuzzyMatcher.getSymbols();
+    let removed = 0;
+
+    for (const symbol of symbols) {
+      if (symbol.startsWith(prefix)) {
+        this.fuzzyMatcher.removeSymbol(symbol);
+        removed++;
+      }
+    }
+
+    if (removed > 0) {
+      this.log.debug(`Removed ${removed} fuzzy symbols for file: ${relativePath}`);
+    }
+  }
+
+  /**
+   * Check if a chunk type should be indexed for fuzzy symbol search
+   */
+  private isIndexableType(type: string): boolean {
+    const indexableTypes = [
+      'function',
+      'method',
+      'class',
+      'interface',
+      'type',
+      'enum',
+      'const',
+      'variable',
+      'struct',
+      'trait',
+      'impl',
+    ];
+    return indexableTypes.includes(type);
   }
 }

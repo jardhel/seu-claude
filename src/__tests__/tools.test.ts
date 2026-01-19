@@ -226,7 +226,9 @@ export { hello };
       expect(result1.success).toBe(true);
 
       // Modify the file (need small delay to ensure mtime changes)
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise<void>(resolve => {
+        setTimeout(resolve, 100);
+      });
       await writeFile(filePath, 'const modified = 2; const another = 3;');
 
       // Second index should pick up modification

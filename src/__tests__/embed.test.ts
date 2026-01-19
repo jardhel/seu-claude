@@ -117,13 +117,13 @@ describe('EmbeddingEngine - Bundled Model Detection', () => {
     expect(engine.isInitialized()).toBe(false);
   });
 
-  it('should handle non-existent models directory gracefully', async () => {
+  it('should handle non-existent models directory gracefully', () => {
     const engine = new EmbeddingEngine(config);
     expect(engine).toBeInstanceOf(EmbeddingEngine);
     expect(engine.getDimensions()).toBe(384);
   });
 
-  it('should return configured dimensions when using custom config', async () => {
+  it('should return configured dimensions when using custom config', () => {
     const customConfig = loadConfig({
       projectRoot: testDir,
       dataDir: join(testDir, '.seu-claude'),

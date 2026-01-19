@@ -17,6 +17,7 @@ import { GetStats } from './tools/get-stats.js';
 import { GetTokenAnalytics } from './tools/get-token-analytics.js';
 import { GetMemoryProfile } from './tools/get-memory-profile.js';
 import { GetQueryAnalytics } from './tools/get-query-analytics.js';
+import { SearchSymbols } from './tools/search-symbols.js';
 import { TokenAnalyticsCollector, MemoryProfiler, QueryAnalyticsCollector } from './stats/index.js';
 
 export class SeuClaudeServer {
@@ -32,6 +33,7 @@ export class SeuClaudeServer {
   private tokenAnalyticsTool: GetTokenAnalytics;
   private memoryProfileTool: GetMemoryProfile;
   private queryAnalyticsTool: GetQueryAnalytics;
+  private symbolsTool: SearchSymbols;
   private tokenAnalytics: TokenAnalyticsCollector;
   private memoryProfiler: MemoryProfiler;
   private queryAnalytics: QueryAnalyticsCollector;
@@ -53,6 +55,7 @@ export class SeuClaudeServer {
     this.memoryProfileTool = new GetMemoryProfile(this.memoryProfiler, this.config);
     this.queryAnalytics = new QueryAnalyticsCollector(this.config);
     this.queryAnalyticsTool = new GetQueryAnalytics(this.queryAnalytics, this.config);
+    this.symbolsTool = new SearchSymbols(this.config.dataDir);
 
     this.server = new Server(
       {
@@ -101,6 +104,8 @@ export class SeuClaudeServer {
             return await this.handleGetMemoryProfile(args);
           case 'get_query_analytics':
             return await this.handleGetQueryAnalytics(args);
+          case 'search_symbols':
+            return await this.handleSearchSymbols(args);
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -307,6 +312,37 @@ export class SeuClaudeServer {
                 "Output format: 'summary' for quick overview, 'detailed' for full markdown report, 'json' for raw data.",
             },
           },
+        },
+      },
+      {
+        name: 'search_symbols',
+        description:
+          'Search for functions, classes, and other symbols with fuzzy matching. Handles typos, case variations, and CamelCase/snake_case differences. Use this to find specific functions or classes even if you\'re not sure of the exact name.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            pattern: {
+              type: 'string',
+              description:
+                'The symbol pattern to search for (e.g., "getUser", "UserService"). Typos and case variations are tolerated.',
+            },
+            fuzzy_threshold: {
+              type: 'number',
+              description:
+                'Minimum similarity score (0-1). Lower values return more results with weaker matches. Default: 0.4',
+            },
+            types: {
+              type: 'array',
+              items: { type: 'string' },
+              description:
+                'Filter by symbol types (e.g., ["function", "class", "method", "interface"]).',
+            },
+            limit: {
+              type: 'number',
+              description: 'Maximum number of results to return. Default: 10.',
+            },
+          },
+          required: ['pattern'],
         },
       },
     ];
@@ -529,6 +565,53 @@ export class SeuClaudeServer {
     const format = (args?.format as 'summary' | 'json' | 'detailed') ?? 'summary';
 
     const text = await this.queryAnalyticsTool.execute({ format });
+
+    return {
+      content: [{ type: 'text', text }],
+    };
+  }
+
+  private async handleSearchSymbols(
+    args: Record<string, unknown> | undefined
+  ): Promise<{ content: { type: string; text: string }[] }> {
+    if (!args?.pattern) {
+      throw new Error('pattern parameter is required');
+    }
+
+    const result = await this.symbolsTool.execute({
+      pattern: args.pattern as string,
+      fuzzy_threshold: args.fuzzy_threshold as number | undefined,
+      types: args.types as string[] | undefined,
+      limit: args.limit as number | undefined,
+    });
+
+    if (!result.success) {
+      return {
+        content: [{ type: 'text', text: `Error: ${result.error}` }],
+      };
+    }
+
+    // Format results for Claude
+    const pattern = args.pattern as string;
+    let text: string;
+    if (result.matches.length === 0) {
+      text = `No symbols found matching "${pattern}"`;
+    } else {
+      const lines = [`Found ${result.matches.length} symbol(s) matching "${pattern}":\n`];
+
+      for (const match of result.matches) {
+        const score = Math.round(match.score * 100);
+        const location = match.line ? `${match.filePath}:${match.line}` : match.filePath;
+        lines.push(`- **${match.symbol}** (${match.type}, ${score}% match)`);
+        lines.push(`  ${location}`);
+      }
+
+      if (result.totalIndexed) {
+        lines.push(`\n_Searched ${result.totalIndexed} indexed symbols_`);
+      }
+
+      text = lines.join('\n');
+    }
 
     return {
       content: [{ type: 'text', text }],

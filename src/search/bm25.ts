@@ -45,6 +45,19 @@ interface TermEntry {
 }
 
 /**
+ * Serialized BM25 index structure for persistence
+ */
+interface SerializedBM25Index {
+  k1: number;
+  b: number;
+  totalDocs: number;
+  totalLength: number;
+  avgDocLength: number;
+  invertedIndex: Array<[string, TermEntry[]]>;
+  documents: Array<[string, { length: number; metadata?: Record<string, unknown> }]>;
+}
+
+/**
  * BM25 search engine for text-based code search
  */
 export class BM25Engine {
@@ -111,7 +124,7 @@ export class BM25Engine {
     // Count term frequencies
     const termFreqs = new Map<string, number>();
     for (const token of tokens) {
-      termFreqs.set(token, (termFreqs.get(token) || 0) + 1);
+      termFreqs.set(token, (termFreqs.get(token) ?? 0) + 1);
     }
 
     // Add to inverted index
@@ -206,7 +219,7 @@ export class BM25Engine {
         const termScore = termIdf * (numerator / denominator);
 
         // Accumulate score
-        scores.set(entry.docId, (scores.get(entry.docId) || 0) + termScore);
+        scores.set(entry.docId, (scores.get(entry.docId) ?? 0) + termScore);
       }
     }
 
@@ -266,7 +279,7 @@ export class BM25Engine {
    * Deserialize the index from JSON
    */
   deserialize(json: string): void {
-    const data = JSON.parse(json);
+    const data = JSON.parse(json) as SerializedBM25Index;
     this.k1 = data.k1;
     this.b = data.b;
     this.totalDocs = data.totalDocs;

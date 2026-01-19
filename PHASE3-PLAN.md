@@ -1,7 +1,7 @@
 # Phase 3: Enhanced Search - Implementation Plan
 
 **Version:** v1.2.0
-**Status:** In Development
+**Status:** Partially Complete (Hybrid Search & Scoped Search done)
 **Start Date:** January 16, 2026
 
 ---
@@ -14,13 +14,13 @@ Phase 3 focuses on making searches smarter and more accurate through hybrid sear
 
 ## Features & Priority
 
-| # | Feature | Priority | Effort | Impact |
-|---|---------|----------|--------|--------|
-| 1 | Scoped Search | HIGH | Low | Medium |
-| 2 | Hybrid Search (BM25 + Semantic) | HIGH | High | High |
-| 3 | Fuzzy Symbol Search | HIGH | Medium | Medium |
-| 4 | Search Ranking Improvements | MEDIUM | Medium | Medium |
-| 5 | Code Similarity Detection | MEDIUM | High | Medium |
+| # | Feature | Priority | Effort | Impact | Status |
+|---|---------|----------|--------|--------|--------|
+| 1 | Scoped Search | HIGH | Low | Medium | ✅ COMPLETE |
+| 2 | Hybrid Search (BM25 + Semantic) | HIGH | High | High | ✅ COMPLETE |
+| 3 | Fuzzy Symbol Search | HIGH | Medium | Medium | ✅ COMPLETE |
+| 4 | Search Ranking Improvements | MEDIUM | Medium | Medium | ❌ TODO |
+| 5 | Code Similarity Detection | MEDIUM | High | Medium | ❌ TODO |
 
 ---
 
@@ -82,11 +82,11 @@ interface SearchOptions {
 - `src/__tests__/tools.test.ts`
 
 ### Tests
-- [ ] Search with includePaths returns only matching files
-- [ ] Search with excludePaths filters out matching files
-- [ ] Glob patterns work correctly (**, *, ?)
-- [ ] Empty scope returns all results
-- [ ] Invalid glob patterns handled gracefully
+- [x] Search with includePaths returns only matching files
+- [x] Search with excludePaths filters out matching files
+- [x] Glob patterns work correctly (**, *, ?)
+- [x] Empty scope returns all results
+- [x] Invalid glob patterns handled gracefully
 
 ---
 
@@ -152,11 +152,11 @@ interface TermEntry {
 - Incremental updates on file changes
 
 ### Tests
-- [ ] BM25 returns exact matches with high scores
-- [ ] Semantic search returns conceptually similar code
-- [ ] Hybrid mode combines both effectively
-- [ ] Weight parameter affects score balance
-- [ ] Performance: < 50ms for keyword search
+- [x] BM25 returns exact matches with high scores
+- [x] Semantic search returns conceptually similar code
+- [x] Hybrid mode combines both effectively
+- [x] Weight parameter affects score balance
+- [x] Performance: < 50ms for keyword search
 
 ---
 
@@ -196,11 +196,11 @@ interface SymbolSearchOptions {
 - `src/tools/search-symbols.ts` - New MCP tool
 
 ### Tests
-- [ ] Exact match returns score 1.0
-- [ ] Typo "getUsr" finds "getUser"
-- [ ] Case-insensitive by default
-- [ ] CamelCase matches snake_case
-- [ ] Threshold filters out low matches
+- [x] Exact match returns score 1.0
+- [x] Typo "getUsr" finds "getUser"
+- [x] Case-insensitive by default
+- [x] CamelCase matches snake_case
+- [x] Threshold filters out low matches
 
 ---
 

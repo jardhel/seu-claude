@@ -113,7 +113,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 
 ### First Run
 
-Once configured, Claude will have access to **8 powerful tools**:
+Once configured, Claude will have access to **9 powerful tools**:
 
 **Core Tools:**
 1. **Index your codebase** (run once, then incremental):
@@ -130,11 +130,28 @@ Once configured, Claude will have access to **8 powerful tools**:
    > "Who calls the validateUser function?"
    > "What functions does processOrder call?"
 
-### Optional: Claude Code subagents (recommended)
+5. **Fuzzy symbol search** (v1.2.0+):
+   > "Find the getUser function" (handles typos!)
+   > "Search for UserService class"
 
-To further reduce main-context clutter, install project-scoped Claude Code subagents into `.claude/agents/` by running `seu-claude setup --subagents` (it won’t overwrite existing files):
+**Analytics Tools (v1.1.0+):**
+6. **Get index statistics**:
+   > "Show me the codebase statistics"
 
-- `seu-researcher` - Locate implementations and explain “where/how” with concise pointers
+7. **Token analytics**:
+   > "How many tokens are we saving with semantic search?"
+
+8. **Memory profiling**:
+   > "What's the memory usage profile?"
+
+9. **Query analytics**:
+   > "Show me search performance metrics"
+
+### Optional: Claude Code Subagents (Recommended)
+
+To further reduce main-context clutter, install project-scoped Claude Code subagents into `.claude/agents/` by running `seu-claude setup --subagents` (it won't overwrite existing files):
+
+- `seu-researcher` - Locate implementations and explain "where/how" with concise pointers
 - `seu-context-summarizer` - Summarize a file/symbol with minimal quoting
 - `seu-xref-explorer` - Map callers/callees and key call paths
 
@@ -208,16 +225,27 @@ Scans and indexes your entire codebase for semantic search.
 
 ### `search_codebase`
 
-Semantic search across your indexed code.
+Search across your indexed code with multiple modes.
 
 ```typescript
 {
   query: string;           // Natural language query
   limit?: number;          // Max results (default: 10)
+  mode?: string;           // "semantic" | "keyword" | "hybrid" (default: "semantic")
+  semantic_weight?: number; // For hybrid mode: 0-1 (default: 0.7)
   filter_type?: string;    // "function" | "class" | "method" | etc.
   filter_language?: string; // "typescript" | "python" | etc.
+  scope?: {                // Limit search to specific paths
+    include_paths?: string[];  // e.g., ["src/**", "lib/**"]
+    exclude_paths?: string[];  // e.g., ["**/*.test.ts"]
+  };
 }
 ```
+
+**Search Modes (v1.2.0+):**
+- `semantic` - Vector-based similarity search (default)
+- `keyword` - BM25 keyword search for exact matches
+- `hybrid` - Combines both for best accuracy
 
 ### `read_semantic_context`
 
@@ -286,6 +314,24 @@ Get search performance metrics including latency percentiles.
   reset?: boolean;  // Reset analytics after retrieval (default: false)
 }
 ```
+
+### `search_symbols`
+
+Search for functions, classes, and other symbols with fuzzy matching. Handles typos, case variations, and CamelCase/snake_case differences.
+
+```typescript
+{
+  pattern: string;           // Symbol to search for (e.g., "getUser", "UserService")
+  fuzzy_threshold?: number;  // Minimum similarity (0-1), default: 0.4
+  types?: string[];          // Filter by types (e.g., ["function", "class"])
+  limit?: number;            // Maximum results, default: 10
+}
+```
+
+**Example prompts:**
+> "Find the getUser function" (even with typos like "gtUser")
+> "Search for UserService class"
+> "Find all functions matching 'validate'"
 
 ## Configuration
 
@@ -379,6 +425,9 @@ seu-claude/
 │   ├── vector/
 │   │   ├── store.ts          # LanceDB operations
 │   │   └── embed.ts          # Transformers.js
+│   ├── search/               # Search engines (v1.2.0+)
+│   │   ├── bm25.ts           # BM25 keyword search
+│   │   └── hybrid.ts         # Hybrid search combiner
 │   └── tools/
 │       ├── index-codebase.ts
 │       ├── search-codebase.ts
