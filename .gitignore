@@ -46,3 +46,4 @@ temp/
 # Local MCP configuration
 .mcp.json
 .phase2-tasks.db
+.agent-state.db
