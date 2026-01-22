@@ -6,7 +6,7 @@ export class PythonStrategy implements LanguageStrategy {
   languageId = 'python';
   extensions = ['.py', '.pyi'];
 
-  getParser(): Parser.Language {
+  getParser(): unknown {
     return Python;
   }
 
@@ -34,7 +34,7 @@ export class PythonStrategy implements LanguageStrategy {
     };
   }
 
-  extractSymbols(tree: Parser.Tree, source: string): CodeSymbol[] {
+  extractSymbols(tree: Parser.Tree, _source: string): CodeSymbol[] {
     const symbols: CodeSymbol[] = [];
     const cursor = tree.walk();
 
@@ -127,7 +127,7 @@ export class PythonStrategy implements LanguageStrategy {
     return symbols;
   }
 
-  extractImports(tree: Parser.Tree, source: string): ImportStatement[] {
+  extractImports(tree: Parser.Tree, _source: string): ImportStatement[] {
     const imports: ImportStatement[] = [];
     const cursor = tree.walk();
 

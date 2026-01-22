@@ -1,5 +1,3 @@
-import type Parser from 'tree-sitter';
-
 /**
  * Represents a parsed code symbol (function, class, method, etc.)
  */
@@ -51,11 +49,11 @@ export interface LanguageStrategy {
   /** File extensions this strategy handles */
   extensions: string[];
   /** Tree-sitter language module */
-  getParser(): Parser.Language;
+  getParser(): unknown;
   /** Query patterns for symbol extraction */
   getQueryPatterns(): QueryPatterns;
   /** Extract symbols from a parsed tree */
-  extractSymbols(tree: Parser.Tree, source: string): CodeSymbol[];
+  extractSymbols(tree: unknown, source: string): CodeSymbol[];
   /** Extract import statements from a parsed tree */
-  extractImports(tree: Parser.Tree, source: string): ImportStatement[];
+  extractImports(tree: unknown, source: string): ImportStatement[];
 }

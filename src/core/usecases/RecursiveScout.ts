@@ -1,4 +1,4 @@
-import { resolve, dirname, extname } from 'path';
+import { resolve, dirname } from 'path';
 import { existsSync, statSync } from 'fs';
 import { TreeSitterAdapter, ParseResult } from '../../adapters/parsers/TreeSitterAdapter';
 import type { CodeSymbol, ImportStatement } from '../../config/LanguageStrategy';
