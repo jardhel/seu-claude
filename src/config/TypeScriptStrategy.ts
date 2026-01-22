@@ -1,6 +1,6 @@
 import Parser from 'tree-sitter';
 import TypeScript from 'tree-sitter-typescript';
-import type { LanguageStrategy, CodeSymbol, QueryPatterns } from './LanguageStrategy';
+import type { LanguageStrategy, CodeSymbol, QueryPatterns, ImportStatement } from './LanguageStrategy';
 
 export class TypeScriptStrategy implements LanguageStrategy {
   languageId = 'typescript';
@@ -162,5 +162,114 @@ export class TypeScriptStrategy implements LanguageStrategy {
 
     visit();
     return symbols;
+  }
+
+  extractImports(tree: Parser.Tree, source: string): ImportStatement[] {
+    const imports: ImportStatement[] = [];
+    const cursor = tree.walk();
+
+    const visit = (): void => {
+      const node = cursor.currentNode;
+
+      if (node.type === 'import_statement') {
+        const sourceNode = node.childForFieldName('source');
+        if (sourceNode) {
+          // Remove quotes from module path
+          const modulePath = sourceNode.text.slice(1, -1);
+          const importedSymbols: string[] = [];
+          let isDefault = false;
+          let isNamespace = false;
+
+          // Find import_clause which contains the actual import bindings
+          for (let i = 0; i < node.childCount; i++) {
+            const child = node.child(i);
+            if (!child) continue;
+
+            if (child.type === 'import_clause') {
+              // Process import clause children
+              for (let j = 0; j < child.childCount; j++) {
+                const clauseChild = child.child(j);
+                if (!clauseChild) continue;
+
+                // Default import: import foo from '...'
+                if (clauseChild.type === 'identifier') {
+                  importedSymbols.push(clauseChild.text);
+                  isDefault = true;
+                }
+
+                // Namespace import: import * as foo from '...'
+                if (clauseChild.type === 'namespace_import') {
+                  // Find the identifier after 'as'
+                  for (let k = 0; k < clauseChild.childCount; k++) {
+                    const nsChild = clauseChild.child(k);
+                    if (nsChild?.type === 'identifier') {
+                      importedSymbols.push(nsChild.text);
+                      isNamespace = true;
+                    }
+                  }
+                }
+
+                // Named imports: import { foo, bar } from '...'
+                if (clauseChild.type === 'named_imports') {
+                  for (let k = 0; k < clauseChild.childCount; k++) {
+                    const specifier = clauseChild.child(k);
+                    if (specifier?.type === 'import_specifier') {
+                      // Find the identifier in the specifier
+                      for (let l = 0; l < specifier.childCount; l++) {
+                        const specChild = specifier.child(l);
+                        if (specChild?.type === 'identifier') {
+                          importedSymbols.push(specChild.text);
+                          break; // Take first identifier (the name, not alias)
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          imports.push({
+            modulePath,
+            importedSymbols,
+            isDefault,
+            isNamespace,
+            line: node.startPosition.row + 1,
+          });
+        }
+      }
+
+      // Also handle require() calls for CommonJS
+      if (node.type === 'call_expression') {
+        const funcNode = node.childForFieldName('function');
+        if (funcNode?.text === 'require') {
+          const argsNode = node.childForFieldName('arguments');
+          if (argsNode && argsNode.childCount > 0) {
+            const argNode = argsNode.child(1); // Skip opening paren
+            if (argNode?.type === 'string') {
+              const modulePath = argNode.text.slice(1, -1);
+              imports.push({
+                modulePath,
+                importedSymbols: ['*'],
+                isDefault: false,
+                isNamespace: true,
+                line: node.startPosition.row + 1,
+              });
+            }
+          }
+        }
+      }
+
+      // Recurse into children
+      if (cursor.gotoFirstChild()) {
+        do {
+          visit();
+        } while (cursor.gotoNextSibling());
+        cursor.gotoParent();
+      }
+    };
+
+    visit();
+    return imports;
   }
 }

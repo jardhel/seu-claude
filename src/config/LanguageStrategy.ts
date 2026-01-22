@@ -17,6 +17,22 @@ export interface CodeSymbol {
 }
 
 /**
+ * Represents an import statement
+ */
+export interface ImportStatement {
+  /** The module path (e.g., './utils', 'lodash', '../core/Task') */
+  modulePath: string;
+  /** Imported symbols (e.g., ['Task', 'TaskStatus']) or ['*'] for namespace import */
+  importedSymbols: string[];
+  /** Whether this is a default import */
+  isDefault: boolean;
+  /** Whether this is a namespace import (import * as X) */
+  isNamespace: boolean;
+  /** Line number of the import */
+  line: number;
+}
+
+/**
  * Tree-sitter query patterns for extracting symbols
  */
 export interface QueryPatterns {
@@ -40,4 +56,6 @@ export interface LanguageStrategy {
   getQueryPatterns(): QueryPatterns;
   /** Extract symbols from a parsed tree */
   extractSymbols(tree: Parser.Tree, source: string): CodeSymbol[];
+  /** Extract import statements from a parsed tree */
+  extractImports(tree: Parser.Tree, source: string): ImportStatement[];
 }
