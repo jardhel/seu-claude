@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import { EmbeddingEngine } from '../vector/embed.js';
 import { loadConfig, Config } from '../utils/config.js';
 import { tmpdir } from 'os';

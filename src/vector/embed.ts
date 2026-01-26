@@ -54,7 +54,7 @@ export class EmbeddingEngine {
       env.allowLocalModels = true;
       modelId = bundledModel.name;
       modelSource = 'bundled';
-      this.actualDimensions = bundledModel.dims;
+      this.actualDimensions = this.resolveOutputDimensions(bundledModel.dims);
     } else {
       // Use HuggingFace cache - model will be downloaded on first use
       this.log.info('Using HuggingFace model (will download on first use)');
@@ -68,8 +68,8 @@ export class EmbeddingEngine {
 
       // Find dimensions for this model
       const modelInfo = SUPPORTED_MODELS.find(m => m.hfName === modelId || m.name === modelId);
-      this.actualDimensions =
-        modelInfo?.dims || this.config.embeddingDimensions || DEFAULT_DIMENSIONS;
+      const modelDims = modelInfo?.dims ?? DEFAULT_DIMENSIONS;
+      this.actualDimensions = this.resolveOutputDimensions(modelDims);
     }
 
     try {
@@ -122,6 +122,20 @@ export class EmbeddingEngine {
     } catch {
       return null;
     }
+  }
+
+  private resolveOutputDimensions(modelDims: number): number {
+    const requested = this.config.embeddingDimensions;
+
+    if (!Number.isFinite(modelDims) || modelDims <= 0) {
+      return DEFAULT_DIMENSIONS;
+    }
+
+    if (!Number.isFinite(requested) || requested <= 0) {
+      return modelDims;
+    }
+
+    return Math.min(requested, modelDims);
   }
 
   async embed(text: string): Promise<number[]> {

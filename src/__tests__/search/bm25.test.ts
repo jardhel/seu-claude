@@ -2,7 +2,7 @@
  * Tests for BM25 Text Search Engine
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { BM25Engine } from '../../search/bm25.js';
 
 describe('BM25Engine', () => {

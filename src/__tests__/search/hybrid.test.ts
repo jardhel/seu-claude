@@ -2,7 +2,7 @@
  * Tests for Hybrid Search (BM25 + Semantic)
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { HybridSearcher } from '../../search/hybrid.js';
 
 describe('HybridSearcher', () => {

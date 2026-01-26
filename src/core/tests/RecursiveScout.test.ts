@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as tmp from 'tmp';
 import { join } from 'path';
-import { rm, writeFile } from 'fs/promises';
+import { rm, writeFile, mkdir } from 'fs/promises';
 import { RecursiveScout } from '../usecases/RecursiveScout.js';
 import { TreeSitterAdapter } from '../../adapters/parsers/TreeSitterAdapter.js';
 

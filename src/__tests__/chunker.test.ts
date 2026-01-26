@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { SemanticChunker } from '../indexer/chunker.js';
 import { loadConfig, Config } from '../utils/config.js';
 
@@ -298,7 +298,17 @@ function largeFunction() {
       'typescript'
     );
 
-    expect(chunks.length).toBeGreaterThan(0);
+    expect(chunks.length).toBeGreaterThan(1);
+    // Ensure we actually extracted an AST function node (not just fallback blocks)
+    expect(chunks.some(c => c.type === 'function')).toBe(true);
+
+    // Overlap: consecutive chunks should have overlapping line ranges
+    const sorted = [...chunks].sort((a, b) => a.startLine - b.startLine);
+    const hasOverlap = sorted.some((c, i) => i > 0 && c.startLine <= sorted[i - 1].endLine);
+    expect(hasOverlap).toBe(true);
+
+    // Grounding: chunks after the first should include grounding context
+    expect(chunks.slice(1).some(c => c.code.includes('Grounding (start of symbol):'))).toBe(true);
     // Each chunk should have valid structure
     for (const chunk of chunks) {
       expect(chunk.id).toBeDefined();

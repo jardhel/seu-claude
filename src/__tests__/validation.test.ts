@@ -2,7 +2,7 @@
  * Tests for validation utilities
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   validateFilePath,
   validateSearchQuery,

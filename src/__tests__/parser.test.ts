@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ASTParser, ParsedNode } from '../indexer/parser.js';
 
 describe('ASTParser', () => {

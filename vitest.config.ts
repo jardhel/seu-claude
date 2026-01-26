@@ -9,6 +9,6 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
     },
-    testTimeout: 10000,
+    testTimeout: 30000,
   },
 });

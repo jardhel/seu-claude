@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
 import { Crawler } from '../indexer/crawler.js';
 import { loadConfig, Config } from '../utils/config.js';
 import { mkdir, writeFile, rm } from 'fs/promises';
