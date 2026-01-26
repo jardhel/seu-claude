@@ -1,4 +1,4 @@
-import { Task } from '../entities/Task';
+import { Task } from '../entities/Task.js';
 
 export interface ITaskStore {
   /** Save or update a task */

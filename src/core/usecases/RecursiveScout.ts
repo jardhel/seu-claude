@@ -1,7 +1,7 @@
 import { resolve, dirname } from 'path';
 import { existsSync, statSync } from 'fs';
-import { TreeSitterAdapter, ParseResult } from '../../adapters/parsers/TreeSitterAdapter';
-import type { CodeSymbol, ImportStatement } from '../../config/LanguageStrategy';
+import { TreeSitterAdapter, ParseResult } from '../../adapters/parsers/TreeSitterAdapter.js';
+import type { CodeSymbol, ImportStatement } from '../../config/LanguageStrategy.js';
 
 /**
  * Represents a node in the dependency graph
@@ -226,9 +226,19 @@ export class RecursiveScout {
       return basePath;
     }
 
-    // Try adding extensions
+    // Strip extension if present (handles './helpers.js' -> './helpers')
+    // This is needed for TypeScript ES modules where imports use .js but files are .ts
+    let basePathWithoutExt = basePath;
     for (const ext of this.options.extensions) {
-      const withExt = basePath + ext;
+      if (basePath.endsWith(ext)) {
+        basePathWithoutExt = basePath.slice(0, -ext.length);
+        break;
+      }
+    }
+
+    // Try adding extensions to the base path without extension
+    for (const ext of this.options.extensions) {
+      const withExt = basePathWithoutExt + ext;
       if (existsSync(withExt) && statSync(withExt).isFile()) {
         return withExt;
       }
@@ -236,7 +246,7 @@ export class RecursiveScout {
 
     // Try index files
     for (const ext of this.options.extensions) {
-      const indexPath = resolve(basePath, 'index' + ext);
+      const indexPath = resolve(basePathWithoutExt, 'index' + ext);
       if (existsSync(indexPath) && statSync(indexPath).isFile()) {
         return indexPath;
       }

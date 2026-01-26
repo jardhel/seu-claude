@@ -7,7 +7,7 @@ import type {
   ValidationOptions,
   ValidationError,
   ValidationWarning,
-} from '../../core/interfaces/IGatekeeper';
+} from '../../core/interfaces/IGatekeeper.js';
 
 const execAsync = promisify(exec);
 
@@ -40,15 +40,11 @@ export class TypeScriptValidator implements IGatekeeper {
         };
       }
 
-      // Use tsc with --noEmit for type checking only
+      // Use tsc with project's tsconfig.json for accurate type checking
       const args = [
         'npx', 'tsc',
         '--noEmit',
         '--skipLibCheck',
-        '--esModuleInterop',
-        '--allowSyntheticDefaultImports',
-        '--strict',
-        ...paths,
       ];
 
       await execAsync(args.join(' '), {

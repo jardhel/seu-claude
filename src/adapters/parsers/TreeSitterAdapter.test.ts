@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { mkdir, rm, writeFile } from 'fs/promises';
-import { TreeSitterAdapter } from './TreeSitterAdapter';
+import { TreeSitterAdapter } from './TreeSitterAdapter.js';
 
 describe('TreeSitterAdapter', () => {
   let testDir: string;
@@ -143,8 +143,8 @@ describe('TreeSitterAdapter', () => {
       await writeFile(filePath, `
         import { readFile, writeFile } from 'fs/promises';
         import path from 'path';
-        import * as utils from './utils';
-        import type { Config } from '../config';
+        import * as utils from './utils.js';
+        import type { Config } from '../config.js';
       `);
 
       const imports = await adapter.getImports(filePath);
@@ -157,7 +157,7 @@ describe('TreeSitterAdapter', () => {
       const pathImport = imports.find(i => i.modulePath === 'path');
       expect(pathImport?.isDefault).toBe(true);
 
-      const utilsImport = imports.find(i => i.modulePath === './utils');
+      const utilsImport = imports.find(i => i.modulePath === './utils.js');
       expect(utilsImport?.isNamespace).toBe(true);
     });
   });

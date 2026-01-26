@@ -3,9 +3,9 @@ import type {
   IGatekeeperRegistry,
   ValidationResult,
   ValidationOptions,
-} from '../interfaces/IGatekeeper';
-import { ESLintValidator } from '../../adapters/sandbox/ESLintValidator';
-import { TypeScriptValidator } from '../../adapters/sandbox/TypeScriptValidator';
+} from '../interfaces/IGatekeeper.js';
+import { ESLintValidator } from '../../adapters/sandbox/ESLintValidator.js';
+import { TypeScriptValidator } from '../../adapters/sandbox/TypeScriptValidator.js';
 
 /**
  * Registry for managing multiple validators

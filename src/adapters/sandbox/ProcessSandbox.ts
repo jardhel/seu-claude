@@ -5,7 +5,7 @@ import type {
   SandboxStatus,
   ExecutionOptions,
   ExecutionResult,
-} from '../../core/interfaces/ISandbox';
+} from '../../core/interfaces/ISandbox.js';
 
 /**
  * ProcessSandbox - Lightweight sandbox using child processes

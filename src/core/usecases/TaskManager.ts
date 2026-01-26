@@ -1,5 +1,5 @@
-import { ITaskStore } from '../interfaces/ITaskStore';
-import { Task, TaskStatus } from '../entities/Task';
+import { ITaskStore } from '../interfaces/ITaskStore.js';
+import { Task, TaskStatus } from '../entities/Task.js';
 
 /**
  * Represents a task node in the hierarchical tree view

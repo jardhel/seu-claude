@@ -52,7 +52,7 @@ export class ESLintValidator implements IGatekeeper {
         args.push('--fix');
       }
 
-      const { stdout, stderr } = await execAsync(args.join(' '), {
+  const { stdout } = await execAsync(args.join(' '), {
         cwd: process.cwd(),
         timeout: 60000,
       });

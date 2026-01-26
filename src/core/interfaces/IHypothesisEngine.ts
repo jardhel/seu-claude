@@ -1,5 +1,5 @@
-import type { ExecutionResult } from './ISandbox';
-import type { ValidationResult } from './IGatekeeper';
+import type { ExecutionResult } from './ISandbox.js';
+import type { ValidationResult } from './IGatekeeper.js';
 
 /**
  * A hypothesis about code behavior to test

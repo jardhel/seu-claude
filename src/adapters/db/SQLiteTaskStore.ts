@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
-import { ITaskStore } from '../../core/interfaces/ITaskStore';
-import { Task } from '../../core/entities/Task';
+import { ITaskStore } from '../../core/interfaces/ITaskStore.js';
+import { Task } from '../../core/entities/Task.js';
 
 export class SQLiteTaskStore implements ITaskStore {
   private db: Database.Database;

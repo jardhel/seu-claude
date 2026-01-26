@@ -8,11 +8,11 @@
  */
 
 import { join } from 'path';
-import { SQLiteTaskStore } from '../adapters/db/SQLiteTaskStore';
-import { TaskManager, TaskNode } from '../core/usecases/TaskManager';
-import { RecursiveScout } from '../core/usecases/RecursiveScout';
-import { TreeSitterAdapter } from '../adapters/parsers/TreeSitterAdapter';
-import { Task } from '../core/entities/Task';
+import { SQLiteTaskStore } from '../adapters/db/SQLiteTaskStore.js';
+import { TaskManager, TaskNode } from '../core/usecases/TaskManager.js';
+import { RecursiveScout } from '../core/usecases/RecursiveScout.js';
+import { TreeSitterAdapter } from '../adapters/parsers/TreeSitterAdapter.js';
+import { Task } from '../core/entities/Task.js';
 
 const DB_PATH = join(__dirname, '../../.agent-state.db');
 

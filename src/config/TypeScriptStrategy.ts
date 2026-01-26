@@ -1,6 +1,6 @@
 import Parser from 'tree-sitter';
 import TypeScript from 'tree-sitter-typescript';
-import type { LanguageStrategy, CodeSymbol, QueryPatterns, ImportStatement } from './LanguageStrategy';
+import type { LanguageStrategy, CodeSymbol, QueryPatterns, ImportStatement } from './LanguageStrategy.js';
 
 export class TypeScriptStrategy implements LanguageStrategy {
   languageId = 'typescript';

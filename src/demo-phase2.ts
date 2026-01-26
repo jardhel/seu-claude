@@ -7,8 +7,8 @@
  * Run: npx ts-node src/demo-phase2.ts
  */
 
-import { SQLiteTaskStore } from './adapters/db/SQLiteTaskStore';
-import { TaskManager } from './core/usecases/TaskManager';
+import { SQLiteTaskStore } from './adapters/db/SQLiteTaskStore.js';
+import { TaskManager } from './core/usecases/TaskManager.js';
 import { join } from 'path';
 
 async function main() {

@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { mkdir, rm, writeFile, readFile } from 'fs/promises';
-import { HypothesisEngine } from '../usecases/HypothesisEngine';
+import { mkdir, rm, writeFile } from 'fs/promises';
+import { HypothesisEngine } from '../usecases/HypothesisEngine.js';
 
 describe('HypothesisEngine', () => {
   let testDir: string;

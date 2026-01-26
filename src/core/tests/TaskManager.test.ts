@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { mkdir, rm } from 'fs/promises';
-import { SQLiteTaskStore } from '../../adapters/db/SQLiteTaskStore';
-import { TaskManager } from '../usecases/TaskManager';
+import { SQLiteTaskStore } from '../../adapters/db/SQLiteTaskStore.js';
+import { TaskManager } from '../usecases/TaskManager.js';
 
 describe('TaskManager', () => {
   let testDir: string;
@@ -118,7 +118,7 @@ describe('TaskManager', () => {
     it('builds task tree from flat structure', async () => {
       const root = await manager.createRootGoal('Root');
       const child1 = await manager.spawnSubtask(root.id, 'Child 1');
-      const child2 = await manager.spawnSubtask(root.id, 'Child 2');
+      await manager.spawnSubtask(root.id, 'Child 2');
       await manager.spawnSubtask(child1.id, 'Grandchild 1.1');
 
       const tree = await manager.getTaskTree();
@@ -143,7 +143,7 @@ describe('TaskManager', () => {
 
     it('gets root tasks only', async () => {
       const root1 = await manager.createRootGoal('Root 1');
-      const root2 = await manager.createRootGoal('Root 2');
+      await manager.createRootGoal('Root 2');
       await manager.spawnSubtask(root1.id, 'Child of Root 1');
 
       const roots = await manager.getRootTasks();
@@ -308,9 +308,9 @@ describe('TaskManager', () => {
 
       const root = await manager1.createRootGoal('Project');
       const phase1 = await manager1.spawnSubtask(root.id, 'Phase 1');
-      const phase2 = await manager1.spawnSubtask(root.id, 'Phase 2');
+      await manager1.spawnSubtask(root.id, 'Phase 2');
       const task1a = await manager1.spawnSubtask(phase1.id, 'Task 1.A');
-      const task1b = await manager1.spawnSubtask(phase1.id, 'Task 1.B');
+      await manager1.spawnSubtask(phase1.id, 'Task 1.B');
 
       await manager1.updateStatus(task1a.id, 'completed');
       await manager1.cacheToolOutput(task1a.id, 'result', { success: true });
@@ -375,8 +375,8 @@ describe('TaskManager', () => {
 
   describe('Task Status Queries', () => {
     it('gets pending tasks', async () => {
-      const task1 = await manager.createRootGoal('Pending 1');
-      const task2 = await manager.createRootGoal('Pending 2');
+      await manager.createRootGoal('Pending 1');
+      await manager.createRootGoal('Pending 2');
       await manager.createRootGoal('Running');
       await manager.updateStatus((await manager.createRootGoal('Running')).id, 'running');
 
@@ -388,7 +388,7 @@ describe('TaskManager', () => {
 
     it('gets running tasks', async () => {
       const task1 = await manager.createRootGoal('Task 1');
-      const task2 = await manager.createRootGoal('Task 2');
+      await manager.createRootGoal('Task 2');
       await manager.updateStatus(task1.id, 'running');
 
       const running = await manager.getRunningTasks();

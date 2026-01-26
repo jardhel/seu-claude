@@ -1,9 +1,9 @@
 import Parser from 'tree-sitter';
 import { readFile } from 'fs/promises';
 import { extname } from 'path';
-import type { LanguageStrategy, CodeSymbol, ImportStatement } from '../../config/LanguageStrategy';
-import { TypeScriptStrategy } from '../../config/TypeScriptStrategy';
-import { PythonStrategy } from '../../config/PythonStrategy';
+import type { LanguageStrategy, CodeSymbol, ImportStatement } from '../../config/LanguageStrategy.js';
+import { TypeScriptStrategy } from '../../config/TypeScriptStrategy.js';
+import { PythonStrategy } from '../../config/PythonStrategy.js';
 
 /**
  * Result of parsing a source file

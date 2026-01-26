@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { mkdir, rm, writeFile } from 'fs/promises';
-import { RecursiveScout } from '../usecases/RecursiveScout';
-import { TreeSitterAdapter } from '../../adapters/parsers/TreeSitterAdapter';
+import { RecursiveScout } from '../usecases/RecursiveScout.js';
+import { TreeSitterAdapter } from '../../adapters/parsers/TreeSitterAdapter.js';
 
 describe('RecursiveScout', () => {
   let testDir: string;
@@ -52,14 +52,14 @@ describe('RecursiveScout', () => {
       `);
 
       await writeFile(utilsPath, `
-        import { formatName } from './helpers';
+        import { formatName } from './helpers.js';
         export function greet(name: string) {
           return 'Hello, ' + formatName(name);
         }
       `);
 
       await writeFile(mainPath, `
-        import { greet } from './utils';
+        import { greet } from './utils.js';
         console.log(greet('World'));
       `);
 
@@ -81,8 +81,8 @@ describe('RecursiveScout', () => {
       const rootPath = join(testDir, 'root.ts');
 
       await writeFile(leafPath, `export const value = 42;`);
-      await writeFile(middlePath, `import { value } from './leaf'; export const doubled = value * 2;`);
-      await writeFile(rootPath, `import { doubled } from './middle'; console.log(doubled);`);
+      await writeFile(middlePath, `import { value } from './leaf.js'; export const doubled = value * 2;`);
+      await writeFile(rootPath, `import { doubled } from './middle.js'; console.log(doubled);`);
 
       const graph = await scout.buildDependencyGraph([rootPath]);
 
@@ -98,8 +98,8 @@ describe('RecursiveScout', () => {
       const entry2Path = join(testDir, 'entry2.ts');
 
       await writeFile(sharedPath, `export const CONSTANT = 'shared';`);
-      await writeFile(entry1Path, `import { CONSTANT } from './shared'; console.log(CONSTANT);`);
-      await writeFile(entry2Path, `import { CONSTANT } from './shared'; export { CONSTANT };`);
+      await writeFile(entry1Path, `import { CONSTANT } from './shared.js'; console.log(CONSTANT);`);
+      await writeFile(entry2Path, `import { CONSTANT } from './shared.js'; export { CONSTANT };`);
 
       const graph = await scout.buildDependencyGraph([entry1Path, entry2Path]);
 
@@ -114,12 +114,12 @@ describe('RecursiveScout', () => {
       const bPath = join(testDir, 'b.ts');
 
       await writeFile(aPath, `
-        import { funcB } from './b';
+        import { funcB } from './b.js';
         export function funcA() { return funcB(); }
       `);
 
       await writeFile(bPath, `
-        import { funcA } from './a';
+        import { funcA } from './a.js';
         export function funcB() { return funcA(); }
       `);
 
@@ -136,9 +136,9 @@ describe('RecursiveScout', () => {
       const bPath = join(testDir, 'b.ts');
       const cPath = join(testDir, 'c.ts');
 
-      await writeFile(aPath, `import { b } from './b'; export const a = 1;`);
-      await writeFile(bPath, `import { c } from './c'; export const b = 2;`);
-      await writeFile(cPath, `import { a } from './a'; export const c = 3;`);
+      await writeFile(aPath, `import { b } from './b.js'; export const a = 1;`);
+      await writeFile(bPath, `import { c } from './c.js'; export const b = 2;`);
+      await writeFile(cPath, `import { a } from './a.js'; export const c = 3;`);
 
       const graph = await scout.buildDependencyGraph([aPath]);
 
@@ -172,7 +172,7 @@ describe('RecursiveScout', () => {
 
       await writeFile(utilsPath, `export function helper() { return 42; }`);
       await writeFile(mainPath, `
-        import { helper } from './utils';
+        import { helper } from './utils.js';
         const a = helper();
         const b = helper();
       `);
@@ -191,8 +191,8 @@ describe('RecursiveScout', () => {
       const bPath = join(testDir, 'b.ts');
       const cPath = join(testDir, 'c.ts');
 
-      await writeFile(aPath, `import { b } from './b'; export const a = 1;`);
-      await writeFile(bPath, `import { c } from './c'; export const b = 2;`);
+      await writeFile(aPath, `import { b } from './b.js'; export const a = 1;`);
+      await writeFile(bPath, `import { c } from './c.js'; export const b = 2;`);
       await writeFile(cPath, `export const c = 3;`);
 
       const graph = await scout.buildDependencyGraph([aPath]);
@@ -223,8 +223,8 @@ describe('RecursiveScout', () => {
       const cPath = join(testDir, 'c.ts');
 
       await writeFile(aPath, `
-        import { b } from './b';
-        import { c } from './c';
+        import { b } from './b.js';
+        import { c } from './c.js';
         export function a() { return b() + c(); }
       `);
       await writeFile(bPath, `export function b() { return 1; }`);
@@ -246,7 +246,7 @@ describe('RecursiveScout', () => {
       const mainPath = join(testDir, 'main.ts');
 
       await writeFile(utilsPath, `export const x = 1;`);
-      await writeFile(mainPath, `import { x } from './utils';`);
+      await writeFile(mainPath, `import { x } from './utils.js';`);
 
       const resolved = scout.resolveImport('./utils', mainPath);
       expect(resolved).toBe(utilsPath);
@@ -259,7 +259,7 @@ describe('RecursiveScout', () => {
       const mainPath = join(testDir, 'main.ts');
 
       await writeFile(indexPath, `export const lib = 'library';`);
-      await writeFile(mainPath, `import { lib } from './lib';`);
+      await writeFile(mainPath, `import { lib } from './lib.js';`);
 
       const resolved = scout.resolveImport('./lib', mainPath);
       expect(resolved).toBe(indexPath);

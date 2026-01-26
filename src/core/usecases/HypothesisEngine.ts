@@ -5,17 +5,18 @@ import type {
   Hypothesis,
   HypothesisResult,
   TDDOptions,
-} from '../interfaces/IHypothesisEngine';
-import type { ExecutionResult } from '../interfaces/ISandbox';
-import type { ValidationResult } from '../interfaces/IGatekeeper';
-import { ProcessSandbox } from '../../adapters/sandbox/ProcessSandbox';
-import { Gatekeeper } from './Gatekeeper';
+} from '../interfaces/IHypothesisEngine.js';
+import type { ExecutionResult } from '../interfaces/ISandbox.js';
+import type { ValidationResult } from '../interfaces/IGatekeeper.js';
+import { ProcessSandbox } from '../../adapters/sandbox/ProcessSandbox.js';
+import { Gatekeeper } from './Gatekeeper.js';
 
-const DEFAULT_OPTIONS: Required<TDDOptions> = {
-  maxIterations: 3,
-  testTimeout: 30000,
-  autoFix: false,
-};
+// Reserved for future use when TDDOptions are fully implemented
+// const DEFAULT_OPTIONS: Required<TDDOptions> = {
+//   maxIterations: 3,
+//   testTimeout: 30000,
+//   autoFix: false,
+// };
 
 /**
  * HypothesisEngine - Automated TDD loop executor
@@ -108,8 +109,8 @@ export class HypothesisEngine implements IHypothesisEngine {
     }
   }
 
-  async runTDDCycle(hypothesis: Hypothesis, options?: TDDOptions): Promise<HypothesisResult> {
-    const opts = { ...DEFAULT_OPTIONS, ...options };
+  async runTDDCycle(hypothesis: Hypothesis, _options?: TDDOptions): Promise<HypothesisResult> {
+    // Options reserved for future use (timeout, auto-fix, etc.)
 
     // Write files
     await this.writeHypothesisFiles(hypothesis);

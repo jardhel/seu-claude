@@ -1,28 +1,47 @@
 {
-  "name": "seu-claude-v2",
+  "name": "seu-claude",
   "version": "2.3.0",
-  "description": "Neuro-Symbolic AI Agent Architecture",
-  "main": "dist/index.js",
+  "description": "Neuro-Symbolic AI Agent Architecture for Claude Code",
+  "type": "module",
+  "main": "dist/v2.js",
+  "bin": {
+    "seu-claude": "dist/v2.js",
+    "seu": "dist/v2.js"
+  },
   "scripts": {
     "test": "vitest run",
     "build": "tsc",
-    "start": "ts-node src/index.ts"
+    "start": "node dist/v2.js",
+    "cli": "node dist/v2.js",
+    "mcp": "node dist/mcp/server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^11.0.0",
+    "@anthropic-ai/tokenizer": "^0.0.4",
+    "@huggingface/transformers": "^3.0.0",
     "@lancedb/lancedb": "^0.23.0",
-    "tree-sitter": "^0.21.0",
-    "tree-sitter-typescript": "^0.21.0",
-    "tree-sitter-python": "^0.21.0",
-    "zod": "^3.22.0",
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "better-sqlite3": "^11.0.0",
     "dotenv": "^16.4.0",
-    "@modelcontextprotocol/sdk": "^1.25.3"
+    "fast-glob": "^3.3.2",
+    "ignore": "^5.3.0",
+    "micromatch": "^4.0.8",
+    "tree-sitter": "^0.21.0",
+    "tree-sitter-python": "^0.21.0",
+    "tree-sitter-typescript": "^0.21.0",
+    "web-tree-sitter": "^0.22.6",
+    "xxhash-wasm": "^1.0.2",
+    "zod": "^3.22.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.0",
-    "ts-node": "^10.9.0",
-    "vitest": "^1.2.0",
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/jest": "^30.0.0",
+    "@types/micromatch": "^4.0.10",
     "@types/node": "^20.11.0",
-    "@types/better-sqlite3": "^7.6.0"
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.18"
   }
 }

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { mkdir, rm, writeFile } from 'fs/promises';
-import { ProcessSandbox } from '../../adapters/sandbox/ProcessSandbox';
+import { ProcessSandbox } from '../../adapters/sandbox/ProcessSandbox.js';
 
 describe('Sandbox', () => {
   let testDir: string;

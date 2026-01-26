@@ -1,6 +1,6 @@
 import Parser from 'tree-sitter';
 import Python from 'tree-sitter-python';
-import type { LanguageStrategy, CodeSymbol, QueryPatterns, ImportStatement } from './LanguageStrategy';
+import type { LanguageStrategy, CodeSymbol, QueryPatterns, ImportStatement } from './LanguageStrategy.js';
 
 export class PythonStrategy implements LanguageStrategy {
   languageId = 'python';
