@@ -9,12 +9,16 @@
     "seu": "dist/v2.js"
   },
   "scripts": {
-  "test": "vitest run",
-  "build": "tsc",
-  "download-grammars": "tsx scripts/download-grammars.ts",
-  "start": "node dist/v2.js",
-  "cli": "node dist/v2.js",
-  "mcp": "node dist/mcp/server.js"
+    "test": "vitest run",
+    "build": "tsc",
+    "download-grammars": "tsx scripts/download-grammars.ts",
+    "lint": "eslint . --ext .ts,.js",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test:coverage": "vitest run --coverage",
+    "start": "node dist/v2.js",
+    "cli": "node dist/v2.js",
+    "mcp": "node dist/mcp/server.js"
   },
   "dependencies": {
     "@anthropic-ai/tokenizer": "^0.0.4",
@@ -38,7 +42,9 @@
     "@types/jest": "^30.0.0",
     "@types/micromatch": "^4.0.10",
     "@types/node": "^20.11.0",
+    "eslint": "^9.39.2",
     "jest": "^30.2.0",
+    "prettier": "^3.8.1",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.0",
     "tsx": "^4.7.0",
