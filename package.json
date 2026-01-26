@@ -9,11 +9,12 @@
     "seu": "dist/v2.js"
   },
   "scripts": {
-    "test": "vitest run",
-    "build": "tsc",
-    "start": "node dist/v2.js",
-    "cli": "node dist/v2.js",
-    "mcp": "node dist/mcp/server.js"
+  "test": "vitest run",
+  "build": "tsc",
+  "download-grammars": "tsx scripts/download-grammars.ts",
+  "start": "node dist/v2.js",
+  "cli": "node dist/v2.js",
+  "mcp": "node dist/mcp/server.js"
   },
   "dependencies": {
     "@anthropic-ai/tokenizer": "^0.0.4",
