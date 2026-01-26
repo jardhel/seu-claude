@@ -1,6 +1,6 @@
 {
   "name": "seu-claude",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Neuro-Symbolic AI Agent Architecture for Claude Code",
   "type": "module",
   "main": "dist/v2.js",
