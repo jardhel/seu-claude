@@ -1,8 +1,6 @@
 /**
  * Tests for validation utilities
  */
-
-import { describe, it, expect, beforeEach } from '@jest/globals';
 import {
   validateFilePath,
   validateSearchQuery,

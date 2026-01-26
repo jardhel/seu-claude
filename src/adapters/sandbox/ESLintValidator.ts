@@ -7,7 +7,7 @@ import type {
   ValidationOptions,
   ValidationError,
   ValidationWarning,
-} from '../../core/interfaces/IGatekeeper';
+} from '../../core/interfaces/IGatekeeper.js';
 
 const execAsync = promisify(exec);
 
@@ -30,7 +30,7 @@ export class ESLintValidator implements IGatekeeper {
     const warnings: ValidationWarning[] = [];
 
     try {
-      const paths = options.paths.filter(p => this.canValidate(p));
+      const paths = options.paths.filter((p: string) => this.canValidate(p));
       if (paths.length === 0) {
         return {
           passed: true,

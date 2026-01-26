@@ -1,11 +1,11 @@
-import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { vi } from 'vitest';
 import { logger, Logger } from '../utils/logger.js';
 
 describe('Logger', () => {
-  let consoleSpy: ReturnType<typeof jest.spyOn>;
+  let consoleSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {

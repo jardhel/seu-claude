@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { VectorStore, StoredChunk, SearchResult } from '../vector/store.js';
 import { loadConfig, Config } from '../utils/config.js';
 import { mkdir, rm } from 'fs/promises';

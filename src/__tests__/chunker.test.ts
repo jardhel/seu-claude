@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach } from '@jest/globals';
 import { SemanticChunker } from '../indexer/chunker.js';
 import { loadConfig, Config } from '../utils/config.js';
 

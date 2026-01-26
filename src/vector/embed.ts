@@ -141,9 +141,8 @@ export class EmbeddingEngine {
       // Extract the embedding tensor and convert to array
       const embedding = Array.from(result.data as Float32Array);
 
-      // Truncate to actual dimensions (supports Matryoshka truncation)
-      const dims = this.actualDimensions ?? this.config.embeddingDimensions;
-      return embedding.slice(0, dims);
+      // Truncate to effective dimensions (supports Matryoshka truncation)
+      return embedding.slice(0, this.getEffectiveDimensions());
     } catch (err) {
       this.log.error('Failed to generate embedding:', err);
       throw err;
@@ -186,7 +185,7 @@ export class EmbeddingEngine {
   private extractBatchEmbeddings(results: unknown, count: number): number[][] {
     const embeddings: number[][] = [];
     const data = (results as { data: Float32Array }).data;
-    const dims = this.actualDimensions ?? this.config.embeddingDimensions;
+    const dims = this.getEffectiveDimensions();
     const fullDims = data.length / count;
 
     for (let i = 0; i < count; i++) {
@@ -213,17 +212,27 @@ export class EmbeddingEngine {
       });
 
       const embedding = Array.from(result.data as Float32Array);
-      const dims = this.actualDimensions ?? this.config.embeddingDimensions;
-      return embedding.slice(0, dims);
+      return embedding.slice(0, this.getEffectiveDimensions());
     } catch (err) {
       this.log.error('Failed to generate query embedding:', err);
       throw err;
     }
   }
 
-  getDimensions(): number {
-    // Return actual dimensions (set during init) or fall back to config
+  /**
+   * Get effective embedding dimensions (supports Matryoshka truncation).
+   * If configured dimensions are smaller than model's native dimensions, use configured.
+   */
+  private getEffectiveDimensions(): number {
+    if (this.config.embeddingDimensions && this.config.embeddingDimensions < (this.actualDimensions ?? Infinity)) {
+      return this.config.embeddingDimensions;
+    }
     return this.actualDimensions ?? this.config.embeddingDimensions;
+  }
+
+  getDimensions(): number {
+    // Return effective dimensions (truncated if configured)
+    return this.getEffectiveDimensions();
   }
 
   isInitialized(): boolean {

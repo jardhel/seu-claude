@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { loadConfig, getLanguageFromExtension, LANGUAGE_EXTENSIONS } from '../utils/config.js';
 import { homedir } from 'os';
 import { join } from 'path';

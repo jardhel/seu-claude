@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { StatsCollector } from '../../stats/collector.js';
 import { loadConfig } from '../../utils/config.js';
 import { mkdir, rm, writeFile } from 'fs/promises';

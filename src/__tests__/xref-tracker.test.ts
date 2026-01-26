@@ -1,8 +1,6 @@
 /**
  * Tests for Cross-Reference Tracker
  */
-
-import { describe, it, expect, beforeEach } from '@jest/globals';
 import { CrossReferenceTracker } from '../indexer/xref-tracker.js';
 import Parser from 'web-tree-sitter';
 import { join, dirname } from 'path';
