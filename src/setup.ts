@@ -34,7 +34,7 @@ interface MCPConfig {
   };
 }
 
-/* eslint-disable no-console */
+ 
 function log(message: string, emoji = '🔧'): void {
   console.log(`${emoji} ${message}`);
 }
@@ -46,7 +46,7 @@ function error(message: string): void {
 function success(message: string): void {
   console.log(`✅ ${message}`);
 }
-/* eslint-enable no-console */
+ 
 
 function detectProjectRoot(): string | null {
   try {
@@ -228,7 +228,7 @@ async function configureClaudeDesktop(projectRoot: string): Promise<boolean> {
   }
 }
 
-/* eslint-disable no-console */
+ 
 export async function runSetup(options?: SetupOptions): Promise<void> {
   console.log('\n🧠 seu-claude Setup\n');
 
@@ -300,7 +300,7 @@ export async function runSetup(options?: SetupOptions): Promise<void> {
     process.exit(1);
   }
 }
-/* eslint-enable no-console */
+ 
 
 // Direct execution support
 if (import.meta.url === `file://${process.argv[1]}`) {

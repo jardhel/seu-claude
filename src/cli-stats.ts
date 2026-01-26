@@ -8,7 +8,7 @@
 import { loadConfig } from './utils/config.js';
 import { StatsCollector, type IndexStats } from './stats/index.js';
 
-/* eslint-disable no-console */
+ 
 
 function formatDate(date: Date | null): string {
   if (!date) return 'Never';
@@ -91,7 +91,7 @@ export async function runStats(): Promise<void> {
   console.log('\n');
 }
 
-/* eslint-enable no-console */
+ 
 
 // Direct execution support
 if (import.meta.url === `file://${process.argv[1]}`) {

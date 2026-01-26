@@ -9,7 +9,7 @@ import { resolve } from 'path';
 import { existsSync } from 'fs';
 import type { IndexProgress } from './tools/index-codebase.js';
 
-/* eslint-disable no-console */
+ 
 
 export async function runIndex(pathArg?: string): Promise<void> {
   console.log('\n🔍 seu-claude Index\n');
@@ -117,7 +117,7 @@ export async function runIndex(pathArg?: string): Promise<void> {
   }
 }
 
-/* eslint-enable no-console */
+ 
 
 // Direct execution support
 if (import.meta.url === `file://${process.argv[1]}`) {

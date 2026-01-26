@@ -25,7 +25,7 @@ const CLAUDE_DESKTOP_CONFIG = {
   linux: join(homedir(), '.config/Claude/claude_desktop_config.json'),
 };
 
-/* eslint-disable no-console */
+ 
 
 function printCheck(result: CheckResult): void {
   const icon = result.status === 'pass' ? '✅' : result.status === 'warn' ? '⚠️' : '❌';
@@ -310,7 +310,7 @@ export async function runDoctor(): Promise<void> {
   console.log('   2. Then ask: "Where is the authentication logic?"');
   console.log('\n');
 }
-/* eslint-enable no-console */
+ 
 
 // Direct execution support
 if (import.meta.url === `file://${process.argv[1]}`) {
