@@ -9,7 +9,10 @@ describe('HypothesisEngine', () => {
   let engine: HypothesisEngine;
 
   beforeEach(async () => {
-    testDir = join(tmpdir(), `hypothesis-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    testDir = join(
+      tmpdir(),
+      `hypothesis-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    );
     await mkdir(testDir, { recursive: true });
     engine = new HypothesisEngine();
   });

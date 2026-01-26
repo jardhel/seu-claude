@@ -169,14 +169,14 @@ Seu-claude built Phase 4 using its own infrastructure - proving the architecture
 
 ### Performance
 
-| Operation | Latency | Notes |
-|-----------|---------|-------|
-| Task CRUD | < 1ms | SQLite in-memory + disk |
-| AST Parse (1000 LOC) | ~50ms | Tree-sitter WASM |
-| Dependency Graph (50 files) | ~500ms | Recursive parsing |
-| ESLint Validation | ~200ms | Per file |
-| TypeScript Check | ~1s | Per project |
-| Sandbox Execution | ~100ms + runtime | Process spawn overhead |
+| Operation                   | Latency          | Notes                   |
+| --------------------------- | ---------------- | ----------------------- |
+| Task CRUD                   | < 1ms            | SQLite in-memory + disk |
+| AST Parse (1000 LOC)        | ~50ms            | Tree-sitter WASM        |
+| Dependency Graph (50 files) | ~500ms           | Recursive parsing       |
+| ESLint Validation           | ~200ms           | Per file                |
+| TypeScript Check            | ~1s              | Per project             |
+| Sandbox Execution           | ~100ms + runtime | Process spawn overhead  |
 
 ### Documentation
 
@@ -214,6 +214,7 @@ Seu-claude built Phase 4 using its own infrastructure - proving the architecture
 See [V2_MIGRATION.md](V2_MIGRATION.md) for detailed migration guide.
 
 **Summary**:
+
 - Tool names changed (search_codebase → find_symbol, etc.)
 - Data directory moved from global to project-local
 - Tool response formats updated (more structured)

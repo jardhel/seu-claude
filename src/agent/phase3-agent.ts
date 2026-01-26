@@ -104,11 +104,16 @@ function printTaskTree(nodes: TaskNode[], indent = 0): void {
 
 function getStatusIcon(status: string): string {
   switch (status) {
-    case 'pending': return '⏳';
-    case 'running': return '🔄';
-    case 'completed': return '✅';
-    case 'failed': return '❌';
-    default: return '❓';
+    case 'pending':
+      return '⏳';
+    case 'running':
+      return '🔄';
+    case 'completed':
+      return '✅';
+    case 'failed':
+      return '❌';
+    default:
+      return '❓';
   }
 }
 
@@ -155,9 +160,10 @@ async function main() {
     const completed = allTasks.filter(t => t.status === 'completed').length;
     const pending = allTasks.filter(t => t.status === 'pending').length;
 
-    console.log(`\n📊 Progress: ${completed}/${allTasks.length} tasks completed (${pending} pending)`);
+    console.log(
+      `\n📊 Progress: ${completed}/${allTasks.length} tasks completed (${pending} pending)`
+    );
     console.log(`   Database: ${DB_PATH}`);
-
   } finally {
     ctx.store.close();
   }

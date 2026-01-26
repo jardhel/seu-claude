@@ -36,10 +36,13 @@ export const ManageTaskInput = z.object({
   label: z.string().optional().describe('Task label for create'),
   parentId: z.string().optional().describe('Parent task ID'),
   status: z.enum(['pending', 'running', 'completed', 'failed']).optional(),
-  toolOutput: z.object({
-    toolName: z.string(),
-    output: z.any(),
-  }).optional().describe('Cache tool output'),
+  toolOutput: z
+    .object({
+      toolName: z.string(),
+      output: z.any(),
+    })
+    .optional()
+    .describe('Cache tool output'),
 });
 
 export const RunTDDInput = z.object({
@@ -59,7 +62,8 @@ export const FindSymbolInput = z.object({
 export const TOOL_DEFINITIONS = [
   {
     name: 'analyze_dependency',
-    description: 'Analyze code dependencies and build import graph. Returns dependency tree, circular dependencies, and symbol locations.',
+    description:
+      'Analyze code dependencies and build import graph. Returns dependency tree, circular dependencies, and symbol locations.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -82,7 +86,8 @@ export const TOOL_DEFINITIONS = [
   },
   {
     name: 'validate_code',
-    description: 'Run pre-flight validation checks (ESLint, TypeScript type checking) on code files.',
+    description:
+      'Run pre-flight validation checks (ESLint, TypeScript type checking) on code files.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -101,7 +106,8 @@ export const TOOL_DEFINITIONS = [
   },
   {
     name: 'execute_sandbox',
-    description: 'Execute a command in an isolated sandbox environment with timeout and resource limits.',
+    description:
+      'Execute a command in an isolated sandbox environment with timeout and resource limits.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -128,7 +134,8 @@ export const TOOL_DEFINITIONS = [
   },
   {
     name: 'manage_task',
-    description: 'Create, update, or query tasks in the persistent task DAG. Supports caching tool outputs to prevent duplicate work.',
+    description:
+      'Create, update, or query tasks in the persistent task DAG. Supports caching tool outputs to prevent duplicate work.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -168,7 +175,8 @@ export const TOOL_DEFINITIONS = [
   },
   {
     name: 'run_tdd',
-    description: 'Execute a TDD cycle: verify test fails (RED), then passes with implementation (GREEN), validate code quality.',
+    description:
+      'Execute a TDD cycle: verify test fails (RED), then passes with implementation (GREEN), validate code quality.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -193,12 +201,19 @@ export const TOOL_DEFINITIONS = [
           description: 'Path to write implementation',
         },
       },
-      required: ['description', 'testCode', 'implementationCode', 'testFilePath', 'implementationFilePath'],
+      required: [
+        'description',
+        'testCode',
+        'implementationCode',
+        'testFilePath',
+        'implementationFilePath',
+      ],
     },
   },
   {
     name: 'find_symbol',
-    description: 'Find where a symbol (function, class, etc.) is defined and where it is called across the codebase.',
+    description:
+      'Find where a symbol (function, class, etc.) is defined and where it is called across the codebase.',
     inputSchema: {
       type: 'object',
       properties: {

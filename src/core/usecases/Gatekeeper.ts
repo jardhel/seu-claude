@@ -88,7 +88,10 @@ export class Gatekeeper {
   /**
    * Run pre-flight checks on the specified files
    */
-  async preflightCheck(paths: string[], options?: Partial<ValidationOptions>): Promise<PreflightResult> {
+  async preflightCheck(
+    paths: string[],
+    options?: Partial<ValidationOptions>
+  ): Promise<PreflightResult> {
     const startTime = performance.now();
 
     const validationOptions: ValidationOptions = {

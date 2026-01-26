@@ -1,6 +1,6 @@
 /**
  * seu-claude Benchmark Suite
- * 
+ *
  * Validates performance claims from the manifest:
  * 1. Index time for 5,000 files < 5 minutes
  * 2. Query latency p99 < 100ms
@@ -41,7 +41,7 @@ if (!existsSync(RESULTS_DIR)) {
  */
 function generateTestCodebase(numFiles: number, outputDir: string): void {
   console.log(`Generating ${numFiles} test files...`);
-  
+
   if (existsSync(outputDir)) {
     rmSync(outputDir, { recursive: true });
   }
@@ -136,24 +136,24 @@ class Service${i}:
   // Generate files in subdirectories
   const languages = Object.keys(templates) as Array<keyof typeof templates>;
   const filesPerLang = Math.floor(numFiles / languages.length);
-  
+
   let fileCount = 0;
   for (const lang of languages) {
     const langDir = join(outputDir, `src-${lang}`);
     mkdirSync(langDir, { recursive: true });
-    
+
     for (let i = 0; i < filesPerLang; i++) {
       const fileName = `service${i}.${lang}`;
       const filePath = join(langDir, fileName);
       writeFileSync(filePath, templates[lang](i));
       fileCount++;
-      
+
       if (fileCount % 500 === 0) {
         process.stdout.write(`  Generated ${fileCount}/${numFiles} files\r`);
       }
     }
   }
-  
+
   console.log(`  Generated ${fileCount} files total`);
 }
 
@@ -187,10 +187,10 @@ async function runBenchmarks(): Promise<void> {
   console.log('  seu-claude Benchmark Suite');
   console.log('='.repeat(60));
   console.log();
-  
+
   const results: BenchmarkResult[] = [];
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  
+
   // Benchmark 1: Memory at idle
   console.log('[Benchmark 1] Idle Memory Usage');
   console.log('  Target: < 100MB RSS');
@@ -208,7 +208,7 @@ async function runBenchmarks(): Promise<void> {
   // Benchmark 2: Generate test codebase
   const testCodebaseDir = join(RESULTS_DIR, 'test-codebase');
   const NUM_TEST_FILES = 1000; // Reduced for quick benchmark
-  
+
   console.log('[Benchmark 2] Test Codebase Generation');
   console.log(`  Generating ${NUM_TEST_FILES} files for testing...`);
   const genStart = performance.now();
@@ -233,27 +233,34 @@ async function runBenchmarks(): Promise<void> {
 
   // Save results
   const reportPath = join(RESULTS_DIR, `benchmark-${timestamp}.json`);
-  writeFileSync(reportPath, JSON.stringify({
-    timestamp: new Date().toISOString(),
-    nodeVersion: process.version,
-    platform: process.platform,
-    arch: process.arch,
-    results,
-  }, null, 2));
-  
+  writeFileSync(
+    reportPath,
+    JSON.stringify(
+      {
+        timestamp: new Date().toISOString(),
+        nodeVersion: process.version,
+        platform: process.platform,
+        arch: process.arch,
+        results,
+      },
+      null,
+      2
+    )
+  );
+
   console.log('='.repeat(60));
   console.log('  Results Summary');
   console.log('='.repeat(60));
-  
+
   for (const result of results) {
     const status = result.passed ? '✓ PASS' : '✗ FAIL';
     console.log(`  ${result.name}: ${result.actual} (target: ${result.target}) - ${status}`);
   }
-  
+
   console.log();
   console.log(`Results saved to: ${reportPath}`);
   console.log();
-  
+
   // Cleanup
   console.log('Cleaning up test codebase...');
   rmSync(testCodebaseDir, { recursive: true, force: true });

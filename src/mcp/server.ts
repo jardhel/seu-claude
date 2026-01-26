@@ -6,10 +6,7 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { join } from 'path';
 
 import { TOOL_DEFINITIONS, ToolName } from './tools.js';
@@ -41,7 +38,7 @@ export async function createServer(): Promise<Server> {
   });
 
   // Handle tool calls
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  server.setRequestHandler(CallToolRequestSchema, async request => {
     const { name, arguments: args } = request.params;
 
     try {

@@ -128,11 +128,7 @@ export class HypothesisEngine implements IHypothesisEngine {
           phase: 'complete',
           testResult,
           validationResult,
-          suggestions: [
-            'TDD cycle complete!',
-            'All tests pass',
-            'Code quality validated',
-          ],
+          suggestions: ['TDD cycle complete!', 'All tests pass', 'Code quality validated'],
         };
       } else {
         return {

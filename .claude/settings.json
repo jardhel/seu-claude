@@ -2,9 +2,7 @@
   "mcpServers": {
     "seu-claude": {
       "command": "npx",
-      "args": [
-        "seu-claude"
-      ],
+      "args": ["seu-claude"],
       "env": {
         "PROJECT_ROOT": "."
       }

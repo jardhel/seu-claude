@@ -11,7 +11,10 @@ describe('TaskManager', () => {
   let manager: TaskManager;
 
   beforeEach(async () => {
-    testDir = join(tmpdir(), `seu-claude-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    testDir = join(
+      tmpdir(),
+      `seu-claude-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    );
     await mkdir(testDir, { recursive: true });
     store = new SQLiteTaskStore(join(testDir, 'tasks.db'));
     manager = new TaskManager(store);
@@ -103,7 +106,9 @@ describe('TaskManager', () => {
     });
 
     it('throws error when spawning subtask with invalid parent', async () => {
-      await expect(manager.spawnSubtask('invalid-id', 'Orphan')).rejects.toThrow('Parent task not found');
+      await expect(manager.spawnSubtask('invalid-id', 'Orphan')).rejects.toThrow(
+        'Parent task not found'
+      );
     });
 
     it('creates multi-level hierarchy', async () => {

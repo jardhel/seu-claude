@@ -224,7 +224,10 @@ export class EmbeddingEngine {
    * If configured dimensions are smaller than model's native dimensions, use configured.
    */
   private getEffectiveDimensions(): number {
-    if (this.config.embeddingDimensions && this.config.embeddingDimensions < (this.actualDimensions ?? Infinity)) {
+    if (
+      this.config.embeddingDimensions &&
+      this.config.embeddingDimensions < (this.actualDimensions ?? Infinity)
+    ) {
       return this.config.embeddingDimensions;
     }
     return this.actualDimensions ?? this.config.embeddingDimensions;

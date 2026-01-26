@@ -11,20 +11,20 @@ All coverage thresholds have been met and exceeded. The codebase is ready for Ph
 
 ### Final Coverage
 
-| Metric | Threshold | Achieved |
-|--------|-----------|----------|
-| Statements | 76% | **87.2%** ✅ |
-| Branches | 70% | **77.03%** ✅ |
-| Functions | 90% | **96.99%** ✅ |
-| Lines | 76% | **87.52%** ✅ |
+| Metric     | Threshold | Achieved      |
+| ---------- | --------- | ------------- |
+| Statements | 76%       | **87.2%** ✅  |
+| Branches   | 70%       | **77.03%** ✅ |
+| Functions  | 90%       | **96.99%** ✅ |
+| Lines      | 76%       | **87.52%** ✅ |
 
 ### Key Improvements
 
-| File | Before | After |
-|------|--------|-------|
+| File                      | Before | After      |
+| ------------------------- | ------ | ---------- |
 | `tools/index-codebase.ts` | 11.45% | **91.66%** |
-| `stats/collector.ts` | 76.92% | **100%** |
-| `indexer/crawler.ts` | 77.21% | **97.46%** |
+| `stats/collector.ts`      | 76.92% | **100%**   |
+| `indexer/crawler.ts`      | 77.21% | **97.46%** |
 
 ---
 

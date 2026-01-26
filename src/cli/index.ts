@@ -49,7 +49,7 @@ const COMMANDS: Record<string, Command> = {
           break;
         }
         case 'tree': {
-          const result = await handler.handleTool('manage_task', { action: 'tree' }) as any;
+          const result = (await handler.handleTool('manage_task', { action: 'tree' })) as any;
           printTree(result.tree, 0);
           break;
         }
@@ -82,22 +82,22 @@ const COMMANDS: Record<string, Command> = {
 
       if (testFile === '--all' || !testFile) {
         console.log('🧪 Running all tests...\n');
-        const result = await handler.handleTool('execute_sandbox', {
+        const result = (await handler.handleTool('execute_sandbox', {
           command: 'npm',
           args: ['test', '--', '--run'],
           timeout: 120000,
-        }) as any;
+        })) as any;
 
         console.log(result.stdout);
         if (result.stderr) console.error(result.stderr);
         console.log(`\n${result.exitCode === 0 ? '✅' : '❌'} Exit code: ${result.exitCode}`);
       } else {
         console.log(`🧪 Running tests: ${testFile}\n`);
-        const result = await handler.handleTool('execute_sandbox', {
+        const result = (await handler.handleTool('execute_sandbox', {
           command: 'npm',
           args: ['test', '--', '--run', testFile],
           timeout: 60000,
-        }) as any;
+        })) as any;
 
         console.log(result.stdout);
         if (result.stderr) console.error(result.stderr);
@@ -146,10 +146,10 @@ const COMMANDS: Record<string, Command> = {
 
       console.log(`🔍 Analyzing dependencies: ${entryFile}\n`);
 
-      const result = await handler.handleTool('analyze_dependency', {
+      const result = (await handler.handleTool('analyze_dependency', {
         entryPoints: [entryFile],
         maxDepth,
-      }) as any;
+      })) as any;
 
       console.log('📊 Statistics:');
       console.log(`   Files: ${result.stats.totalFiles}`);
@@ -165,8 +165,14 @@ const COMMANDS: Record<string, Command> = {
         });
       }
 
-      console.log('\n📁 Entry points:', result.roots.map((r: string) => r.split('/').pop()).join(', '));
-      console.log('🍃 Leaf nodes:', result.leaves.map((l: string) => l.split('/').pop()).join(', '));
+      console.log(
+        '\n📁 Entry points:',
+        result.roots.map((r: string) => r.split('/').pop()).join(', ')
+      );
+      console.log(
+        '🍃 Leaf nodes:',
+        result.leaves.map((l: string) => l.split('/').pop()).join(', ')
+      );
     },
   },
 
@@ -185,10 +191,10 @@ const COMMANDS: Record<string, Command> = {
 
       console.log(`🔎 Validating: ${path}${fix ? ' (with auto-fix)' : ''}\n`);
 
-      const result = await handler.handleTool('validate_code', {
+      const result = (await handler.handleTool('validate_code', {
         paths: [path],
         fix,
-      }) as any;
+      })) as any;
 
       if (result.passed) {
         console.log('✅ All checks passed!');
@@ -226,10 +232,10 @@ const COMMANDS: Record<string, Command> = {
 
       console.log(`🔍 Finding symbol: ${symbolName}\n`);
 
-      const result = await handler.handleTool('find_symbol', {
+      const result = (await handler.handleTool('find_symbol', {
         symbolName,
         entryPoints: [entryFile],
-      }) as any;
+      })) as any;
 
       if (result.definitions.length > 0) {
         console.log('📍 Definitions:');
@@ -281,11 +287,16 @@ function printTree(nodes: any[], indent: number): void {
 
 function getStatusIcon(status: string): string {
   switch (status) {
-    case 'pending': return '⏳';
-    case 'running': return '🔄';
-    case 'completed': return '✅';
-    case 'failed': return '❌';
-    default: return '❓';
+    case 'pending':
+      return '⏳';
+    case 'running':
+      return '🔄';
+    case 'completed':
+      return '✅';
+    case 'failed':
+      return '❌';
+    default:
+      return '❓';
   }
 }
 

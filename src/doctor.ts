@@ -25,8 +25,6 @@ const CLAUDE_DESKTOP_CONFIG = {
   linux: join(homedir(), '.config/Claude/claude_desktop_config.json'),
 };
 
- 
-
 function printCheck(result: CheckResult): void {
   const icon = result.status === 'pass' ? '✅' : result.status === 'warn' ? '⚠️' : '❌';
   console.log(`${icon} ${result.name}: ${result.message}`);
@@ -310,7 +308,6 @@ export async function runDoctor(): Promise<void> {
   console.log('   2. Then ask: "Where is the authentication logic?"');
   console.log('\n');
 }
- 
 
 // Direct execution support
 if (import.meta.url === `file://${process.argv[1]}`) {

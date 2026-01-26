@@ -18,7 +18,7 @@ async function main() {
   const manager = new TaskManager(store);
 
   console.log('🚀 Project Janus - Phase 2: Perception');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
 
   // Check if we're recovering from a previous session
   const existing = await manager.recoverState();
@@ -61,12 +61,12 @@ async function main() {
   // Simulate caching some "expensive" analysis results
   await manager.cacheToolOutput(tsStrategy.id, 'file_analysis', {
     existingFiles: ['src/config/TypeScriptStrategy.ts', 'src/config/LanguageStrategy.ts'],
-    status: 'partially_implemented'
+    status: 'partially_implemented',
   });
 
   await manager.cacheToolOutput(pyStrategy.id, 'file_analysis', {
     existingFiles: ['src/config/PythonStrategy.ts'],
-    status: 'partially_implemented'
+    status: 'partially_implemented',
   });
 
   // Print the task tree
@@ -100,11 +100,16 @@ function printTree(nodes: any[], indent: number) {
 
 function getStatusIcon(status: string): string {
   switch (status) {
-    case 'pending': return '⏳';
-    case 'running': return '🔄';
-    case 'completed': return '✅';
-    case 'failed': return '❌';
-    default: return '❓';
+    case 'pending':
+      return '⏳';
+    case 'running':
+      return '🔄';
+    case 'completed':
+      return '✅';
+    case 'failed':
+      return '❌';
+    default:
+      return '❓';
   }
 }
 

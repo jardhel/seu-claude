@@ -116,17 +116,22 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 Once configured, Claude will have access to **9 powerful tools**:
 
 **Core Tools:**
+
 1. **Index your codebase** (run once, then incremental):
+
    > "Index this codebase for semantic search"
 
 2. **Search semantically**:
+
    > "Where is the user authentication logic?"
    > "Find all database connection handling code"
 
 3. **Read with context**:
+
    > "Read the AuthService.login method with its surrounding context"
 
 4. **Search cross-references** (find callers/callees):
+
    > "Who calls the validateUser function?"
    > "What functions does processOrder call?"
 
@@ -134,14 +139,16 @@ Once configured, Claude will have access to **9 powerful tools**:
    > "Find the getUser function" (handles typos!)
    > "Search for UserService class"
 
-**Analytics Tools (v1.1.0+):**
-6. **Get index statistics**:
-   > "Show me the codebase statistics"
+**Analytics Tools (v1.1.0+):** 6. **Get index statistics**:
+
+> "Show me the codebase statistics"
 
 7. **Token analytics**:
+
    > "How many tokens are we saving with semantic search?"
 
 8. **Memory profiling**:
+
    > "What's the memory usage profile?"
 
 9. **Query analytics**:
@@ -244,12 +251,14 @@ Search across your indexed code with multiple modes.
 ```
 
 **Search Modes (v1.2.0+):**
+
 - `semantic` - Vector-based similarity search (default)
 - `keyword` - BM25 keyword search for exact matches
 - `hybrid` - Combines both for best accuracy
 
 **Search Ranking (v1.2.0+):**
 When `use_ranking` is enabled (default), results are re-ranked using multiple factors:
+
 - Semantic/keyword score (weighted based on mode)
 - Export/public symbol detection (boosts exported functions/classes)
 - Entry point file detection (boosts index.ts, main.py, app.ts, etc.)
@@ -289,7 +298,8 @@ Find callers and callees of functions/methods. Understand code dependencies and 
 Get index statistics including file counts, chunk counts, and language distribution.
 
 ```typescript
-{} // No parameters required
+{
+} // No parameters required
 ```
 
 ### `get_token_analytics`
@@ -336,6 +346,7 @@ Search for functions, classes, and other symbols with fuzzy matching. Handles ty
 ```
 
 **Example prompts:**
+
 > "Find the getUser function" (even with typos like "gtUser")
 > "Search for UserService class"
 > "Find all functions matching 'validate'"
@@ -515,17 +526,21 @@ Seu-Claude v2 is a domain-agnostic agentic framework designed to solve the "Stoc
 While v1 proved that agents could garden code and notes, v2 industrializes that logic into a **Hexagonal Neuro-Symbolic Architecture**.
 
 ### Key Innovations:
-* **Symbolic Memory:** A persistent SQLite Task DAG. If the agent crashes, it resumes exactly where it left off.
-* **Syntax Perception:** Powered by **Tree-Sitter**. The agent "sees" your code's Abstract Syntax Tree (AST), navigating imports and call sites with 100% precision.
-* **Speculative Execution:** The "Proving Ground." Every fix is verified in an isolated Docker Sandbox before it reaches your eyes.
-* **The Gatekeeper:** A deterministic validation layer that forces LLMs to self-correct syntax and linting errors autonomously.
+
+- **Symbolic Memory:** A persistent SQLite Task DAG. If the agent crashes, it resumes exactly where it left off.
+- **Syntax Perception:** Powered by **Tree-Sitter**. The agent "sees" your code's Abstract Syntax Tree (AST), navigating imports and call sites with 100% precision.
+- **Speculative Execution:** The "Proving Ground." Every fix is verified in an isolated Docker Sandbox before it reaches your eyes.
+- **The Gatekeeper:** A deterministic validation layer that forces LLMs to self-correct syntax and linting errors autonomously.
 
 ## 🗺️ v2 Development Strategy
 
 We follow a **Prerelease Flow** to maintain stability.
-* **`main`**: Stable v1.x (Hotfixes only).
-* **`v2-develop`**: Bleeding edge development of the Janus architecture.
+
+- **`main`**: Stable v1.x (Hotfixes only).
+- **`v2-develop`**: Bleeding edge development of the Janus architecture.
 
 **Install the latest alpha:**
+
 ```bash
 npm install -g seu-claude@next
+```

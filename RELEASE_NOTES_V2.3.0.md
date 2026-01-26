@@ -10,7 +10,7 @@
 
 Seu-claude 2.3.0 represents a **complete paradigm shift** from traditional RAG (Retrieval-Augmented Generation) to a **Hexagonal Neuro-Symbolic Architecture** that grounds LLM reasoning in rigid symbolic structures.
 
-**The Big Idea**: Instead of searching for code, seu-claude now *manages autonomous development workflows* with crash-resistant state, automated validation, and test-driven development.
+**The Big Idea**: Instead of searching for code, seu-claude now _manages autonomous development workflows_ with crash-resistant state, automated validation, and test-driven development.
 
 **Self-Hosting Proof**: Seu-claude built Phase 4 of itself using its own infrastructure - proving the architecture works for real-world software development.
 
@@ -29,14 +29,14 @@ Four-phase neuro-symbolic system:
 
 ### 🛠️ 6 New MCP Tools
 
-| Tool | Purpose |
-|------|---------|
-| **analyze_dependency** | AST-based dependency graphs |
-| **validate_code** | Gatekeeper validation (ESLint + TypeScript) |
-| **execute_sandbox** | Isolated command execution |
-| **manage_task** | Persistent task DAG management |
-| **run_tdd** | Automated TDD cycles (RED-GREEN-REFACTOR) |
-| **find_symbol** | Symbol search across codebase |
+| Tool                   | Purpose                                     |
+| ---------------------- | ------------------------------------------- |
+| **analyze_dependency** | AST-based dependency graphs                 |
+| **validate_code**      | Gatekeeper validation (ESLint + TypeScript) |
+| **execute_sandbox**    | Isolated command execution                  |
+| **manage_task**        | Persistent task DAG management              |
+| **run_tdd**            | Automated TDD cycles (RED-GREEN-REFACTOR)   |
+| **find_symbol**        | Symbol search across codebase               |
 
 ### 💻 7 New CLI Commands
 
@@ -145,13 +145,13 @@ Claude:
 
 ### v1 → v2 Migration Required
 
-| Change | v1 | v2 |
-|--------|----|----|
-| **Package Name** | `seu-claude` | `seu-claude` (same) |
+| Change             | v1                       | v2                            |
+| ------------------ | ------------------------ | ----------------------------- |
+| **Package Name**   | `seu-claude`             | `seu-claude` (same)           |
 | **Data Directory** | `~/.seu-claude` (global) | `.seu-claude` (project-local) |
-| **Tool Names** | `search_codebase` | `find_symbol` |
-|  | `index_codebase` | `analyze_dependency` |
-| **Architecture** | Vector-based RAG | Symbolic reasoning |
+| **Tool Names**     | `search_codebase`        | `find_symbol`                 |
+|                    | `index_codebase`         | `analyze_dependency`          |
+| **Architecture**   | Vector-based RAG         | Symbolic reasoning            |
 
 **Migration Guide**: See [V2_MIGRATION.md](V2_MIGRATION.md)
 
@@ -233,14 +233,14 @@ seu-claude /deps src/index.ts
 
 ## Performance
 
-| Operation | Latency |
-|-----------|---------|
-| Task CRUD | < 1ms |
-| AST Parse (1000 LOC) | ~50ms |
-| Dependency Graph (50 files) | ~500ms |
-| ESLint Validation | ~200ms/file |
-| TypeScript Check | ~1s/project |
-| Sandbox Execution | ~100ms + runtime |
+| Operation                   | Latency          |
+| --------------------------- | ---------------- |
+| Task CRUD                   | < 1ms            |
+| AST Parse (1000 LOC)        | ~50ms            |
+| Dependency Graph (50 files) | ~500ms           |
+| ESLint Validation           | ~200ms/file      |
+| TypeScript Check            | ~1s/project      |
+| Sandbox Execution           | ~100ms + runtime |
 
 ---
 
@@ -318,6 +318,7 @@ Code Quality:
 Current sandbox uses Node.js child processes, not Docker containers.
 
 **Limitations**:
+
 - No network isolation
 - No resource limits (cgroups)
 - Relies on OS-level process isolation

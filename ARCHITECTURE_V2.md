@@ -88,18 +88,21 @@ Seu-Claude v2 is a **Hexagonal Neuro-Symbolic Architecture** that grounds LLM re
 **Purpose:** Persistent task state that survives crashes.
 
 **Files:**
+
 - `src/core/entities/Task.ts` - Task entity
 - `src/core/interfaces/ITaskStore.ts` - Storage port
 - `src/core/usecases/TaskManager.ts` - Task orchestration
 - `src/adapters/db/SQLiteTaskStore.ts` - SQLite adapter
 
 **Key Features:**
+
 - Hierarchical task DAG (parent-child relationships)
 - Tool output caching (prevent duplicate work)
 - State recovery after process restart
 - Status tracking: pending → running → completed/failed
 
 **API:**
+
 ```typescript
 const manager = new TaskManager(store);
 const root = await manager.createRootGoal('Project Goal');
@@ -115,6 +118,7 @@ await manager.cacheToolOutput(subtask.id, 'analysis', { findings: [...] });
 **Purpose:** AST-based code understanding and dependency tracking.
 
 **Files:**
+
 - `src/config/LanguageStrategy.ts` - Language abstraction
 - `src/config/TypeScriptStrategy.ts` - TypeScript queries
 - `src/config/PythonStrategy.ts` - Python queries
@@ -122,6 +126,7 @@ await manager.cacheToolOutput(subtask.id, 'analysis', { findings: [...] });
 - `src/core/usecases/RecursiveScout.ts` - Dependency analyzer
 
 **Key Features:**
+
 - Multi-language AST parsing (TypeScript, Python, JavaScript)
 - Recursive import resolution
 - Circular dependency detection
@@ -129,6 +134,7 @@ await manager.cacheToolOutput(subtask.id, 'analysis', { findings: [...] });
 - Import path finding between files
 
 **API:**
+
 ```typescript
 const adapter = new TreeSitterAdapter();
 const scout = new RecursiveScout(adapter);
@@ -144,6 +150,7 @@ const stats = scout.getGraphStats(graph);
 **Purpose:** Automated TDD validation and code quality checks.
 
 **Files:**
+
 - `src/core/interfaces/IGatekeeper.ts` - Validator port
 - `src/core/interfaces/ISandbox.ts` - Execution port
 - `src/core/interfaces/IHypothesisEngine.ts` - TDD port
@@ -154,12 +161,14 @@ const stats = scout.getGraphStats(graph);
 - `src/adapters/sandbox/ProcessSandbox.ts` - Isolated execution
 
 **Key Features:**
+
 - Pre-flight validation (ESLint + TypeScript)
 - Isolated sandbox execution (process isolation)
 - TDD cycle automation (RED → GREEN → REFACTOR)
 - Hypothesis testing with auto-validation
 
 **API:**
+
 ```typescript
 // Gatekeeper
 const gatekeeper = new Gatekeeper();
@@ -188,6 +197,7 @@ const result = await engine.runTDDCycle(hypothesis);
 **Purpose:** Expose v2 capabilities to Claude Code/Desktop via MCP protocol.
 
 **Files:**
+
 - `src/mcp/tools.ts` - Tool definitions (schema)
 - `src/mcp/handler.ts` - Tool implementation logic
 - `src/mcp/server.ts` - MCP server (stdio transport)
@@ -196,6 +206,7 @@ const result = await engine.runTDDCycle(hypothesis);
 **MCP Tools Exposed:**
 
 1. **`analyze_dependency`** - Analyze code dependencies
+
    ```json
    {
      "entryPoints": ["/src/index.ts"],
@@ -205,6 +216,7 @@ const result = await engine.runTDDCycle(hypothesis);
    ```
 
 2. **`validate_code`** - Run pre-flight checks
+
    ```json
    {
      "paths": ["/src/file.ts"],
@@ -213,6 +225,7 @@ const result = await engine.runTDDCycle(hypothesis);
    ```
 
 3. **`execute_sandbox`** - Run command in sandbox
+
    ```json
    {
      "command": "npm",
@@ -222,6 +235,7 @@ const result = await engine.runTDDCycle(hypothesis);
    ```
 
 4. **`manage_task`** - Manage task DAG
+
    ```json
    {
      "action": "create",
@@ -231,6 +245,7 @@ const result = await engine.runTDDCycle(hypothesis);
    ```
 
 5. **`run_tdd`** - Execute TDD cycle
+
    ```json
    {
      "description": "Test addition",
@@ -442,17 +457,18 @@ class ToolHandler {
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PROJECT_ROOT` | `process.cwd()` | Target codebase root |
-| `DATA_DIR` | `.seu-claude-v2` | State storage directory |
-| `LOG_LEVEL` | `info` | Logging verbosity |
+| Variable       | Default          | Description             |
+| -------------- | ---------------- | ----------------------- |
+| `PROJECT_ROOT` | `process.cwd()`  | Target codebase root    |
+| `DATA_DIR`     | `.seu-claude-v2` | State storage directory |
+| `LOG_LEVEL`    | `info`           | Logging verbosity       |
 
 ### Data Storage
 
 **SQLite Database:** `${DATA_DIR}/tasks.db`
 
 **Schema:**
+
 ```sql
 CREATE TABLE tasks (
   id TEXT PRIMARY KEY,
@@ -467,14 +483,14 @@ CREATE TABLE tasks (
 
 ## 8. Performance Characteristics
 
-| Operation | Latency | Notes |
-|-----------|---------|-------|
-| Task CRUD | < 1ms | In-memory + SQLite |
-| AST Parse (1000 LOC) | ~50ms | Tree-sitter WASM |
-| Dependency Graph (50 files) | ~500ms | Recursive parsing |
-| ESLint Validation | ~200ms | Per file |
-| TypeScript Check | ~1s | Per project |
-| Sandbox Execution | ~100ms + runtime | Process spawn overhead |
+| Operation                   | Latency          | Notes                  |
+| --------------------------- | ---------------- | ---------------------- |
+| Task CRUD                   | < 1ms            | In-memory + SQLite     |
+| AST Parse (1000 LOC)        | ~50ms            | Tree-sitter WASM       |
+| Dependency Graph (50 files) | ~500ms           | Recursive parsing      |
+| ESLint Validation           | ~200ms           | Per file               |
+| TypeScript Check            | ~1s              | Per project            |
+| Sandbox Execution           | ~100ms + runtime | Process spawn overhead |
 
 ---
 
@@ -483,6 +499,7 @@ CREATE TABLE tasks (
 ### Phase 1 Guarantees
 
 **Crash-Resistant State:**
+
 - All tasks persisted to SQLite immediately
 - Tool outputs cached in task context
 - On restart: `await manager.recoverState()`
@@ -490,6 +507,7 @@ CREATE TABLE tasks (
 ### Phase 3 Guarantees
 
 **Sandbox Isolation:**
+
 - Child process with timeout
 - No network access (future: Docker)
 - Resource limits (future: cgroups)
@@ -537,6 +555,7 @@ CREATE TABLE tasks (
 See the main project for contribution guidelines.
 
 Key architectural principles to follow:
+
 1. **Core is pure** - No I/O, no external deps
 2. **Use interfaces** - Depend on ports, not adapters
 3. **One-way dependencies** - Adapters depend on core, not vice versa

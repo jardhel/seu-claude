@@ -42,8 +42,10 @@ export class ESLintValidator implements IGatekeeper {
 
       // Build ESLint command
       const args = [
-        'npx', 'eslint',
-        '--format', 'json',
+        'npx',
+        'eslint',
+        '--format',
+        'json',
         '--no-error-on-unmatched-pattern',
         ...paths,
       ];
@@ -52,7 +54,7 @@ export class ESLintValidator implements IGatekeeper {
         args.push('--fix');
       }
 
-  const { stdout } = await execAsync(args.join(' '), {
+      const { stdout } = await execAsync(args.join(' '), {
         cwd: process.cwd(),
         timeout: 60000,
       });

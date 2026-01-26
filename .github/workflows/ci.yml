@@ -17,19 +17,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci --ignore-scripts
-      
+
       - name: Run ESLint
         run: npm run lint
-      
+
       - name: Check formatting
         run: npm run format:check
 
@@ -39,16 +39,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci --ignore-scripts
-      
+
       - name: Type check
         run: npm run typecheck
 
@@ -91,7 +91,7 @@ jobs:
         with:
           name: coverage-report
           path: coverage/
-      
+
       - name: Check coverage threshold
         if: matrix.node-version == '20.x'
         run: |
@@ -108,16 +108,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci --ignore-scripts
-      
+
       - name: Run npm audit
         run: npm audit --audit-level=high
         continue-on-error: true
@@ -127,7 +127,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
-    continue-on-error: true  # Don't fail the workflow if SonarCloud isn't configured
+    continue-on-error: true # Don't fail the workflow if SonarCloud isn't configured
 
     steps:
       - name: Checkout repository
@@ -157,7 +157,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   release:
-    needs: [build]  # Remove sonarcloud dependency
+    needs: [build] # Remove sonarcloud dependency
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 

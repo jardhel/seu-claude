@@ -125,10 +125,13 @@ describe('Sandbox', () => {
       await sandbox.initialize();
 
       const scriptPath = join(testDir, 'test.js');
-      await writeFile(scriptPath, `
+      await writeFile(
+        scriptPath,
+        `
         const sum = (a, b) => a + b;
         console.log(JSON.stringify({ result: sum(2, 3) }));
-      `);
+      `
+      );
 
       try {
         const result = await sandbox.execute({
@@ -150,14 +153,17 @@ describe('Sandbox', () => {
 
       // Create a simple test file
       const testFile = join(testDir, 'simple.test.js');
-      await writeFile(testFile, `
+      await writeFile(
+        testFile,
+        `
         const { test } = require('node:test');
         const assert = require('node:assert');
 
         test('adds numbers', () => {
           assert.strictEqual(1 + 1, 2);
         });
-      `);
+      `
+      );
 
       try {
         const result = await sandbox.execute({

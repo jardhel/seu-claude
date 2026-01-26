@@ -37,22 +37,30 @@ export class SQLiteTaskStore implements ITaskStore {
   }
 
   async get(id: string): Promise<Task | null> {
-    const row = this.db.prepare('SELECT id, parentId, label, status, context FROM tasks WHERE id = ?').get(id) as any;
+    const row = this.db
+      .prepare('SELECT id, parentId, label, status, context FROM tasks WHERE id = ?')
+      .get(id) as any;
     return row ? this.rowToTask(row) : null;
   }
 
   async getChildren(parentId: string): Promise<Task[]> {
-    const rows = this.db.prepare('SELECT id, parentId, label, status, context FROM tasks WHERE parentId = ?').all(parentId) as any[];
+    const rows = this.db
+      .prepare('SELECT id, parentId, label, status, context FROM tasks WHERE parentId = ?')
+      .all(parentId) as any[];
     return rows.map(row => this.rowToTask(row));
   }
 
   async getAll(): Promise<Task[]> {
-    const rows = this.db.prepare('SELECT id, parentId, label, status, context FROM tasks').all() as any[];
+    const rows = this.db
+      .prepare('SELECT id, parentId, label, status, context FROM tasks')
+      .all() as any[];
     return rows.map(row => this.rowToTask(row));
   }
 
   async getRoots(): Promise<Task[]> {
-    const rows = this.db.prepare('SELECT id, parentId, label, status, context FROM tasks WHERE parentId IS NULL').all() as any[];
+    const rows = this.db
+      .prepare('SELECT id, parentId, label, status, context FROM tasks WHERE parentId IS NULL')
+      .all() as any[];
     return rows.map(row => this.rowToTask(row));
   }
 

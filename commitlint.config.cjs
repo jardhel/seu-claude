@@ -5,17 +5,17 @@ module.exports = {
       2,
       'always',
       [
-        'feat',     // New feature
-        'fix',      // Bug fix
-        'docs',     // Documentation only
-        'style',    // Formatting, missing semicolons, etc
+        'feat', // New feature
+        'fix', // Bug fix
+        'docs', // Documentation only
+        'style', // Formatting, missing semicolons, etc
         'refactor', // Code change that neither fixes a bug nor adds a feature
-        'perf',     // Performance improvement
-        'test',     // Adding missing tests
-        'build',    // Build system or external dependencies
-        'ci',       // CI configuration
-        'chore',    // Other changes that don't modify src or test
-        'revert',   // Reverts a previous commit
+        'perf', // Performance improvement
+        'test', // Adding missing tests
+        'build', // Build system or external dependencies
+        'ci', // CI configuration
+        'chore', // Other changes that don't modify src or test
+        'revert', // Reverts a previous commit
         'security', // Security fix
       ],
     ],

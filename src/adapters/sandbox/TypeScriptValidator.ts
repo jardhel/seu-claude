@@ -41,11 +41,7 @@ export class TypeScriptValidator implements IGatekeeper {
       }
 
       // Use tsc with project's tsconfig.json for accurate type checking
-      const args = [
-        'npx', 'tsc',
-        '--noEmit',
-        '--skipLibCheck',
-      ];
+      const args = ['npx', 'tsc', '--noEmit', '--skipLibCheck'];
 
       await execAsync(args.join(' '), {
         cwd: process.cwd(),

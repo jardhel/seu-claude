@@ -100,7 +100,7 @@ if (handler) {
     console.log('  1️⃣ RED Phase - Verifying test fails...');
     const redResult = await engine.verifyRed({
       ...hypothesis,
-      implementationCode: '// Empty implementation'
+      implementationCode: '// Empty implementation',
     });
 
     if (redResult.phase === 'red') {
@@ -145,9 +145,7 @@ if (handler) {
     console.log(`  REFACTOR Phase: ${fullResult.phase === 'complete' ? '✅ Valid' : '❌ Invalid'}`);
 
     const allPassed =
-      redResult.phase === 'red' &&
-      greenResult.phase === 'green' &&
-      fullResult.phase === 'complete';
+      redResult.phase === 'red' && greenResult.phase === 'green' && fullResult.phase === 'complete';
 
     if (allPassed) {
       console.log('\n🎉 Phase 4 approach validated!');
@@ -165,7 +163,6 @@ if (handler) {
     console.log('   4. Validate with Gatekeeper (REFACTOR)');
     console.log('   5. Track progress in TaskManager');
     console.log('='.repeat(60));
-
   } finally {
     // Cleanup
     await rm(testDir, { recursive: true, force: true });

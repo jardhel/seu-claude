@@ -42,7 +42,7 @@ export class ProcessSandbox implements ISandbox {
     const startTime = performance.now();
     const timeout = options.timeout ?? 30000;
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this._status = 'running';
 
       const env = {
@@ -66,11 +66,11 @@ export class ProcessSandbox implements ISandbox {
       let stderr = '';
       let timedOut = false;
 
-      proc.stdout?.on('data', (data) => {
+      proc.stdout?.on('data', data => {
         stdout += data.toString();
       });
 
-      proc.stderr?.on('data', (data) => {
+      proc.stderr?.on('data', data => {
         stderr += data.toString();
       });
 
@@ -100,7 +100,7 @@ export class ProcessSandbox implements ISandbox {
         });
       });
 
-      proc.on('error', (error) => {
+      proc.on('error', error => {
         clearTimeout(timeoutId);
         this.currentProcess = null;
         this._status = 'error';
