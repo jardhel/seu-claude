@@ -35,7 +35,8 @@
     "tree-sitter-typescript": "^0.21.0",
     "web-tree-sitter": "^0.22.6",
     "xxhash-wasm": "^1.0.2",
-    "zod": "^3.22.0"
+    "zod": "^3.22.0",
+    "tmp": "^0.2.5"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.0",
