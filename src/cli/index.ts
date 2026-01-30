@@ -19,9 +19,19 @@ import {
   DependencyAnalysisSuite,
   ScalabilitySuite,
   AccuracySuite,
+  MemoryEfficiencySuite,
   ReportGenerator,
 } from '../benchmarks/index.js';
 import type { IBenchmarkSuite } from '../benchmarks/framework/types.js';
+import {
+  writeConfig,
+  writeConfigs,
+  getInstallInstructions,
+  listSupportedTools,
+  detectExistingTools,
+  CONFIG_TEMPLATES,
+  type AgentTool,
+} from '../mcp/config-generator.js';
 
 const PROJECT_ROOT = process.cwd();
 const DATA_DIR = join(PROJECT_ROOT, '.seu-claude-v2');
@@ -293,6 +303,7 @@ const COMMANDS: Record<string, Command> = {
           console.log('   dependency          - Import resolution and circular detection');
           console.log('   scalability         - Throughput, memory, and latency at scale');
           console.log('   accuracy            - Precision/recall against ground truth');
+          console.log('   memory-efficiency   - Token savings, retrieval latency, cache hit rate');
           console.log('   all                 - Run all suites');
           break;
         }
@@ -303,6 +314,75 @@ const COMMANDS: Record<string, Command> = {
           console.log('   report [fmt]   - Generate report (markdown, json, html)');
           console.log('   list           - List available suites');
       }
+    },
+  },
+
+  setup: {
+    name: '/setup',
+    description: 'Generate MCP config for agentic tools',
+    usage: '/setup <tool> | /setup --list | /setup --all',
+    handler: async (args, _handler) => {
+      const subcommand = args[0] || '--list';
+
+      if (subcommand === '--list' || subcommand === 'list') {
+        console.log('\n🔧 Supported Agentic Tools:\n');
+        const tools = listSupportedTools();
+        for (const { tool, description, configPath } of tools) {
+          console.log(`   ${tool.padEnd(12)} ${description}`);
+          console.log(`   ${''.padEnd(12)} Config: ${configPath}\n`);
+        }
+        console.log('Usage:');
+        console.log('   /setup claude     - Generate config for Claude Code');
+        console.log('   /setup copilot    - Generate config for GitHub Copilot');
+        console.log('   /setup --all      - Generate configs for all tools');
+        console.log('   /setup --detect   - Detect existing configs');
+        return;
+      }
+
+      if (subcommand === '--detect' || subcommand === 'detect') {
+        console.log('\n🔍 Detecting existing MCP configurations...\n');
+        const detected = detectExistingTools(PROJECT_ROOT);
+        if (detected.length > 0) {
+          console.log('   Found configurations for:');
+          for (const tool of detected) {
+            const template = CONFIG_TEMPLATES[tool];
+            console.log(`   - ${tool}: ${join(template.directory, template.filename)}`);
+          }
+        } else {
+          console.log('   No existing MCP configurations found.');
+        }
+        return;
+      }
+
+      if (subcommand === '--all' || subcommand === 'all') {
+        console.log('\n📝 Generating MCP configs for all tools...\n');
+        const allTools = Object.keys(CONFIG_TEMPLATES) as AgentTool[];
+        const paths = writeConfigs(allTools, PROJECT_ROOT, {
+          projectRoot: '.',
+        });
+        for (const path of paths) {
+          console.log(`   ✅ ${path}`);
+        }
+        console.log('\n🎉 All configurations generated!');
+        return;
+      }
+
+      // Check if it's a valid tool name
+      const tool = subcommand as AgentTool;
+      if (!CONFIG_TEMPLATES[tool]) {
+        console.error(`❌ Unknown tool: ${tool}`);
+        console.log('   Run /setup --list to see available tools');
+        return;
+      }
+
+      console.log(`\n📝 Generating MCP config for ${CONFIG_TEMPLATES[tool].description}...\n`);
+
+      const configPath = writeConfig(tool, PROJECT_ROOT, {
+        projectRoot: '.',
+      });
+
+      console.log(`   ✅ Created: ${configPath}`);
+      console.log(getInstallInstructions(tool));
     },
   },
 
@@ -339,6 +419,7 @@ async function runBenchmarks(suiteName: string): Promise<void> {
   suites.set('dependency', new DependencyAnalysisSuite());
   suites.set('scalability', new ScalabilitySuite());
   suites.set('accuracy', new AccuracySuite());
+  suites.set('memory-efficiency', new MemoryEfficiencySuite());
 
   const suitesToRun: IBenchmarkSuite[] = [];
 
@@ -348,7 +429,7 @@ async function runBenchmarks(suiteName: string): Promise<void> {
     suitesToRun.push(suites.get(suiteName)!);
   } else {
     console.error(`❌ Unknown suite: ${suiteName}`);
-    console.log('   Available: code-understanding, dependency, scalability, accuracy, all');
+    console.log('   Available: code-understanding, dependency, scalability, accuracy, memory-efficiency, all');
     return;
   }
 

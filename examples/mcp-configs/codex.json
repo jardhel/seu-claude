@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "seu-claude": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["seu-claude"],
+      "env": {
+        "PROJECT_ROOT": "."
+      }
+    }
+  }
+}

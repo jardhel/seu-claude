@@ -1,9 +1,16 @@
 {
   "name": "seu-claude",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "description": "Neuro-Symbolic AI Agent Architecture for Claude Code",
   "type": "module",
   "main": "dist/v2.js",
+  "exports": {
+    ".": "./dist/v2.js",
+    "./mcp": "./dist/mcp/index.js",
+    "./mcp/config": "./dist/mcp/config-generator.js",
+    "./mcp/server": "./dist/mcp/server.js",
+    "./mcp/tools": "./dist/mcp/tools.js"
+  },
   "bin": {
     "seu-claude": "dist/v2.js",
     "seu": "dist/v2.js"
