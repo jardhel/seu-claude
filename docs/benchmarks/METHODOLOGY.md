@@ -19,6 +19,7 @@ The seu-claude benchmark framework provides industrial-grade evaluation with PhD
 **Purpose:** Evaluates symbol resolution and call graph accuracy.
 
 **Test Cases:**
+
 - Symbol lookup by name
 - Find all callers of a function
 - Find all callees of a function
@@ -38,6 +39,7 @@ The seu-claude benchmark framework provides industrial-grade evaluation with PhD
 **Purpose:** Evaluates import resolution and dependency graph accuracy.
 
 **Test Cases:**
+
 - Relative imports (`./`, `../`)
 - Absolute imports (`@org/package`)
 - Dynamic imports
@@ -79,18 +81,19 @@ Significance threshold: p < 0.05
 
 **Cohen's d** measures practical significance:
 
-| |d| | Interpretation |
-|-----|----------------|
-| < 0.2 | Negligible |
-| 0.2 - 0.5 | Small |
-| 0.5 - 0.8 | Medium |
-| > 0.8 | Large |
+|           | d          |     | Interpretation |
+| --------- | ---------- | --- | -------------- |
+| < 0.2     | Negligible |
+| 0.2 - 0.5 | Small      |
+| 0.5 - 0.8 | Medium     |
+| > 0.8     | Large      |
 
 ## Baseline Comparisons
 
 ### NaiveGrepBaseline
 
 Simple pattern-matching baseline:
+
 - Uses grep for symbol search
 - Regex-based import detection
 - No semantic understanding
@@ -100,6 +103,7 @@ Provides lower bound for comparison.
 ### CtrlFlowBaseline (Planned)
 
 Traditional static analysis baseline:
+
 - Control flow analysis
 - Data flow analysis
 - Standard compiler techniques
@@ -109,6 +113,7 @@ Traditional static analysis baseline:
 ### Random Seeds
 
 All randomized operations use deterministic seeds:
+
 ```typescript
 const runner = new BenchmarkRunner({
   seed: 42, // Reproducible results
@@ -118,6 +123,7 @@ const runner = new BenchmarkRunner({
 ### Dataset Versioning
 
 Datasets include version metadata:
+
 ```json
 {
   "version": "1.0.0",
@@ -130,6 +136,7 @@ Datasets include version metadata:
 ### Environment Recording
 
 Reports include:
+
 - Node.js version
 - OS and architecture
 - Git commit hash
@@ -138,15 +145,19 @@ Reports include:
 ## Reporting
 
 ### JSON Format
+
 Machine-readable for CI/CD integration.
 
 ### HTML Format
+
 Interactive dashboard with visualizations.
 
 ### LaTeX Format
+
 Publication-ready tables for papers.
 
 ### Markdown Format
+
 GitHub-friendly summary.
 
 ## Running Benchmarks

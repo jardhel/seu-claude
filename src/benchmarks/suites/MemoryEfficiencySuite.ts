@@ -198,9 +198,7 @@ export class MemoryEfficiencySuite implements IBenchmarkSuite {
   /**
    * Generate test queries based on actual code content
    */
-  private async generateTestQueries(
-    files: string[]
-  ): Promise<
+  private async generateTestQueries(files: string[]): Promise<
     Array<{
       text: string;
       type: string;
@@ -291,7 +289,8 @@ export class MemoryEfficiencySuite implements IBenchmarkSuite {
   private getChunkingTiers(
     totalFiles: number
   ): Array<{ name: string; count: number; difficulty: 'easy' | 'medium' | 'hard' }> {
-    const tiers: Array<{ name: string; count: number; difficulty: 'easy' | 'medium' | 'hard' }> = [];
+    const tiers: Array<{ name: string; count: number; difficulty: 'easy' | 'medium' | 'hard' }> =
+      [];
 
     if (totalFiles >= 5) {
       tiers.push({ name: 'small', count: Math.min(10, totalFiles), difficulty: 'easy' });
@@ -634,9 +633,7 @@ export class MemoryEfficiencySuite implements IBenchmarkSuite {
     // Check P95 latency
     if (expected.maxP95LatencyMs !== undefined) {
       const p95 =
-        metrics.find(m => m.name.includes('p95'))?.value ||
-        (actual.latencyP95 as number) ||
-        0;
+        metrics.find(m => m.name.includes('p95'))?.value || (actual.latencyP95 as number) || 0;
       if (p95 > expected.maxP95LatencyMs) {
         return {
           passed: false,

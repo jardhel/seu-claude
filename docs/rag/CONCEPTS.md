@@ -42,6 +42,7 @@ Seu-claude implements a sophisticated Retrieval-Augmented Generation (RAG) syste
 **File:** `src/vector/store.ts`
 
 LanceDB is an Apache Arrow-based vector database that provides:
+
 - Persistent vector storage
 - Fast similarity search
 - Filtering by metadata (type, language, file path)
@@ -61,13 +62,14 @@ interface VectorStore {
 
 Uses HuggingFace Transformers.js with quantized models:
 
-| Model | Dimensions | Use Case |
-|-------|------------|----------|
-| `Xenova/all-MiniLM-L6-v2` | 384 | Default, balanced |
-| `Xenova/bge-small-en-v1.5` | 384 | Higher quality |
-| `Xenova/nomic-embed-text-v1.5` | 768 | Best quality, slower |
+| Model                          | Dimensions | Use Case             |
+| ------------------------------ | ---------- | -------------------- |
+| `Xenova/all-MiniLM-L6-v2`      | 384        | Default, balanced    |
+| `Xenova/bge-small-en-v1.5`     | 384        | Higher quality       |
+| `Xenova/nomic-embed-text-v1.5` | 768        | Best quality, slower |
 
 Features:
+
 - Batch embedding for efficiency
 - Query-specific prefixing
 - Matryoshka dimension truncation support
@@ -78,6 +80,7 @@ Features:
 **File:** `src/search/bm25.ts`
 
 Classic BM25 algorithm implementation:
+
 - Inverted index structure
 - Tokenization with camelCase/snake_case splitting
 - Configurable parameters (k1=1.2, b=0.75)
@@ -102,6 +105,7 @@ Also supports Reciprocal Rank Fusion (RRF) as an alternative.
 **File:** `src/indexer/chunker.ts`
 
 AST-based code chunking:
+
 - Extracts functions, classes, methods
 - Preserves semantic boundaries
 - Cross-reference enrichment (callers/callees)
@@ -112,6 +116,7 @@ AST-based code chunking:
 **File:** `src/indexer/xref-tracker.ts`
 
 Builds call graph relationships:
+
 - Tracks function calls
 - Maps callers/callees
 - Supports 10+ languages
@@ -120,12 +125,15 @@ Builds call graph relationships:
 ## Search Modes
 
 ### Semantic Search
+
 Best for conceptual queries: "how do we handle authentication"
 
 ### Keyword Search
+
 Best for exact matches: "handleAuthCallback function"
 
 ### Hybrid Search (Default)
+
 Best for general use: combines both approaches
 
 ## Configuration
@@ -165,13 +173,13 @@ The system tracks file changes for efficient updates:
 
 ## Performance Characteristics
 
-| Operation | Typical Latency | Notes |
-|-----------|----------------|-------|
-| Single query | 50-200ms | Depends on index size |
-| Embedding generation | 10-50ms | Per query |
-| BM25 lookup | <10ms | Very fast |
-| Hybrid combination | <5ms | Score merging |
-| Ranking | <10ms | Post-processing |
+| Operation            | Typical Latency | Notes                 |
+| -------------------- | --------------- | --------------------- |
+| Single query         | 50-200ms        | Depends on index size |
+| Embedding generation | 10-50ms         | Per query             |
+| BM25 lookup          | <10ms           | Very fast             |
+| Hybrid combination   | <5ms            | Score merging         |
+| Ranking              | <10ms           | Post-processing       |
 
 ## Best Practices
 

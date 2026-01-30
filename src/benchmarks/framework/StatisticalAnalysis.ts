@@ -254,7 +254,8 @@ export class StatisticalAnalysis {
       const timeTest = this.mannWhitneyU(baselineTimes, currentTimes);
       const baselineMean = baselineTimes.reduce((a, b) => a + b, 0) / baselineTimes.length;
       const currentMean = currentTimes.reduce((a, b) => a + b, 0) / currentTimes.length;
-      const percentChange = baselineMean !== 0 ? ((currentMean - baselineMean) / baselineMean) * 100 : 0;
+      const percentChange =
+        baselineMean !== 0 ? ((currentMean - baselineMean) / baselineMean) * 100 : 0;
 
       metricComparisons.push({
         metricName: 'execution_time',

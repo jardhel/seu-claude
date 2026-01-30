@@ -53,13 +53,16 @@ export interface ConfigOptions {
 /**
  * Configuration templates for different agentic tools
  */
-export const CONFIG_TEMPLATES: Record<AgentTool, {
-  filename: string;
-  directory: string;
-  format: 'json' | 'jsonc';
-  wrapKey?: string;
-  description: string;
-}> = {
+export const CONFIG_TEMPLATES: Record<
+  AgentTool,
+  {
+    filename: string;
+    directory: string;
+    format: 'json' | 'jsonc';
+    wrapKey?: string;
+    description: string;
+  }
+> = {
   claude: {
     filename: 'settings.json',
     directory: '.claude',
@@ -200,7 +203,9 @@ export function generateConfig(
 /**
  * Generates configuration for all supported tools
  */
-export function generateAllConfigs(options: ConfigOptions = {}): Record<AgentTool, MCPConfig | Record<string, unknown>> {
+export function generateAllConfigs(
+  options: ConfigOptions = {}
+): Record<AgentTool, MCPConfig | Record<string, unknown>> {
   const configs: Partial<Record<AgentTool, MCPConfig | Record<string, unknown>>> = {};
 
   for (const tool of Object.keys(CONFIG_TEMPLATES) as AgentTool[]) {
@@ -213,11 +218,7 @@ export function generateAllConfigs(options: ConfigOptions = {}): Record<AgentToo
 /**
  * Writes configuration file for a specific tool
  */
-export function writeConfig(
-  tool: AgentTool,
-  baseDir: string,
-  options: ConfigOptions = {}
-): string {
+export function writeConfig(tool: AgentTool, baseDir: string, options: ConfigOptions = {}): string {
   const template = CONFIG_TEMPLATES[tool];
   const config = generateConfig(tool, options);
 
@@ -439,7 +440,11 @@ export function getInstallInstructions(tool: AgentTool): string {
 /**
  * Lists all supported tools with descriptions
  */
-export function listSupportedTools(): Array<{ tool: AgentTool; description: string; configPath: string }> {
+export function listSupportedTools(): Array<{
+  tool: AgentTool;
+  description: string;
+  configPath: string;
+}> {
   return Object.entries(CONFIG_TEMPLATES).map(([tool, template]) => ({
     tool: tool as AgentTool,
     description: template.description,

@@ -7,9 +7,7 @@
     "sourceCommit": "7373a5b44aa2aaa553b83a08e87f5391c7633494",
     "totalFiles": 17,
     "totalLinesOfCode": 3499,
-    "languages": [
-      "typescript"
-    ],
+    "languages": ["typescript"],
     "generatorVersion": "1.0.0"
   },
   "symbolLookups": [
@@ -25,10 +23,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:2",
@@ -43,11 +38,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:3",
@@ -62,11 +53,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:4",
@@ -81,11 +68,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:5",
@@ -100,11 +83,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:6",
@@ -125,10 +104,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:7",
@@ -149,10 +125,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:8",
@@ -167,11 +140,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:9",
@@ -186,11 +155,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:10",
@@ -205,11 +170,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:11",
@@ -224,11 +185,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:12",
@@ -243,11 +200,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:13",
@@ -262,11 +215,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:14",
@@ -281,11 +230,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:15",
@@ -310,9 +255,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "function"
-      ]
+      "tags": ["function"]
     },
     {
       "id": "symbol:16",
@@ -327,11 +270,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:17",
@@ -352,10 +291,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:18",
@@ -370,11 +306,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:19",
@@ -388,10 +320,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:20",
@@ -406,11 +335,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:21",
@@ -436,10 +361,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:22",
@@ -502,12 +424,7 @@
         }
       ],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "scoped",
-        "frequently-used",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "frequently-used", "multi-definition"]
     },
     {
       "id": "symbol:23",
@@ -528,10 +445,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:24",
@@ -552,10 +466,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:25",
@@ -581,10 +492,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:26",
@@ -599,11 +507,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:27",
@@ -618,11 +522,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:28",
@@ -637,11 +537,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:29",
@@ -656,11 +552,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:30",
@@ -681,12 +573,7 @@
       ],
       "callSites": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "unused",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "unused", "multi-definition"]
     },
     {
       "id": "symbol:31",
@@ -700,10 +587,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:32",
@@ -729,10 +613,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:33",
@@ -763,10 +644,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:34",
@@ -787,10 +665,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:35",
@@ -805,11 +680,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:36",
@@ -830,10 +701,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:37",
@@ -848,11 +716,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:38",
@@ -867,11 +731,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:39",
@@ -886,11 +746,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:40",
@@ -905,11 +761,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:41",
@@ -924,11 +776,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:42",
@@ -943,11 +791,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:43",
@@ -962,11 +806,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:44",
@@ -987,10 +827,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:45",
@@ -1004,10 +841,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:46",
@@ -1034,11 +868,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "multi-definition"]
     },
     {
       "id": "symbol:47",
@@ -1059,12 +889,7 @@
       ],
       "callSites": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "unused",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "unused", "multi-definition"]
     },
     {
       "id": "symbol:48",
@@ -1091,11 +916,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "multi-definition"]
     },
     {
       "id": "symbol:49",
@@ -1165,11 +986,7 @@
         }
       ],
       "difficulty": "hard",
-      "tags": [
-        "function",
-        "frequently-used",
-        "multi-definition"
-      ]
+      "tags": ["function", "frequently-used", "multi-definition"]
     },
     {
       "id": "symbol:50",
@@ -1196,11 +1013,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "multi-definition"]
     },
     {
       "id": "symbol:51",
@@ -1214,10 +1027,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:52",
@@ -1231,10 +1041,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:53",
@@ -1278,11 +1085,7 @@
         }
       ],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "scoped",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "multi-definition"]
     },
     {
       "id": "symbol:54",
@@ -1297,11 +1100,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:55",
@@ -1316,11 +1115,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:56",
@@ -1335,11 +1130,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:57",
@@ -1360,10 +1151,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:58",
@@ -1384,10 +1172,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:59",
@@ -1413,10 +1198,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:60",
@@ -1447,10 +1229,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:61",
@@ -1481,10 +1260,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:62",
@@ -1515,10 +1291,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:63",
@@ -1539,10 +1312,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:64",
@@ -1556,10 +1326,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:65",
@@ -1580,10 +1347,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:66",
@@ -1624,10 +1388,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:67",
@@ -1653,10 +1414,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:68",
@@ -1701,10 +1459,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "function",
-        "multi-definition"
-      ]
+      "tags": ["function", "multi-definition"]
     },
     {
       "id": "symbol:69",
@@ -1725,10 +1480,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:70",
@@ -1749,10 +1501,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:71",
@@ -1766,10 +1515,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:72",
@@ -1805,10 +1551,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:73",
@@ -1844,10 +1587,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:74",
@@ -1893,11 +1633,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "frequently-used"
-      ]
+      "tags": ["method", "scoped", "frequently-used"]
     },
     {
       "id": "symbol:75",
@@ -1988,11 +1724,7 @@
         }
       ],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "scoped",
-        "frequently-used"
-      ]
+      "tags": ["method", "scoped", "frequently-used"]
     },
     {
       "id": "symbol:76",
@@ -2028,10 +1760,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:77",
@@ -2122,11 +1851,7 @@
         }
       ],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "scoped",
-        "frequently-used"
-      ]
+      "tags": ["method", "scoped", "frequently-used"]
     },
     {
       "id": "symbol:78",
@@ -2140,10 +1865,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:79",
@@ -2164,10 +1886,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:80",
@@ -2202,9 +1921,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "function"
-      ]
+      "tags": ["function"]
     },
     {
       "id": "symbol:81",
@@ -2229,9 +1946,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "function"
-      ]
+      "tags": ["function"]
     },
     {
       "id": "symbol:82",
@@ -2252,10 +1967,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:83",
@@ -2281,10 +1993,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:84",
@@ -2310,10 +2019,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:85",
@@ -2334,10 +2040,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:86",
@@ -2358,10 +2061,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:87",
@@ -2382,10 +2082,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:88",
@@ -2406,10 +2103,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:89",
@@ -2430,10 +2124,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:90",
@@ -2459,10 +2150,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:91",
@@ -2477,11 +2165,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:92",
@@ -2496,11 +2180,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:93",
@@ -2515,11 +2195,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:94",
@@ -2534,11 +2210,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:95",
@@ -2553,11 +2225,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:96",
@@ -2599,11 +2267,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped",
-        "multi-definition"
-      ]
+      "tags": ["method", "scoped", "multi-definition"]
     },
     {
       "id": "symbol:97",
@@ -2617,10 +2281,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "function",
-        "unused"
-      ]
+      "tags": ["function", "unused"]
     },
     {
       "id": "symbol:98",
@@ -2634,10 +2295,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "function",
-        "unused"
-      ]
+      "tags": ["function", "unused"]
     },
     {
       "id": "symbol:99",
@@ -2651,10 +2309,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:100",
@@ -2669,11 +2324,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:101",
@@ -2688,11 +2339,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:102",
@@ -2707,11 +2354,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:103",
@@ -2726,11 +2369,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:104",
@@ -2744,10 +2383,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:105",
@@ -2762,11 +2398,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:106",
@@ -2797,10 +2429,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:107",
@@ -2815,11 +2444,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:108",
@@ -2834,11 +2459,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:109",
@@ -2853,11 +2474,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:110",
@@ -2872,11 +2489,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:111",
@@ -2891,11 +2504,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:112",
@@ -2921,10 +2530,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:113",
@@ -2939,11 +2545,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:114",
@@ -2957,10 +2559,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "class",
-        "unused"
-      ]
+      "tags": ["class", "unused"]
     },
     {
       "id": "symbol:115",
@@ -2981,10 +2580,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:116",
@@ -2999,11 +2595,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:117",
@@ -3018,11 +2610,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:118",
@@ -3043,10 +2631,7 @@
         }
       ],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:119",
@@ -3061,11 +2646,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:120",
@@ -3101,10 +2682,7 @@
         }
       ],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "scoped"
-      ]
+      "tags": ["method", "scoped"]
     },
     {
       "id": "symbol:121",
@@ -3119,11 +2697,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     },
     {
       "id": "symbol:122",
@@ -3138,11 +2712,7 @@
       ],
       "callSites": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "scoped",
-        "unused"
-      ]
+      "tags": ["method", "scoped", "unused"]
     }
   ],
   "callGraphs": [
@@ -3159,10 +2729,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:2",
@@ -3177,10 +2744,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:3",
@@ -3200,10 +2764,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "function",
-        "leaf"
-      ]
+      "tags": ["function", "leaf"]
     },
     {
       "id": "callgraph:4",
@@ -3218,10 +2779,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:5",
@@ -3241,10 +2799,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:6",
@@ -3289,11 +2844,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:7",
@@ -3308,10 +2859,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:8",
@@ -3326,10 +2874,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:9",
@@ -3349,10 +2894,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:10",
@@ -3372,10 +2914,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:11",
@@ -3400,10 +2939,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:12",
@@ -3418,10 +2954,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:13",
@@ -3466,11 +2999,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:14",
@@ -3485,10 +3014,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:15",
@@ -3503,10 +3029,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:16",
@@ -3521,10 +3044,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:17",
@@ -3539,10 +3059,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:18",
@@ -3592,11 +3109,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "function",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["function", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:19",
@@ -3611,10 +3124,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:20",
@@ -3629,10 +3139,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:21",
@@ -3647,10 +3154,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:22",
@@ -3665,10 +3169,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:23",
@@ -3688,10 +3189,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:24",
@@ -3706,10 +3204,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:25",
@@ -3724,10 +3219,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:26",
@@ -3747,10 +3239,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:27",
@@ -3775,10 +3264,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:28",
@@ -3803,10 +3289,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:29",
@@ -3831,10 +3314,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:30",
@@ -3849,10 +3329,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:31",
@@ -3872,10 +3349,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:32",
@@ -3890,10 +3364,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:33",
@@ -3928,10 +3399,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:34",
@@ -3951,10 +3419,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:35",
@@ -3989,10 +3454,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "function",
-        "leaf"
-      ]
+      "tags": ["function", "leaf"]
     },
     {
       "id": "callgraph:36",
@@ -4007,10 +3469,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:37",
@@ -4025,10 +3484,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:38",
@@ -4073,11 +3529,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:39",
@@ -4107,10 +3559,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:40",
@@ -4140,10 +3589,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:41",
@@ -4183,11 +3629,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:42",
@@ -4272,11 +3714,7 @@
       ],
       "callees": [],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:43",
@@ -4306,10 +3744,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:44",
@@ -4429,11 +3864,7 @@
       ],
       "callees": [],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:45",
@@ -4518,11 +3949,7 @@
       ],
       "callees": [],
       "difficulty": "hard",
-      "tags": [
-        "method",
-        "leaf",
-        "high-fan-in"
-      ]
+      "tags": ["method", "leaf", "high-fan-in"]
     },
     {
       "id": "callgraph:46",
@@ -4537,10 +3964,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:47",
@@ -4570,10 +3994,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "function",
-        "leaf"
-      ]
+      "tags": ["function", "leaf"]
     },
     {
       "id": "callgraph:48",
@@ -4593,10 +4014,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "function",
-        "leaf"
-      ]
+      "tags": ["function", "leaf"]
     },
     {
       "id": "callgraph:49",
@@ -4611,10 +4029,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:50",
@@ -4634,10 +4049,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:51",
@@ -4657,10 +4069,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:52",
@@ -4675,10 +4084,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:53",
@@ -4693,10 +4099,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:54",
@@ -4711,10 +4114,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:55",
@@ -4729,10 +4129,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:56",
@@ -4747,10 +4144,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:57",
@@ -4770,10 +4164,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:58",
@@ -4803,10 +4194,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:59",
@@ -4826,10 +4214,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:60",
@@ -4854,10 +4239,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:61",
@@ -4887,10 +4269,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:62",
@@ -4910,10 +4289,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:63",
@@ -4933,10 +4309,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:64",
@@ -4951,10 +4324,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:65",
@@ -4969,10 +4339,7 @@
       ],
       "callees": [],
       "difficulty": "easy",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     },
     {
       "id": "callgraph:66",
@@ -5002,10 +4369,7 @@
       ],
       "callees": [],
       "difficulty": "medium",
-      "tags": [
-        "method",
-        "leaf"
-      ]
+      "tags": ["method", "leaf"]
     }
   ],
   "importResolutions": [
@@ -5014,716 +4378,460 @@
       "sourceFile": "src/core/usecases/TaskManager.ts",
       "importPath": "../interfaces/ITaskStore.js",
       "resolvedPath": "src/core/interfaces/ITaskStore.ts",
-      "importedSymbols": [
-        "ITaskStore"
-      ],
+      "importedSymbols": ["ITaskStore"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:2",
       "sourceFile": "src/core/usecases/TaskManager.ts",
       "importPath": "../entities/Task.js",
       "resolvedPath": "src/core/entities/Task.ts",
-      "importedSymbols": [
-        "Task",
-        "TaskStatus"
-      ],
+      "importedSymbols": ["Task", "TaskStatus"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:3",
       "sourceFile": "src/core/interfaces/ITaskStore.ts",
       "importPath": "../entities/Task.js",
       "resolvedPath": "src/core/entities/Task.ts",
-      "importedSymbols": [
-        "Task"
-      ],
+      "importedSymbols": ["Task"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:4",
       "sourceFile": "src/core/usecases/RecursiveScout.ts",
       "importPath": "path",
       "resolvedPath": null,
-      "importedSymbols": [
-        "resolve",
-        "dirname"
-      ],
+      "importedSymbols": ["resolve", "dirname"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:5",
       "sourceFile": "src/core/usecases/RecursiveScout.ts",
       "importPath": "fs",
       "resolvedPath": null,
-      "importedSymbols": [
-        "existsSync",
-        "statSync"
-      ],
+      "importedSymbols": ["existsSync", "statSync"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:6",
       "sourceFile": "src/core/usecases/RecursiveScout.ts",
       "importPath": "../../adapters/parsers/TreeSitterAdapter.js",
       "resolvedPath": "src/adapters/parsers/TreeSitterAdapter.ts",
-      "importedSymbols": [
-        "TreeSitterAdapter",
-        "ParseResult"
-      ],
+      "importedSymbols": ["TreeSitterAdapter", "ParseResult"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:7",
       "sourceFile": "src/core/usecases/RecursiveScout.ts",
       "importPath": "../../config/LanguageStrategy.js",
       "resolvedPath": "src/config/LanguageStrategy.ts",
-      "importedSymbols": [
-        "CodeSymbol",
-        "ImportStatement"
-      ],
+      "importedSymbols": ["CodeSymbol", "ImportStatement"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:8",
       "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
       "importPath": "tree-sitter",
       "resolvedPath": null,
-      "importedSymbols": [
-        "Parser"
-      ],
+      "importedSymbols": ["Parser"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "default"
-      ]
+      "tags": ["package", "default"]
     },
     {
       "id": "import:9",
       "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
       "importPath": "fs/promises",
       "resolvedPath": null,
-      "importedSymbols": [
-        "readFile"
-      ],
+      "importedSymbols": ["readFile"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:10",
       "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
       "importPath": "path",
       "resolvedPath": null,
-      "importedSymbols": [
-        "extname"
-      ],
+      "importedSymbols": ["extname"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:11",
       "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
       "importPath": "../../config/LanguageStrategy.js",
       "resolvedPath": "src/config/LanguageStrategy.ts",
-      "importedSymbols": [
-        "LanguageStrategy",
-        "CodeSymbol",
-        "ImportStatement"
-      ],
+      "importedSymbols": ["LanguageStrategy", "CodeSymbol", "ImportStatement"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:12",
       "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
       "importPath": "../../config/TypeScriptStrategy.js",
       "resolvedPath": "src/config/TypeScriptStrategy.ts",
-      "importedSymbols": [
-        "TypeScriptStrategy"
-      ],
+      "importedSymbols": ["TypeScriptStrategy"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:13",
       "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
       "importPath": "../../config/PythonStrategy.js",
       "resolvedPath": "src/config/PythonStrategy.ts",
-      "importedSymbols": [
-        "PythonStrategy"
-      ],
+      "importedSymbols": ["PythonStrategy"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:14",
       "sourceFile": "src/config/TypeScriptStrategy.ts",
       "importPath": "tree-sitter",
       "resolvedPath": null,
-      "importedSymbols": [
-        "Parser"
-      ],
+      "importedSymbols": ["Parser"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "default"
-      ]
+      "tags": ["package", "default"]
     },
     {
       "id": "import:15",
       "sourceFile": "src/config/TypeScriptStrategy.ts",
       "importPath": "tree-sitter-typescript",
       "resolvedPath": null,
-      "importedSymbols": [
-        "TypeScript"
-      ],
+      "importedSymbols": ["TypeScript"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "default"
-      ]
+      "tags": ["package", "default"]
     },
     {
       "id": "import:16",
       "sourceFile": "src/config/TypeScriptStrategy.ts",
       "importPath": "./LanguageStrategy.js",
       "resolvedPath": "src/config/LanguageStrategy.ts",
-      "importedSymbols": [
-        "LanguageStrategy",
-        "CodeSymbol",
-        "QueryPatterns",
-        "ImportStatement"
-      ],
+      "importedSymbols": ["LanguageStrategy", "CodeSymbol", "QueryPatterns", "ImportStatement"],
       "importType": "relative",
       "difficulty": "easy",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:17",
       "sourceFile": "src/config/PythonStrategy.ts",
       "importPath": "tree-sitter",
       "resolvedPath": null,
-      "importedSymbols": [
-        "Parser"
-      ],
+      "importedSymbols": ["Parser"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "default"
-      ]
+      "tags": ["package", "default"]
     },
     {
       "id": "import:18",
       "sourceFile": "src/config/PythonStrategy.ts",
       "importPath": "tree-sitter-python",
       "resolvedPath": null,
-      "importedSymbols": [
-        "Python"
-      ],
+      "importedSymbols": ["Python"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "default"
-      ]
+      "tags": ["package", "default"]
     },
     {
       "id": "import:19",
       "sourceFile": "src/config/PythonStrategy.ts",
       "importPath": "./LanguageStrategy.js",
       "resolvedPath": "src/config/LanguageStrategy.ts",
-      "importedSymbols": [
-        "LanguageStrategy",
-        "CodeSymbol",
-        "QueryPatterns",
-        "ImportStatement"
-      ],
+      "importedSymbols": ["LanguageStrategy", "CodeSymbol", "QueryPatterns", "ImportStatement"],
       "importType": "relative",
       "difficulty": "easy",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:20",
       "sourceFile": "src/indexer/chunker.ts",
       "importPath": "./parser.js",
       "resolvedPath": "src/indexer/parser.ts",
-      "importedSymbols": [
-        "ASTParser",
-        "ParsedNode"
-      ],
+      "importedSymbols": ["ASTParser", "ParsedNode"],
       "importType": "relative",
       "difficulty": "easy",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:21",
       "sourceFile": "src/indexer/chunker.ts",
       "importPath": "./xref-tracker.js",
       "resolvedPath": "src/indexer/xref-tracker.ts",
-      "importedSymbols": [
-        "CrossReferenceTracker"
-      ],
+      "importedSymbols": ["CrossReferenceTracker"],
       "importType": "relative",
       "difficulty": "easy",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:22",
       "sourceFile": "src/indexer/chunker.ts",
       "importPath": "../utils/config.js",
       "resolvedPath": "src/utils/config.ts",
-      "importedSymbols": [
-        "Config"
-      ],
+      "importedSymbols": ["Config"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:23",
       "sourceFile": "src/indexer/chunker.ts",
       "importPath": "../utils/logger.js",
       "resolvedPath": "src/utils/logger.ts",
-      "importedSymbols": [
-        "logger"
-      ],
+      "importedSymbols": ["logger"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:24",
       "sourceFile": "src/indexer/chunker.ts",
       "importPath": "crypto",
       "resolvedPath": null,
-      "importedSymbols": [
-        "createHash"
-      ],
+      "importedSymbols": ["createHash"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:25",
       "sourceFile": "src/indexer/parser.ts",
       "importPath": "web-tree-sitter",
       "resolvedPath": null,
-      "importedSymbols": [
-        "Parser",
-        "Language",
-        "Tree",
-        "SyntaxNode"
-      ],
+      "importedSymbols": ["Parser", "Language", "Tree", "SyntaxNode"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "default"
-      ]
+      "tags": ["package", "default"]
     },
     {
       "id": "import:26",
       "sourceFile": "src/indexer/parser.ts",
       "importPath": "path",
       "resolvedPath": null,
-      "importedSymbols": [
-        "join",
-        "dirname"
-      ],
+      "importedSymbols": ["join", "dirname"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:27",
       "sourceFile": "src/indexer/parser.ts",
       "importPath": "url",
       "resolvedPath": null,
-      "importedSymbols": [
-        "fileURLToPath"
-      ],
+      "importedSymbols": ["fileURLToPath"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:28",
       "sourceFile": "src/indexer/parser.ts",
       "importPath": "fs/promises",
       "resolvedPath": null,
-      "importedSymbols": [
-        "readFile",
-        "access"
-      ],
+      "importedSymbols": ["readFile", "access"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:29",
       "sourceFile": "src/indexer/parser.ts",
       "importPath": "../utils/logger.js",
       "resolvedPath": "src/utils/logger.ts",
-      "importedSymbols": [
-        "logger"
-      ],
+      "importedSymbols": ["logger"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:30",
       "sourceFile": "src/indexer/xref-tracker.ts",
       "importPath": "web-tree-sitter",
       "resolvedPath": null,
-      "importedSymbols": [
-        "Tree",
-        "SyntaxNode"
-      ],
+      "importedSymbols": ["Tree", "SyntaxNode"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:31",
       "sourceFile": "src/indexer/xref-tracker.ts",
       "importPath": "../utils/logger.js",
       "resolvedPath": "src/utils/logger.ts",
-      "importedSymbols": [
-        "logger"
-      ],
+      "importedSymbols": ["logger"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:32",
       "sourceFile": "src/utils/config.ts",
       "importPath": "os",
       "resolvedPath": null,
-      "importedSymbols": [
-        "homedir"
-      ],
+      "importedSymbols": ["homedir"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:33",
       "sourceFile": "src/utils/config.ts",
       "importPath": "path",
       "resolvedPath": null,
-      "importedSymbols": [
-        "join"
-      ],
+      "importedSymbols": ["join"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:34",
       "sourceFile": "src/search/hybrid.ts",
       "importPath": "../utils/logger.js",
       "resolvedPath": "src/utils/logger.ts",
-      "importedSymbols": [
-        "logger"
-      ],
+      "importedSymbols": ["logger"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:35",
       "sourceFile": "src/vector/store.ts",
       "importPath": "@lancedb/lancedb",
       "resolvedPath": null,
-      "importedSymbols": [
-        "lancedb"
-      ],
+      "importedSymbols": ["lancedb"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named",
-        "namespace"
-      ]
+      "tags": ["package", "named", "namespace"]
     },
     {
       "id": "import:36",
       "sourceFile": "src/vector/store.ts",
       "importPath": "../utils/config.js",
       "resolvedPath": "src/utils/config.ts",
-      "importedSymbols": [
-        "Config"
-      ],
+      "importedSymbols": ["Config"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:37",
       "sourceFile": "src/vector/store.ts",
       "importPath": "../utils/logger.js",
       "resolvedPath": "src/utils/logger.ts",
-      "importedSymbols": [
-        "logger"
-      ],
+      "importedSymbols": ["logger"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:38",
       "sourceFile": "src/vector/store.ts",
       "importPath": "../indexer/chunker.js",
       "resolvedPath": "src/indexer/chunker.ts",
-      "importedSymbols": [
-        "CodeChunk"
-      ],
+      "importedSymbols": ["CodeChunk"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:39",
       "sourceFile": "src/vector/store.ts",
       "importPath": "fs/promises",
       "resolvedPath": null,
-      "importedSymbols": [
-        "mkdir"
-      ],
+      "importedSymbols": ["mkdir"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:40",
       "sourceFile": "src/vector/store.ts",
       "importPath": "path",
       "resolvedPath": null,
-      "importedSymbols": [
-        "join"
-      ],
+      "importedSymbols": ["join"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:41",
       "sourceFile": "src/vector/embed.ts",
       "importPath": "@huggingface/transformers",
       "resolvedPath": null,
-      "importedSymbols": [
-        "pipeline",
-        "FeatureExtractionPipeline",
-        "env"
-      ],
+      "importedSymbols": ["pipeline", "FeatureExtractionPipeline", "env"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:42",
       "sourceFile": "src/vector/embed.ts",
       "importPath": "../utils/config.js",
       "resolvedPath": "src/utils/config.ts",
-      "importedSymbols": [
-        "Config"
-      ],
+      "importedSymbols": ["Config"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:43",
       "sourceFile": "src/vector/embed.ts",
       "importPath": "../utils/logger.js",
       "resolvedPath": "src/utils/logger.ts",
-      "importedSymbols": [
-        "logger"
-      ],
+      "importedSymbols": ["logger"],
       "importType": "relative",
       "difficulty": "medium",
-      "tags": [
-        "relative",
-        "named"
-      ]
+      "tags": ["relative", "named"]
     },
     {
       "id": "import:44",
       "sourceFile": "src/vector/embed.ts",
       "importPath": "path",
       "resolvedPath": null,
-      "importedSymbols": [
-        "join",
-        "dirname"
-      ],
+      "importedSymbols": ["join", "dirname"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:45",
       "sourceFile": "src/vector/embed.ts",
       "importPath": "url",
       "resolvedPath": null,
-      "importedSymbols": [
-        "fileURLToPath"
-      ],
+      "importedSymbols": ["fileURLToPath"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     },
     {
       "id": "import:46",
       "sourceFile": "src/vector/embed.ts",
       "importPath": "fs/promises",
       "resolvedPath": null,
-      "importedSymbols": [
-        "access",
-        "mkdir",
-        "readdir"
-      ],
+      "importedSymbols": ["access", "mkdir", "readdir"],
       "importType": "package",
       "difficulty": "medium",
-      "tags": [
-        "package",
-        "named"
-      ]
+      "tags": ["package", "named"]
     }
   ],
   "circularDependencies": []

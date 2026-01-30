@@ -368,9 +368,7 @@ export class GroundTruthGenerator {
     let sourceCommit: string | undefined;
     try {
       const { execSync } = await import('child_process');
-      sourceCommit = execSync('git rev-parse HEAD', { cwd: codebasePath })
-        .toString()
-        .trim();
+      sourceCommit = execSync('git rev-parse HEAD', { cwd: codebasePath }).toString().trim();
     } catch {
       // Not a git repo or git not available
     }
@@ -415,10 +413,7 @@ export class GroundTruthGenerator {
     await mkdir(outputDir, { recursive: true });
 
     // Save individual files for easier loading
-    await writeFile(
-      join(outputDir, 'metadata.json'),
-      JSON.stringify(dataset.metadata, null, 2)
-    );
+    await writeFile(join(outputDir, 'metadata.json'), JSON.stringify(dataset.metadata, null, 2));
 
     await writeFile(
       join(outputDir, 'symbol-lookups.json'),
@@ -507,10 +502,7 @@ export class GroundTruthGenerator {
   /**
    * Generate tags for symbol lookup
    */
-  private generateTags(
-    definitions: SymbolLocation[],
-    callSites: CallSiteLocation[]
-  ): string[] {
+  private generateTags(definitions: SymbolLocation[], callSites: CallSiteLocation[]): string[] {
     const tags: string[] = [];
 
     // Type tags
@@ -565,9 +557,7 @@ export class GroundTruthGenerator {
   /**
    * Classify import type
    */
-  private classifyImportType(
-    importPath: string
-  ): 'relative' | 'absolute' | 'package' | 'builtin' {
+  private classifyImportType(importPath: string): 'relative' | 'absolute' | 'package' | 'builtin' {
     if (importPath.startsWith('./') || importPath.startsWith('../')) {
       return 'relative';
     }

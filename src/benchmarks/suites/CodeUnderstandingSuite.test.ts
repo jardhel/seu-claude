@@ -61,9 +61,7 @@ describe('CodeUnderstandingSuite', () => {
           entryPoints: [`${process.cwd()}/src/core/usecases/TaskManager.ts`],
         },
         expected: {
-          definitions: [
-            { file: 'TaskManager.ts', line: 28, type: 'class' },
-          ],
+          definitions: [{ file: 'TaskManager.ts', line: 28, type: 'class' }],
           callSites: [],
         },
       };

@@ -122,7 +122,9 @@ export class BenchmarkRunner {
         );
       }
 
-      this.log.info(`Running ${filteredCases.length} test cases (${config.measurementIterations ?? 1} iterations)`);
+      this.log.info(
+        `Running ${filteredCases.length} test cases (${config.measurementIterations ?? 1} iterations)`
+      );
 
       // Warmup iterations
       const warmupIterations = config.warmupIterations ?? 1;
@@ -218,7 +220,7 @@ export class BenchmarkRunner {
     testCase: BenchmarkTestCase,
     timeoutMs = 30000
   ): Promise<TestCaseResult> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const timeout = setTimeout(() => {
         resolve({
           testCaseId: testCase.id,
@@ -232,11 +234,11 @@ export class BenchmarkRunner {
 
       suite
         .runTestCase(testCase)
-        .then((result) => {
+        .then(result => {
           clearTimeout(timeout);
           resolve(result);
         })
-        .catch((error) => {
+        .catch(error => {
           clearTimeout(timeout);
           resolve({
             testCaseId: testCase.id,
@@ -292,7 +294,9 @@ export class BenchmarkRunner {
       }
     }
 
-    return results.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    return results.sort(
+      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
   }
 
   /**

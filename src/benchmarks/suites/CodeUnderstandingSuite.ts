@@ -55,8 +55,7 @@ interface CallGraphTestCase extends BenchmarkTestCase {
 
 export class CodeUnderstandingSuite implements IBenchmarkSuite {
   readonly name = 'code-understanding';
-  readonly description =
-    'Benchmarks symbol resolution, call graph accuracy using RecursiveScout';
+  readonly description = 'Benchmarks symbol resolution, call graph accuracy using RecursiveScout';
   readonly supportedLanguages = ['typescript', 'javascript', 'python'];
 
   private adapter: TreeSitterAdapter;
@@ -415,9 +414,7 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
                 entryPoints: files.slice(0, 10),
               },
               expected: {
-                definitions: [
-                  { file: node.filePath, line: symbol.startLine, type: symbol.type },
-                ],
+                definitions: [{ file: node.filePath, line: symbol.startLine, type: symbol.type }],
                 callSites: [],
               },
               difficulty: 'easy',

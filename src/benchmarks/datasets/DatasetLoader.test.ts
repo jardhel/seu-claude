@@ -99,10 +99,7 @@ describe('DatasetLoader', () => {
       ])
     );
 
-    await writeFile(
-      join(testDatasetDir, 'circular-dependencies.json'),
-      JSON.stringify([])
-    );
+    await writeFile(join(testDatasetDir, 'circular-dependencies.json'), JSON.stringify([]));
   });
 
   afterEach(async () => {
@@ -228,10 +225,7 @@ describe('DatasetLoader', () => {
 
     it('should detect missing metadata fields', async () => {
       // Overwrite metadata with missing fields
-      await writeFile(
-        join(testDatasetDir, 'metadata.json'),
-        JSON.stringify({ totalFiles: 0 })
-      );
+      await writeFile(join(testDatasetDir, 'metadata.json'), JSON.stringify({ totalFiles: 0 }));
       loader.clearCache();
 
       const result = await loader.validateDataset(testDatasetDir);

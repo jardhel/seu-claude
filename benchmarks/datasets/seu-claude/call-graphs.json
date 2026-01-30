@@ -12,10 +12,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:2",
@@ -30,10 +27,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:3",
@@ -53,10 +47,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "function",
-      "leaf"
-    ]
+    "tags": ["function", "leaf"]
   },
   {
     "id": "callgraph:4",
@@ -71,10 +62,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:5",
@@ -94,10 +82,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:6",
@@ -142,11 +127,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:7",
@@ -161,10 +142,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:8",
@@ -179,10 +157,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:9",
@@ -202,10 +177,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:10",
@@ -225,10 +197,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:11",
@@ -253,10 +222,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:12",
@@ -271,10 +237,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:13",
@@ -319,11 +282,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:14",
@@ -338,10 +297,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:15",
@@ -356,10 +312,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:16",
@@ -374,10 +327,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:17",
@@ -392,10 +342,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:18",
@@ -445,11 +392,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "function",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["function", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:19",
@@ -464,10 +407,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:20",
@@ -482,10 +422,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:21",
@@ -500,10 +437,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:22",
@@ -518,10 +452,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:23",
@@ -541,10 +472,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:24",
@@ -559,10 +487,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:25",
@@ -577,10 +502,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:26",
@@ -600,10 +522,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:27",
@@ -628,10 +547,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:28",
@@ -656,10 +572,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:29",
@@ -684,10 +597,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:30",
@@ -702,10 +612,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:31",
@@ -725,10 +632,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:32",
@@ -743,10 +647,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:33",
@@ -781,10 +682,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:34",
@@ -804,10 +702,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:35",
@@ -842,10 +737,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "function",
-      "leaf"
-    ]
+    "tags": ["function", "leaf"]
   },
   {
     "id": "callgraph:36",
@@ -860,10 +752,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:37",
@@ -878,10 +767,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:38",
@@ -926,11 +812,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:39",
@@ -960,10 +842,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:40",
@@ -993,10 +872,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:41",
@@ -1036,11 +912,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:42",
@@ -1125,11 +997,7 @@
     ],
     "callees": [],
     "difficulty": "hard",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:43",
@@ -1159,10 +1027,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:44",
@@ -1282,11 +1147,7 @@
     ],
     "callees": [],
     "difficulty": "hard",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:45",
@@ -1371,11 +1232,7 @@
     ],
     "callees": [],
     "difficulty": "hard",
-    "tags": [
-      "method",
-      "leaf",
-      "high-fan-in"
-    ]
+    "tags": ["method", "leaf", "high-fan-in"]
   },
   {
     "id": "callgraph:46",
@@ -1390,10 +1247,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:47",
@@ -1423,10 +1277,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "function",
-      "leaf"
-    ]
+    "tags": ["function", "leaf"]
   },
   {
     "id": "callgraph:48",
@@ -1446,10 +1297,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "function",
-      "leaf"
-    ]
+    "tags": ["function", "leaf"]
   },
   {
     "id": "callgraph:49",
@@ -1464,10 +1312,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:50",
@@ -1487,10 +1332,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:51",
@@ -1510,10 +1352,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:52",
@@ -1528,10 +1367,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:53",
@@ -1546,10 +1382,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:54",
@@ -1564,10 +1397,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:55",
@@ -1582,10 +1412,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:56",
@@ -1600,10 +1427,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:57",
@@ -1623,10 +1447,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:58",
@@ -1656,10 +1477,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:59",
@@ -1679,10 +1497,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:60",
@@ -1707,10 +1522,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:61",
@@ -1740,10 +1552,7 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:62",
@@ -1763,10 +1572,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:63",
@@ -1786,10 +1592,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:64",
@@ -1804,10 +1607,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:65",
@@ -1822,10 +1622,7 @@
     ],
     "callees": [],
     "difficulty": "easy",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   },
   {
     "id": "callgraph:66",
@@ -1855,9 +1652,6 @@
     ],
     "callees": [],
     "difficulty": "medium",
-    "tags": [
-      "method",
-      "leaf"
-    ]
+    "tags": ["method", "leaf"]
   }
 ]

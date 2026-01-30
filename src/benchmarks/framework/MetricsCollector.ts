@@ -5,12 +5,7 @@
  * and provide PhD-level statistical analysis.
  */
 
-import type {
-  MetricMeasurement,
-  LatencyPercentiles,
-  IRMetrics,
-  TestCaseResult,
-} from './types.js';
+import type { MetricMeasurement, LatencyPercentiles, IRMetrics, TestCaseResult } from './types.js';
 
 /**
  * Collects timing measurements for latency analysis
@@ -335,7 +330,8 @@ export class MetricsCollector {
     // Custom metrics
     for (const [name, values] of this.customMetrics) {
       const mean = values.reduce((a, b) => a + b, 0) / values.length;
-      const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+      const variance =
+        values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
       metrics.push({
         name,
         value: mean,

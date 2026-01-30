@@ -47,7 +47,10 @@ export class NaiveGrepBaseline implements IBaseline {
   /**
    * Search for a symbol using grep
    */
-  async search(query: string, options?: { limit?: number; fileTypes?: string[] }): Promise<GrepResult[]> {
+  async search(
+    query: string,
+    options?: { limit?: number; fileTypes?: string[] }
+  ): Promise<GrepResult[]> {
     const limit = options?.limit ?? 20;
     const fileTypes = options?.fileTypes ?? ['ts', 'tsx', 'js', 'jsx', 'py'];
     const results: GrepResult[] = [];
@@ -98,7 +101,8 @@ export class NaiveGrepBaseline implements IBaseline {
 
       if (['.ts', '.tsx', '.js', '.jsx'].includes(ext)) {
         // JavaScript/TypeScript imports
-        const importRegex = /import\s+(?:(?:{[^}]+}|\*\s+as\s+\w+|\w+)\s+from\s+)?['"]([^'"]+)['"]/g;
+        const importRegex =
+          /import\s+(?:(?:{[^}]+}|\*\s+as\s+\w+|\w+)\s+from\s+)?['"]([^'"]+)['"]/g;
         let match;
         while ((match = importRegex.exec(content)) !== null) {
           imports.push(match[1]);
@@ -266,7 +270,7 @@ export class NaiveGrepBaseline implements IBaseline {
     // Partial match
     const words = lowerQuery.split(/\s+/);
     const matchedWords = words.filter(w => lowerContent.includes(w));
-    return matchedWords.length / words.length * 0.5;
+    return (matchedWords.length / words.length) * 0.5;
   }
 
   private escapeRegex(str: string): string {

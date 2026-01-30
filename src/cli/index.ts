@@ -429,7 +429,9 @@ async function runBenchmarks(suiteName: string): Promise<void> {
     suitesToRun.push(suites.get(suiteName)!);
   } else {
     console.error(`❌ Unknown suite: ${suiteName}`);
-    console.log('   Available: code-understanding, dependency, scalability, accuracy, memory-efficiency, all');
+    console.log(
+      '   Available: code-understanding, dependency, scalability, accuracy, memory-efficiency, all'
+    );
     return;
   }
 
@@ -457,10 +459,14 @@ async function runBenchmarks(suiteName: string): Promise<void> {
 
       console.log(`   ✅ Completed in ${duration}s`);
       console.log(`   📈 Results: ${passed}/${total} passed (${passRate}%)`);
-      console.log(`   ⏱️  Latency: P50=${result.latencyStats.p50.toFixed(0)}ms, P95=${result.latencyStats.p95.toFixed(0)}ms`);
+      console.log(
+        `   ⏱️  Latency: P50=${result.latencyStats.p50.toFixed(0)}ms, P95=${result.latencyStats.p95.toFixed(0)}ms`
+      );
 
       if (result.irMetrics) {
-        console.log(`   🎯 IR Metrics: Precision=${(result.irMetrics.precisionAtK[1] || 0).toFixed(3)}, Recall=${result.irMetrics.recall.toFixed(3)}`);
+        console.log(
+          `   🎯 IR Metrics: Precision=${(result.irMetrics.precisionAtK[1] || 0).toFixed(3)}, Recall=${result.irMetrics.recall.toFixed(3)}`
+        );
       }
 
       // Generate report

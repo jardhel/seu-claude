@@ -6,8 +6,6 @@
   "sourceCommit": "7373a5b44aa2aaa553b83a08e87f5391c7633494",
   "totalFiles": 17,
   "totalLinesOfCode": 3499,
-  "languages": [
-    "typescript"
-  ],
+  "languages": ["typescript"],
   "generatorVersion": "1.0.0"
 }

@@ -233,15 +233,16 @@ export class AccuracySuite implements IBenchmarkSuite {
 
     // Calculate precision and recall for definitions
     const expectedDefFiles = new Set(groundTruth.definitions.map(d => d.file));
-    const foundDefFiles = new Set(
-      foundDefinitions.map(d => relative(codebasePath, d.filePath))
-    );
+    const foundDefFiles = new Set(foundDefinitions.map(d => relative(codebasePath, d.filePath)));
 
     const defTruePositives = [...foundDefFiles].filter(f => expectedDefFiles.has(f)).length;
     const defPrecision =
-      foundDefFiles.size > 0 ? defTruePositives / foundDefFiles.size : groundTruth.definitions.length === 0 ? 1 : 0;
-    const defRecall =
-      expectedDefFiles.size > 0 ? defTruePositives / expectedDefFiles.size : 1;
+      foundDefFiles.size > 0
+        ? defTruePositives / foundDefFiles.size
+        : groundTruth.definitions.length === 0
+          ? 1
+          : 0;
+    const defRecall = expectedDefFiles.size > 0 ? defTruePositives / expectedDefFiles.size : 1;
     const defF1 =
       defPrecision + defRecall > 0
         ? (2 * defPrecision * defRecall) / (defPrecision + defRecall)
@@ -252,15 +253,16 @@ export class AccuracySuite implements IBenchmarkSuite {
 
     // Calculate precision and recall for call sites
     const expectedCallFiles = new Set(groundTruth.callSites.map(c => c.file));
-    const foundCallFiles = new Set(
-      foundCallSites.map(c => relative(codebasePath, c.filePath))
-    );
+    const foundCallFiles = new Set(foundCallSites.map(c => relative(codebasePath, c.filePath)));
 
     const callTruePositives = [...foundCallFiles].filter(f => expectedCallFiles.has(f)).length;
     const callPrecision =
-      foundCallFiles.size > 0 ? callTruePositives / foundCallFiles.size : groundTruth.callSites.length === 0 ? 1 : 0;
-    const callRecall =
-      expectedCallFiles.size > 0 ? callTruePositives / expectedCallFiles.size : 1;
+      foundCallFiles.size > 0
+        ? callTruePositives / foundCallFiles.size
+        : groundTruth.callSites.length === 0
+          ? 1
+          : 0;
+    const callRecall = expectedCallFiles.size > 0 ? callTruePositives / expectedCallFiles.size : 1;
     const callF1 =
       callPrecision + callRecall > 0
         ? (2 * callPrecision * callRecall) / (callPrecision + callRecall)
@@ -339,7 +341,11 @@ export class AccuracySuite implements IBenchmarkSuite {
       expectedCallerNames.has(n)
     ).length;
     const callerPrecision =
-      foundCallerNames.size > 0 ? callerTruePositives / foundCallerNames.size : groundTruth.callers.length === 0 ? 1 : 0;
+      foundCallerNames.size > 0
+        ? callerTruePositives / foundCallerNames.size
+        : groundTruth.callers.length === 0
+          ? 1
+          : 0;
     const callerRecall =
       expectedCallerNames.size > 0 ? callerTruePositives / expectedCallerNames.size : 1;
     const callerF1 =
@@ -364,7 +370,11 @@ export class AccuracySuite implements IBenchmarkSuite {
     const expectedCalleeNames = new Set(groundTruth.callees.map(c => c.name));
     const calleeTruePositives = foundCallees.filter(n => expectedCalleeNames.has(n)).length;
     const calleePrecision =
-      foundCallees.length > 0 ? calleeTruePositives / foundCallees.length : groundTruth.callees.length === 0 ? 1 : 0;
+      foundCallees.length > 0
+        ? calleeTruePositives / foundCallees.length
+        : groundTruth.callees.length === 0
+          ? 1
+          : 0;
     const calleeRecall =
       expectedCalleeNames.size > 0 ? calleeTruePositives / expectedCalleeNames.size : 1;
     const calleeF1 =
@@ -480,7 +490,9 @@ export class AccuracySuite implements IBenchmarkSuite {
       collector.recordTestResult(result);
 
       // Track IR metrics
-      const precision = result.metrics.find((m: MetricMeasurement) => m.name === 'precision')?.value;
+      const precision = result.metrics.find(
+        (m: MetricMeasurement) => m.name === 'precision'
+      )?.value;
       const recall = result.metrics.find((m: MetricMeasurement) => m.name === 'recall')?.value;
       if (precision !== undefined && recall !== undefined) {
         irCollector.recordPrecisionAtK(1, precision);

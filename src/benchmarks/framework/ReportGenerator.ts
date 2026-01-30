@@ -204,9 +204,8 @@ export class ReportGenerator {
     md += `| Metric | Value | Unit |\n`;
     md += `|--------|-------|------|\n`;
     for (const metric of result.aggregatedMetrics) {
-      const value = metric.unit === 'ratio'
-        ? `${(metric.value * 100).toFixed(1)}%`
-        : metric.value.toFixed(3);
+      const value =
+        metric.unit === 'ratio' ? `${(metric.value * 100).toFixed(1)}%` : metric.value.toFixed(3);
       md += `| ${metric.name} | ${value} | ${metric.unit} |\n`;
     }
     md += `\n`;
@@ -326,31 +325,39 @@ export class ReportGenerator {
       <tr><td>P99</td><td>${result.latencyStats.p99.toFixed(2)}</td></tr>
     </table>
 
-    ${result.irMetrics ? `
+    ${
+      result.irMetrics
+        ? `
     <h2>Information Retrieval Metrics</h2>
     <table>
       <tr><th>Metric</th><th>Value</th></tr>
-      ${Object.entries(result.irMetrics.precisionAtK).map(([k, v]) =>
-        `<tr><td>Precision@${k}</td><td>${(v * 100).toFixed(1)}%</td></tr>`
-      ).join('')}
+      ${Object.entries(result.irMetrics.precisionAtK)
+        .map(([k, v]) => `<tr><td>Precision@${k}</td><td>${(v * 100).toFixed(1)}%</td></tr>`)
+        .join('')}
       <tr><td>Recall</td><td>${(result.irMetrics.recall * 100).toFixed(1)}%</td></tr>
       <tr><td>F1 Score</td><td>${(result.irMetrics.f1 * 100).toFixed(1)}%</td></tr>
       <tr><td>MRR</td><td>${result.irMetrics.mrr.toFixed(3)}</td></tr>
       <tr><td>MAP</td><td>${result.irMetrics.map.toFixed(3)}</td></tr>
       <tr><td>NDCG</td><td>${result.irMetrics.ndcg.toFixed(3)}</td></tr>
     </table>
-    ` : ''}
+    `
+        : ''
+    }
 
     <h2>Aggregated Metrics</h2>
     <table>
       <tr><th>Metric</th><th>Value</th><th>Std Dev</th></tr>
-      ${result.aggregatedMetrics.map(m => `
+      ${result.aggregatedMetrics
+        .map(
+          m => `
         <tr>
           <td>${m.name}</td>
           <td>${m.unit === 'ratio' ? (m.value * 100).toFixed(1) + '%' : m.value.toFixed(3)}</td>
           <td>${m.stdDev?.toFixed(3) ?? '-'}</td>
         </tr>
-      `).join('')}
+      `
+        )
+        .join('')}
     </table>
 
     <footer>
@@ -420,9 +427,9 @@ Mean & ${result.latencyStats.mean.toFixed(2)} $\\pm$ ${result.latencyStats.stdDe
 \\toprule
 \\textbf{Metric} & \\textbf{Value} \\\\
 \\midrule
-${Object.entries(result.irMetrics.precisionAtK).map(([k, v]) =>
-  `Precision@${k} & ${(v * 100).toFixed(1)}\\% \\\\`
-).join('\n')}
+${Object.entries(result.irMetrics.precisionAtK)
+  .map(([k, v]) => `Precision@${k} & ${(v * 100).toFixed(1)}\\% \\\\`)
+  .join('\n')}
 Recall & ${(result.irMetrics.recall * 100).toFixed(1)}\\% \\\\
 F1 Score & ${(result.irMetrics.f1 * 100).toFixed(1)}\\% \\\\
 MRR & ${result.irMetrics.mrr.toFixed(3)} \\\\
@@ -444,7 +451,10 @@ NDCG & ${result.irMetrics.ndcg.toFixed(3)} \\\\
 
   // === Comparison Reports ===
 
-  private generateComparisonMarkdown(comparison: BenchmarkComparison, config: ReportConfig): string {
+  private generateComparisonMarkdown(
+    comparison: BenchmarkComparison,
+    config: ReportConfig
+  ): string {
     const title = config.title ?? 'Benchmark Comparison Report';
 
     let md = `# ${title}\n\n`;
@@ -458,7 +468,10 @@ NDCG & ${result.irMetrics.ndcg.toFixed(3)} \\\\
     md += `|--------|----------|---------|--------|-------------|\n`;
 
     for (const mc of comparison.metricComparisons) {
-      const change = mc.percentChange >= 0 ? `+${mc.percentChange.toFixed(1)}%` : `${mc.percentChange.toFixed(1)}%`;
+      const change =
+        mc.percentChange >= 0
+          ? `+${mc.percentChange.toFixed(1)}%`
+          : `${mc.percentChange.toFixed(1)}%`;
       const sig = mc.isSignificant ? (mc.percentChange > 0 ? '✅ Yes' : '⚠️ Yes') : 'No';
       md += `| ${mc.metricName} | ${mc.baselineValue.toFixed(3)} | ${mc.currentValue.toFixed(3)} | ${change} | ${sig} |\n`;
     }
@@ -496,11 +509,16 @@ Significance Level: ${(comparison.significanceLevel * 100).toFixed(1)}\\%
 
   private getExtension(format: ReportFormat): string {
     switch (format) {
-      case 'json': return 'json';
-      case 'html': return 'html';
-      case 'latex': return 'tex';
-      case 'markdown': return 'md';
-      default: return 'txt';
+      case 'json':
+        return 'json';
+      case 'html':
+        return 'html';
+      case 'latex':
+        return 'tex';
+      case 'markdown':
+        return 'md';
+      default:
+        return 'txt';
     }
   }
 

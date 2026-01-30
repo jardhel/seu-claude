@@ -83,7 +83,10 @@ export function calculate(x: number, y: number): number {
           targetSymbol: 'calculate',
           targetFile: 'src/main.ts',
           callers: [],
-          callees: [{ name: 'add', callLine: 5 }, { name: 'multiply', callLine: 5 }],
+          callees: [
+            { name: 'add', callLine: 5 },
+            { name: 'multiply', callLine: 5 },
+          ],
           difficulty: 'easy',
           tags: ['function'],
         },

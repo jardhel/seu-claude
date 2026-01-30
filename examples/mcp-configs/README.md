@@ -4,16 +4,16 @@ Pre-built MCP (Model Context Protocol) configurations for integrating seu-claude
 
 ## Supported Tools
 
-| Tool | Config File | Target Location |
-|------|-------------|-----------------|
-| Claude Code / Desktop | `claude.json` | `.claude/settings.json` |
-| GitHub Copilot | `copilot.json` | `.github/mcp.json` |
-| OpenAI Codex | `codex.json` | `.codex/mcp-servers.json` |
-| Continue.dev | `continue.json` | `.continue/config.json` |
-| Cursor | `cursor.json` | `.cursor/mcp.json` |
-| Cline | `cline.json` | `.cline/mcp_settings.json` |
-| Windsurf | `windsurf.json` | `.windsurf/mcp.json` |
-| Aider | `aider.json` | `.aider.mcp.json` |
+| Tool                  | Config File     | Target Location            |
+| --------------------- | --------------- | -------------------------- |
+| Claude Code / Desktop | `claude.json`   | `.claude/settings.json`    |
+| GitHub Copilot        | `copilot.json`  | `.github/mcp.json`         |
+| OpenAI Codex          | `codex.json`    | `.codex/mcp-servers.json`  |
+| Continue.dev          | `continue.json` | `.continue/config.json`    |
+| Cursor                | `cursor.json`   | `.cursor/mcp.json`         |
+| Cline                 | `cline.json`    | `.cline/mcp_settings.json` |
+| Windsurf              | `windsurf.json` | `.windsurf/mcp.json`       |
+| Aider                 | `aider.json`    | `.aider.mcp.json`          |
 
 ## Quick Setup
 
@@ -57,14 +57,15 @@ All configs use the same base structure:
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PROJECT_ROOT` | Root directory for analysis | Current directory |
-| `DATA_DIR` | Directory for persistent data | `.seu-claude-v2` |
+| Variable       | Description                   | Default           |
+| -------------- | ----------------------------- | ----------------- |
+| `PROJECT_ROOT` | Root directory for analysis   | Current directory |
+| `DATA_DIR`     | Directory for persistent data | `.seu-claude-v2`  |
 
 ### Alternative Commands
 
 **Using global install:**
+
 ```json
 {
   "command": "seu-claude",
@@ -73,6 +74,7 @@ All configs use the same base structure:
 ```
 
 **Using node directly:**
+
 ```json
 {
   "command": "node",
@@ -84,29 +86,33 @@ All configs use the same base structure:
 
 Once configured, these tools become available to your AI assistant:
 
-| Tool | Description |
-|------|-------------|
+| Tool                 | Description                              |
+| -------------------- | ---------------------------------------- |
 | `analyze_dependency` | Build import graph, detect circular deps |
-| `validate_code` | Run ESLint and TypeScript checks |
-| `execute_sandbox` | Run commands in isolated sandbox |
-| `manage_task` | Create and track tasks |
-| `run_tdd` | Execute TDD cycles (red-green-refactor) |
-| `find_symbol` | Find symbol definitions and call sites |
+| `validate_code`      | Run ESLint and TypeScript checks         |
+| `execute_sandbox`    | Run commands in isolated sandbox         |
+| `manage_task`        | Create and track tasks                   |
+| `run_tdd`            | Execute TDD cycles (red-green-refactor)  |
+| `find_symbol`        | Find symbol definitions and call sites   |
 
 ## Troubleshooting
 
 ### Server not starting
+
 1. Ensure `npx seu-claude` works from command line
 2. Check that the config file is in the correct location
 3. Restart your AI tool
 
 ### Tools not appearing
+
 1. Verify the MCP server is enabled in your tool's settings
 2. Check logs for connection errors
 3. Ensure `PROJECT_ROOT` points to a valid directory
 
 ### Permission issues
+
 Some tools may require additional permissions for:
+
 - File system access
 - Running shell commands
 - Network access (if enabled)

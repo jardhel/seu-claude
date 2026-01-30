@@ -233,9 +233,10 @@ export class DatasetLoader {
   /**
    * Filter and sample test cases
    */
-  private filterAndSample<
-    T extends { difficulty?: string; tags?: string[] }
-  >(items: T[], options: DatasetLoadOptions): T[] {
+  private filterAndSample<T extends { difficulty?: string; tags?: string[] }>(
+    items: T[],
+    options: DatasetLoadOptions
+  ): T[] {
     let filtered = [...items];
 
     // Filter by difficulty

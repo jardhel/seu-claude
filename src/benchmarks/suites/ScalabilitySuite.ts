@@ -160,7 +160,8 @@ export class ScalabilitySuite implements IBenchmarkSuite {
   private calculateTiers(
     totalFiles: number
   ): Array<{ name: string; count: number; difficulty: 'easy' | 'medium' | 'hard' }> {
-    const tiers: Array<{ name: string; count: number; difficulty: 'easy' | 'medium' | 'hard' }> = [];
+    const tiers: Array<{ name: string; count: number; difficulty: 'easy' | 'medium' | 'hard' }> =
+      [];
 
     // Small tier (up to 10 files)
     if (totalFiles >= 5) {

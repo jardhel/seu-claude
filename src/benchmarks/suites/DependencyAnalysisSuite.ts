@@ -218,11 +218,23 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
 
     try {
       if (testCase.id.startsWith('import:')) {
-        return await this.runImportResolution(testCase as ImportResolutionTestCase, startTime, memBefore);
+        return await this.runImportResolution(
+          testCase as ImportResolutionTestCase,
+          startTime,
+          memBefore
+        );
       } else if (testCase.id.startsWith('circular:')) {
-        return await this.runCircularDetection(testCase as CircularDependencyTestCase, startTime, memBefore);
+        return await this.runCircularDetection(
+          testCase as CircularDependencyTestCase,
+          startTime,
+          memBefore
+        );
       } else if (testCase.id.startsWith('graph:')) {
-        return await this.runGraphCompleteness(testCase as GraphCompletenessTestCase, startTime, memBefore);
+        return await this.runGraphCompleteness(
+          testCase as GraphCompletenessTestCase,
+          startTime,
+          memBefore
+        );
       } else {
         throw new Error(`Unknown test case type: ${testCase.id}`);
       }
@@ -365,12 +377,10 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
     }
 
     // Calculate completeness
-    const nodeCompleteness = expected.totalNodes > 0
-      ? Math.min(1, graph.nodes.size / expected.totalNodes)
-      : 1;
-    const edgeCompleteness = expected.totalEdges > 0
-      ? Math.min(1, totalEdges / expected.totalEdges)
-      : 1;
+    const nodeCompleteness =
+      expected.totalNodes > 0 ? Math.min(1, graph.nodes.size / expected.totalNodes) : 1;
+    const edgeCompleteness =
+      expected.totalEdges > 0 ? Math.min(1, totalEdges / expected.totalEdges) : 1;
 
     // Check roots and leaves
     const expectedRoots = new Set(expected.roots);
@@ -378,12 +388,14 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
     const actualRoots = new Set(graph.roots);
     const actualLeaves = new Set(graph.leaves);
 
-    const rootAccuracy = expectedRoots.size > 0
-      ? [...actualRoots].filter(r => expectedRoots.has(r)).length / expectedRoots.size
-      : 1;
-    const leafAccuracy = expectedLeaves.size > 0
-      ? [...actualLeaves].filter(l => expectedLeaves.has(l)).length / expectedLeaves.size
-      : 1;
+    const rootAccuracy =
+      expectedRoots.size > 0
+        ? [...actualRoots].filter(r => expectedRoots.has(r)).length / expectedRoots.size
+        : 1;
+    const leafAccuracy =
+      expectedLeaves.size > 0
+        ? [...actualLeaves].filter(l => expectedLeaves.has(l)).length / expectedLeaves.size
+        : 1;
 
     const passed = nodeCompleteness >= 0.8 && edgeCompleteness >= 0.7;
 
