@@ -29,3 +29,6 @@ export * from './suites/index.js';
 
 // Baselines
 export * from './baselines/index.js';
+
+// Datasets
+export * from './datasets/index.js';
