@@ -19,6 +19,8 @@ describe('TokenAnalyticsCollector', () => {
       embeddingDimensions: 384,
       maxChunkTokens: 512,
       minChunkLines: 5,
+      chunkOverlapRatio: 0.25,
+      chunkGroundingLines: 6,
       supportedLanguages: ['typescript'],
       ignorePatterns: [],
     };

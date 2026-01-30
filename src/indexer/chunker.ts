@@ -123,7 +123,7 @@ export class SemanticChunker {
 
     // Add scope context
     if (scope) {
-      enrichedText += `// Scope: ${scope}\n`;
+      enrichedText += `${this.getCommentPrefix(language)} Scope: ${scope}\n`;
     }
 
     // Add docstring if available
@@ -152,40 +152,80 @@ export class SemanticChunker {
   }
 
   private splitLargeChunk(chunk: CodeChunk, _fullContent: string): CodeChunk[] {
-    const lines = chunk.code.split('\n');
-    const chunks: CodeChunk[] = [];
-    const maxLines = Math.floor(this.config.maxChunkTokens / 4); // Rough estimate: 4 tokens per line
+    const nodeText = this.extractOriginalNodeText(chunk);
+    const nodeLines = nodeText.split('\n');
 
-    let currentLines: string[] = [];
-    let currentStartLine = chunk.startLine;
-
-    for (let i = 0; i < lines.length; i++) {
-      currentLines.push(lines[i]);
-
-      if (currentLines.length >= maxLines) {
-        const subChunk = this.createSubChunk(
-          chunk,
-          currentLines.join('\n'),
-          currentStartLine,
-          currentStartLine + currentLines.length - 1,
-          chunks.length
-        );
-        chunks.push(subChunk);
-        currentLines = [];
-        currentStartLine = chunk.startLine + i + 1;
-      }
+    if (nodeLines.length === 0 || nodeText.trim().length === 0) {
+      return [];
     }
 
-    // Don't forget remaining lines
-    if (currentLines.length > 0) {
+    const chunks: CodeChunk[] = [];
+    const maxChars = Math.max(1, this.config.maxChunkTokens) * 4;
+
+    // Precompute cumulative line lengths for fast slice-length estimation
+    const cumulativeLineLengths: number[] = new Array(nodeLines.length + 1);
+    cumulativeLineLengths[0] = 0;
+    for (let i = 0; i < nodeLines.length; i++) {
+      cumulativeLineLengths[i + 1] = cumulativeLineLengths[i] + nodeLines[i].length;
+    }
+
+    const sliceLength = (start: number, end: number): number => {
+      const count = end - start;
+      if (count <= 0) return 0;
+      const chars = cumulativeLineLengths[end] - cumulativeLineLengths[start];
+      const newlines = count - 1;
+      return chars + newlines;
+    };
+
+    let startIndex = 0;
+    let partIndex = 0;
+
+    while (startIndex < nodeLines.length) {
+      const header = this.buildSplitChunkHeader(chunk, nodeLines, partIndex);
+      const headerLength = header.length + 2; // + "\n\n" separator before body
+      const availableBodyChars = Math.max(0, maxChars - headerLength);
+
+      let endIndex = startIndex;
+      while (endIndex < nodeLines.length) {
+        const nextEnd = endIndex + 1;
+        const bodyChars = sliceLength(startIndex, nextEnd);
+
+        // Always include at least one line to guarantee progress
+        if (bodyChars > availableBodyChars && endIndex > startIndex) {
+          break;
+        }
+
+        endIndex = nextEnd;
+
+        if (bodyChars >= availableBodyChars) {
+          break;
+        }
+      }
+
+      const body = nodeLines.slice(startIndex, endIndex).join('\n');
+      const code = `${header}\n\n${body}`;
+
       const subChunk = this.createSubChunk(
         chunk,
-        currentLines.join('\n'),
-        currentStartLine,
-        currentStartLine + currentLines.length - 1,
-        chunks.length
+        code,
+        chunk.startLine + startIndex,
+        chunk.startLine + endIndex - 1,
+        partIndex
       );
       chunks.push(subChunk);
+
+      if (endIndex >= nodeLines.length) {
+        break;
+      }
+
+      const chunkLineCount = endIndex - startIndex;
+      const overlapRatio = this.clampOverlapRatio(this.config.chunkOverlapRatio);
+      let overlapLines =
+        chunkLineCount > 1 ? Math.max(1, Math.floor(chunkLineCount * overlapRatio)) : 0;
+      overlapLines = Math.min(overlapLines, Math.max(0, chunkLineCount - 1));
+
+      startIndex = endIndex - overlapLines;
+      partIndex += 1;
     }
 
     return chunks;
@@ -210,6 +250,8 @@ export class SemanticChunker {
       name: parent.name ? `${parent.name}_part${index}` : null,
       scope: parent.scope,
       docstring: index === 0 ? parent.docstring : null,
+      calls: parent.calls,
+      calledBy: parent.calledBy,
       tokenEstimate: this.estimateTokens(code),
     };
   }
@@ -222,10 +264,12 @@ export class SemanticChunker {
   ): CodeChunk[] {
     const lines = content.split('\n');
     const chunks: CodeChunk[] = [];
-    const chunkSize = Math.floor(this.config.maxChunkTokens / 4);
-    const overlap = Math.floor(chunkSize / 4);
+    const chunkSize = Math.max(1, Math.floor(this.config.maxChunkTokens / 4));
+    const overlapRatio = this.clampOverlapRatio(this.config.chunkOverlapRatio);
+    const overlap = Math.min(chunkSize - 1, Math.floor(chunkSize * overlapRatio));
+    const step = Math.max(1, chunkSize - overlap);
 
-    for (let i = 0; i < lines.length; i += chunkSize - overlap) {
+    for (let i = 0; i < lines.length; i += step) {
       const chunkLines = lines.slice(i, i + chunkSize);
       const code = chunkLines.join('\n');
       const startLine = i + 1;
@@ -250,6 +294,101 @@ export class SemanticChunker {
     }
 
     return chunks;
+  }
+
+  private getCommentPrefix(language: string): string {
+    switch (language) {
+      case 'python':
+      case 'ruby':
+        return '#';
+      default:
+        return '//';
+    }
+  }
+
+  private clampOverlapRatio(ratio: number): number {
+    if (Number.isNaN(ratio)) return 0;
+    return Math.max(0, Math.min(0.9, ratio));
+  }
+
+  private extractOriginalNodeText(chunk: CodeChunk): string {
+    let text = chunk.code;
+
+    if (chunk.scope) {
+      const scopeLine = `${this.getCommentPrefix(chunk.language)} Scope: ${chunk.scope}\n`;
+      if (text.startsWith(scopeLine)) {
+        text = text.slice(scopeLine.length);
+      }
+    }
+
+    if (chunk.docstring) {
+      const docPrefix = chunk.docstring + '\n';
+      if (text.startsWith(docPrefix)) {
+        text = text.slice(docPrefix.length);
+      }
+    }
+
+    return text;
+  }
+
+  private buildSplitChunkHeader(chunk: CodeChunk, nodeLines: string[], partIndex: number): string {
+    const prefix = this.getCommentPrefix(chunk.language);
+    const headerLines: string[] = [];
+
+    if (chunk.scope) {
+      headerLines.push(`${prefix} Scope: ${chunk.scope}`);
+    }
+
+    if (chunk.name || chunk.type) {
+      const symbol = [chunk.type, chunk.name].filter(Boolean).join(' ');
+      if (symbol.trim().length > 0) {
+        headerLines.push(`${prefix} Symbol: ${symbol}`);
+      }
+    }
+
+    if (chunk.docstring) {
+      const preview = this.getDocstringPreview(chunk.docstring);
+      if (preview) {
+        headerLines.push(`${prefix} Doc: ${preview}`);
+      }
+    }
+
+    headerLines.push(`${prefix} Part: ${partIndex + 1}`);
+
+    if (partIndex > 0) {
+      const groundingLines = nodeLines.slice(0, Math.max(0, this.config.chunkGroundingLines));
+      if (groundingLines.length > 0) {
+        headerLines.push(`${prefix} Grounding (start of symbol):`);
+        for (const line of groundingLines) {
+          headerLines.push(line.length > 0 ? `${prefix} ${line}` : `${prefix}`);
+        }
+      }
+    }
+
+    return headerLines.join('\n');
+  }
+
+  private getDocstringPreview(docstring: string): string {
+    const maxChars = 200;
+    const cleaned = docstring
+      .split('\n')
+      .map(line =>
+        line
+          .trim()
+          .replace(/^\/\*\*?/, '')
+          .replace(/^\*\/$/, '')
+          .replace(/^\*/, '')
+          .replace(/^\/\//, '')
+          .replace(/^#/, '')
+          .replace(/^'''/, '')
+          .replace(/^"""/, '')
+          .trim()
+      )
+      .filter(Boolean);
+
+    const preview = cleaned.join(' ').trim();
+    if (preview.length <= maxChars) return preview;
+    return preview.slice(0, maxChars - 3).trimEnd() + '...';
   }
 
   private generateChunkId(

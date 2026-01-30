@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { tmpdir } from 'os';
+import * as tmp from 'tmp';
 import { join } from 'path';
-import { mkdir, rm, writeFile } from 'fs/promises';
+import { rm, writeFile, mkdir } from 'fs/promises';
 import { RecursiveScout } from '../usecases/RecursiveScout.js';
 import { TreeSitterAdapter } from '../../adapters/parsers/TreeSitterAdapter.js';
 
@@ -11,8 +11,7 @@ describe('RecursiveScout', () => {
   let adapter: TreeSitterAdapter;
 
   beforeEach(async () => {
-    testDir = join(tmpdir(), `scout-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
-    await mkdir(testDir, { recursive: true });
+    testDir = tmp.dirSync({ unsafeCleanup: true }).name;
     adapter = new TreeSitterAdapter();
     scout = new RecursiveScout(adapter);
   });

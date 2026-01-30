@@ -8,6 +8,10 @@ export interface Config {
   embeddingDimensions: number;
   maxChunkTokens: number;
   minChunkLines: number;
+  /** Overlap ratio between consecutive chunks (0-1) */
+  chunkOverlapRatio: number;
+  /** Number of initial symbol lines to include as grounding context when splitting large chunks */
+  chunkGroundingLines: number;
   supportedLanguages: string[];
   ignorePatterns: string[];
 }
@@ -19,6 +23,8 @@ const defaultConfig: Config = {
   embeddingDimensions: 384, // Match default model dimensions
   maxChunkTokens: 512,
   minChunkLines: 5,
+  chunkOverlapRatio: 0.25,
+  chunkGroundingLines: 6,
   supportedLanguages: [
     'typescript',
     'javascript',
@@ -64,6 +70,18 @@ export function loadConfig(overrides: Partial<Config> = {}): Config {
   }
   if (process.env.EMBEDDING_DIMENSIONS) {
     envConfig.embeddingDimensions = parseInt(process.env.EMBEDDING_DIMENSIONS, 10);
+  }
+  if (process.env.CHUNK_OVERLAP_RATIO) {
+    const ratio = parseFloat(process.env.CHUNK_OVERLAP_RATIO);
+    if (!Number.isNaN(ratio)) {
+      envConfig.chunkOverlapRatio = ratio;
+    }
+  }
+  if (process.env.CHUNK_GROUNDING_LINES) {
+    const lines = parseInt(process.env.CHUNK_GROUNDING_LINES, 10);
+    if (!Number.isNaN(lines)) {
+      envConfig.chunkGroundingLines = lines;
+    }
   }
 
   return {
