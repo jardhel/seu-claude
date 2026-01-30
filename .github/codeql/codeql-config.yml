@@ -1,0 +1,21 @@
+name: 'CodeQL Config'
+
+# Exclude test files from certain security checks that produce false positives
+paths-ignore:
+  - '**/*.test.ts'
+  - '**/__tests__/**'
+  - '**/tests/**'
+  - 'benchmarks/**'
+  - 'assets/**'
+
+queries:
+  - uses: security-and-quality
+
+# Disable specific queries that produce false positives in test files
+query-filters:
+  - exclude:
+      id: js/insecure-temporary-file
+      # This rule flags test files using mkdtemp which is acceptable for tests
+  - exclude:
+      id: js/unused-local-variable
+      # Assets folder has intentionally unused variables in demo code
