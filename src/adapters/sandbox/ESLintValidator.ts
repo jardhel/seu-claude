@@ -7,7 +7,7 @@ import type {
   ValidationOptions,
   ValidationError,
   ValidationWarning,
-} from '../../core/interfaces/IGatekeeper';
+} from '../../core/interfaces/IGatekeeper.js';
 
 const execAsync = promisify(exec);
 
