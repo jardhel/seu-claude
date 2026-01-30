@@ -64,14 +64,10 @@ export class TypeScriptValidator implements IGatekeeper {
     try {
       await writeFile(tempTsconfigPath, JSON.stringify(tempConfig, null, 2), 'utf-8');
 
-      await execFileAsync(
-        'npx',
-        ['tsc', '-p', tempTsconfigPath, '--pretty', 'false'],
-        {
-          cwd: executionCwd,
-          timeout: 60000,
-        }
-      );
+      await execFileAsync('npx', ['tsc', '-p', tempTsconfigPath, '--pretty', 'false'], {
+        cwd: executionCwd,
+        timeout: 60000,
+      });
 
       // If we get here, no type errors
     } catch (error: any) {
