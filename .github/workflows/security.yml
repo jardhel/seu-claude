@@ -14,27 +14,27 @@ jobs:
   security-audit:
     name: Dependency Security Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run npm audit
         run: npm audit --audit-level=moderate
         continue-on-error: true
-      
+
       - name: Run npm audit (JSON output)
         run: npm audit --json > audit-results.json || true
-      
+
       - name: Upload audit results
         uses: actions/upload-artifact@v4
         with:
@@ -49,35 +49,35 @@ jobs:
       security-events: write
       actions: read
       contents: read
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript-typescript
-          queries: +security-and-quality
-      
+          config-file: .github/codeql/codeql-config.yml
+
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
-      
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:javascript-typescript"
+          category: '/language:javascript-typescript'
 
   secrets-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: TruffleHog Secret Scan
         uses: trufflesecurity/trufflehog@main
         with:
@@ -86,20 +86,20 @@ jobs:
   license-check:
     name: License Compliance
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Check licenses
         run: |
           npx license-checker --summary --failOn "GPL;AGPL;LGPL;CDDL;CPAL"
@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only run on schedule (weekly)
     if: github.event_name == 'schedule'
-    
+
     steps:
       - name: Check token age reminder
         run: |
@@ -127,14 +127,14 @@ jobs:
           echo "2. Generate new Granular Access Token"
           echo "3. Update GitHub secret: NPM_TOKEN"
           echo "4. Delete old token"
-      
+
       - name: Create rotation issue (optional)
         uses: actions/github-script@v7
         with:
           script: |
             const today = new Date();
             const issueTitle = `🔐 Security: Review NPM Token (${today.toISOString().split('T')[0]})`;
-            
+
             // Check if issue already exists this month
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
@@ -142,7 +142,7 @@ jobs:
               state: 'open',
               labels: 'security,token-rotation'
             });
-            
+
             if (issues.data.length === 0) {
               await github.rest.issues.create({
                 owner: context.repo.owner,

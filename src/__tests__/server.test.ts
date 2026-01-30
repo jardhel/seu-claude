@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { SeuClaudeServer } from '../server.js';
 import { Config } from '../utils/config.js';
 import { mkdir, rm } from 'fs/promises';

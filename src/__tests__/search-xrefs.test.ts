@@ -1,8 +1,6 @@
 /**
  * Tests for SearchXrefs tool
  */
-
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { SearchXrefs } from '../tools/search-xrefs.js';
 import { Config, loadConfig } from '../utils/config.js';
 import { mkdtemp, rm, writeFile } from 'fs/promises';

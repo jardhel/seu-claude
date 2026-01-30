@@ -10,26 +10,38 @@ jobs:
   validate:
     name: Validate Release
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
+      - name: Verify tag matches package.json version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Tag version: $TAG_VERSION"
+          echo "Package.json version: $PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag version ($TAG_VERSION) does not match package.json version ($PKG_VERSION)"
+            exit 1
+          fi
+          echo "✓ Version check passed"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Download Tree-sitter grammars
         run: npm run download-grammars
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Run tests
         run: npm test
 
@@ -38,20 +50,20 @@ jobs:
     name: Create GitHub Release
     needs: validate
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: write
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Get version
         id: version
         run: |
           echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
           echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
-      
+
       - name: Check if GitHub release exists
         id: check_release
         run: |
@@ -62,23 +74,23 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Generate release notes
         if: steps.check_release.outputs.exists == 'false'
         run: |
           cat << 'EOF' > release_notes.md
           ## 🚀 seu-claude ${{ steps.version.outputs.tag }}
-          
+
           ### Installation
           \`\`\`bash
           npm install -g seu-claude
           # or
           npx seu-claude
           \`\`\`
-          
+
           ### What's New
           See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
-          
+
           ### Quick Start
           Add to your Claude Code settings:
           \`\`\`json
@@ -92,13 +104,13 @@ jobs:
             }
           }
           \`\`\`
-          
+
           ### Links
           - 📦 [npm package](https://www.npmjs.com/package/seu-claude)
           - 📖 [Documentation](https://github.com/${{ github.repository }}#readme)
           - 🐛 [Report issues](https://github.com/${{ github.repository }}/issues)
           EOF
-      
+
       - name: Create GitHub Release
         if: steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
@@ -110,7 +122,7 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Release already exists
         if: steps.check_release.outputs.exists == 'true'
         run: |
@@ -120,7 +132,7 @@ jobs:
     name: Post-release notification
     needs: [validate, github-release]
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Release notification
         run: |

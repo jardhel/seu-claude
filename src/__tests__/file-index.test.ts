@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { FileIndex } from '../indexer/file-index.js';
 import { FileInfo } from '../indexer/crawler.js';
 import { mkdir, rm, writeFile, readFile } from 'fs/promises';

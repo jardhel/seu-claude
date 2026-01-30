@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { IndexCodebase, IndexResult } from '../tools/index-codebase.js';
 import { SearchCodebase, SearchOptions, FormattedSearchResult } from '../tools/search-codebase.js';
 import { ReadSemanticContext, ContextOptions, ContextResult } from '../tools/read-context.js';

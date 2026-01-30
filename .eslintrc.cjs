@@ -27,26 +27,26 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'error',
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     '@typescript-eslint/prefer-optional-chain': 'warn',
-    
+
     // Security rules
     'no-eval': 'error',
     'no-implied-eval': 'error',
     'no-new-func': 'error',
     'no-script-url': 'error',
-    
+
     // Code quality
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-debugger': 'error',
     'no-duplicate-imports': 'error',
     'no-template-curly-in-string': 'warn',
     'prefer-const': 'error',
-    'eqeqeq': ['error', 'always'],
-    
+    eqeqeq: ['error', 'always'],
+
     // Async/Promise handling
     'no-async-promise-executor': 'error',
     'no-promise-executor-return': 'error',
     'require-atomic-updates': 'error',
-    
+
     // Error handling
     'no-throw-literal': 'error',
   },
@@ -71,11 +71,5 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: [
-    'dist/',
-    'node_modules/',
-    'coverage/',
-    '*.js',
-    '*.cjs',
-  ],
+  ignorePatterns: ['dist/', 'node_modules/', 'coverage/', '*.js', '*.cjs'],
 };

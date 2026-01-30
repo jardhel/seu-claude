@@ -81,7 +81,11 @@ export class TaskManager {
   /**
    * Update task status and optionally merge additional context
    */
-  async updateStatus(taskId: string, status: TaskStatus, context?: Record<string, unknown>): Promise<void> {
+  async updateStatus(
+    taskId: string,
+    status: TaskStatus,
+    context?: Record<string, unknown>
+  ): Promise<void> {
     const task = await this.store.get(taskId);
     if (!task) {
       throw new Error(`Task not found: ${taskId}`);

@@ -9,7 +9,10 @@ describe('TreeSitterAdapter', () => {
   let adapter: TreeSitterAdapter;
 
   beforeEach(async () => {
-    testDir = join(tmpdir(), `tree-sitter-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    testDir = join(
+      tmpdir(),
+      `tree-sitter-test-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    );
     await mkdir(testDir, { recursive: true });
     adapter = new TreeSitterAdapter();
   });
@@ -49,7 +52,9 @@ describe('TreeSitterAdapter', () => {
   describe('TypeScript Parsing', () => {
     it('extracts function declarations', async () => {
       const filePath = join(testDir, 'functions.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         function greet(name: string): string {
           return 'Hello, ' + name;
         }
@@ -57,7 +62,8 @@ describe('TreeSitterAdapter', () => {
         function add(a: number, b: number): number {
           return a + b;
         }
-      `);
+      `
+      );
 
       const functions = await adapter.getFunctions(filePath);
       expect(functions).toHaveLength(2);
@@ -67,12 +73,15 @@ describe('TreeSitterAdapter', () => {
 
     it('extracts arrow functions', async () => {
       const filePath = join(testDir, 'arrows.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         const multiply = (a: number, b: number) => a * b;
         const divide = (a: number, b: number) => {
           return a / b;
         };
-      `);
+      `
+      );
 
       const functions = await adapter.getFunctions(filePath);
       expect(functions).toHaveLength(2);
@@ -82,7 +91,9 @@ describe('TreeSitterAdapter', () => {
 
     it('extracts class declarations', async () => {
       const filePath = join(testDir, 'classes.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         class Animal {
           name: string;
           constructor(name: string) {
@@ -95,7 +106,8 @@ describe('TreeSitterAdapter', () => {
             console.log('Woof!');
           }
         }
-      `);
+      `
+      );
 
       const classes = await adapter.getClasses(filePath);
       expect(classes).toHaveLength(2);
@@ -105,7 +117,9 @@ describe('TreeSitterAdapter', () => {
 
     it('extracts method definitions with parent class', async () => {
       const filePath = join(testDir, 'methods.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         class Calculator {
           add(a: number, b: number): number {
             return a + b;
@@ -114,7 +128,8 @@ describe('TreeSitterAdapter', () => {
             return a - b;
           }
         }
-      `);
+      `
+      );
 
       const result = await adapter.parseFile(filePath);
       const methods = result.symbols.filter(s => s.type === 'method');
@@ -125,11 +140,14 @@ describe('TreeSitterAdapter', () => {
 
     it('extracts call sites', async () => {
       const filePath = join(testDir, 'calls.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         console.log('Hello');
         fetch('/api/data');
         const result = process.exit(1);
-      `);
+      `
+      );
 
       const calls = await adapter.getCallSites(filePath);
       expect(calls.length).toBeGreaterThanOrEqual(3);
@@ -140,12 +158,15 @@ describe('TreeSitterAdapter', () => {
 
     it('extracts import statements', async () => {
       const filePath = join(testDir, 'imports.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         import { readFile, writeFile } from 'fs/promises';
         import path from 'path';
         import * as utils from './utils.js';
         import type { Config } from '../config.js';
-      `);
+      `
+      );
 
       const imports = await adapter.getImports(filePath);
       expect(imports).toHaveLength(4);
@@ -165,13 +186,16 @@ describe('TreeSitterAdapter', () => {
   describe('Python Parsing', () => {
     it('extracts function definitions', async () => {
       const filePath = join(testDir, 'functions.py');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
 def greet(name):
     return f"Hello, {name}"
 
 def add(a, b):
     return a + b
-      `);
+      `
+      );
 
       const functions = await adapter.getFunctions(filePath);
       expect(functions).toHaveLength(2);
@@ -181,7 +205,9 @@ def add(a, b):
 
     it('extracts class definitions', async () => {
       const filePath = join(testDir, 'classes.py');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
 class Animal:
     def __init__(self, name):
         self.name = name
@@ -189,7 +215,8 @@ class Animal:
 class Dog(Animal):
     def bark(self):
         print("Woof!")
-      `);
+      `
+      );
 
       const classes = await adapter.getClasses(filePath);
       expect(classes).toHaveLength(2);
@@ -199,14 +226,17 @@ class Dog(Animal):
 
     it('extracts methods with parent class', async () => {
       const filePath = join(testDir, 'methods.py');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
 class Calculator:
     def add(self, a, b):
         return a + b
 
     def subtract(self, a, b):
         return a - b
-      `);
+      `
+      );
 
       const result = await adapter.parseFile(filePath);
       const methods = result.symbols.filter(s => s.type === 'method');
@@ -216,12 +246,15 @@ class Calculator:
 
     it('extracts import statements', async () => {
       const filePath = join(testDir, 'imports.py');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
 import os
 import json
 from pathlib import Path
 from typing import List, Dict
-      `);
+      `
+      );
 
       const imports = await adapter.getImports(filePath);
       expect(imports.length).toBeGreaterThanOrEqual(3);

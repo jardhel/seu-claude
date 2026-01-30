@@ -40,13 +40,13 @@ Seu-claude v2 is a **Neuro-Symbolic Architecture** that provides Claude (and oth
 
 ### Key Benefits
 
-| Traditional LLM Assistants | seu-claude |
-|----------------------------|---------------|
-| Loses context on crash | ✅ Persistent state (SQLite) |
-| Text-based code understanding | ✅ AST-aware (Tree-sitter) |
-| No quality guarantees | ✅ Automated validation (Gatekeeper) |
-| Manual testing | ✅ TDD automation (HypothesisEngine) |
-| Stochastic drift | ✅ Symbolic task DAG |
+| Traditional LLM Assistants    | seu-claude                           |
+| ----------------------------- | ------------------------------------ |
+| Loses context on crash        | ✅ Persistent state (SQLite)         |
+| Text-based code understanding | ✅ AST-aware (Tree-sitter)           |
+| No quality guarantees         | ✅ Automated validation (Gatekeeper) |
+| Manual testing                | ✅ TDD automation (HypothesisEngine) |
+| Stochastic drift              | ✅ Symbolic task DAG                 |
 
 ---
 
@@ -65,6 +65,7 @@ npm install -g seu-claude
 ```
 
 Verify installation:
+
 ```bash
 seu-claude /help
 ```
@@ -124,6 +125,7 @@ Restart Claude Code to load the MCP server.
 #### 4. Verify Connection
 
 In Claude Code, ask:
+
 > "Use the manage_task tool to list all tasks"
 
 If successful, you'll see the task list (initially empty).
@@ -146,12 +148,14 @@ seu-claude /plan create "Learn seu-claude"
 **Purpose**: Understand code structure and dependencies
 
 **When to use**:
+
 - Before refactoring to see impact
 - Finding circular dependencies
 - Understanding import chains
 - Mapping file relationships
 
 **Parameters**:
+
 ```typescript
 {
   entryPoints: string[];           // Starting files to analyze
@@ -161,6 +165,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Example**:
+
 ```json
 {
   "entryPoints": ["/src/index.ts"],
@@ -170,6 +175,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Returns**:
+
 ```typescript
 {
   stats: {
@@ -188,6 +194,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Claude Code Prompt**:
+
 > "Analyze dependencies starting from src/api/index.ts and show me any circular dependencies"
 
 ### 2. `validate_code`
@@ -195,12 +202,14 @@ seu-claude /plan create "Learn seu-claude"
 **Purpose**: Run pre-flight quality checks
 
 **When to use**:
+
 - Before committing code
 - After making changes
 - As part of CI/CD pipeline
 - To enforce code standards
 
 **Parameters**:
+
 ```typescript
 {
   paths: string[];        // Files/directories to validate
@@ -209,6 +218,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Example**:
+
 ```json
 {
   "paths": ["/src/api/routes.ts", "/src/api/handlers.ts"],
@@ -217,6 +227,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Returns**:
+
 ```typescript
 {
   passed: boolean;
@@ -232,6 +243,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Claude Code Prompt**:
+
 > "Validate src/api/routes.ts and fix any ESLint errors automatically"
 
 ### 3. `execute_sandbox`
@@ -239,12 +251,14 @@ seu-claude /plan create "Learn seu-claude"
 **Purpose**: Run commands in isolated environment
 
 **When to use**:
+
 - Running tests
 - Building projects
 - Linting with specific configs
 - Executing scripts safely
 
 **Parameters**:
+
 ```typescript
 {
   command: string;        // Command to execute
@@ -255,6 +269,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Example**:
+
 ```json
 {
   "command": "npm",
@@ -264,6 +279,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Returns**:
+
 ```typescript
 {
   success: boolean;
@@ -275,6 +291,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Claude Code Prompt**:
+
 > "Run npm test in a sandbox and show me the results"
 
 ### 4. `manage_task`
@@ -282,6 +299,7 @@ seu-claude /plan create "Learn seu-claude"
 **Purpose**: Manage persistent task DAG
 
 **When to use**:
+
 - Planning multi-step work
 - Tracking progress across sessions
 - Recovering from crashes
@@ -290,24 +308,27 @@ seu-claude /plan create "Learn seu-claude"
 **Actions**:
 
 #### Create Task
+
 ```json
 {
   "action": "create",
   "label": "Refactor authentication system",
-  "parentId": null  // or parent task ID for subtask
+  "parentId": null // or parent task ID for subtask
 }
 ```
 
 #### Update Task
+
 ```json
 {
   "action": "update",
   "taskId": "uuid-here",
-  "status": "completed"  // or "pending", "running", "failed"
+  "status": "completed" // or "pending", "running", "failed"
 }
 ```
 
 #### List Tasks
+
 ```json
 {
   "action": "list"
@@ -315,6 +336,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 #### Show Task Tree
+
 ```json
 {
   "action": "tree"
@@ -322,6 +344,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 #### Get Task Status
+
 ```json
 {
   "action": "status",
@@ -330,6 +353,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Claude Code Prompt**:
+
 > "Create a task plan for implementing user authentication with subtasks for: database schema, API endpoints, and frontend integration"
 
 ### 5. `run_tdd`
@@ -337,23 +361,26 @@ seu-claude /plan create "Learn seu-claude"
 **Purpose**: Automate Test-Driven Development cycle
 
 **When to use**:
+
 - Implementing new features with TDD
 - Validating hypothesis about code changes
 - Ensuring tests fail first (RED)
 - Confirming implementation passes (GREEN)
 
 **Parameters**:
+
 ```typescript
 {
-  description: string;              // What you're testing
-  testCode: string;                 // Test file content
-  implementationCode: string;       // Implementation file content
-  testFilePath: string;             // Where to write test
-  implementationFilePath: string;   // Where to write implementation
+  description: string; // What you're testing
+  testCode: string; // Test file content
+  implementationCode: string; // Implementation file content
+  testFilePath: string; // Where to write test
+  implementationFilePath: string; // Where to write implementation
 }
 ```
 
 **Example**:
+
 ```json
 {
   "description": "User authentication",
@@ -365,6 +392,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Returns**:
+
 ```typescript
 {
   phase: "red" | "green" | "refactor";
@@ -380,6 +408,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Claude Code Prompt**:
+
 > "Run a TDD cycle to implement a function that validates email addresses. Start with a test that should fail."
 
 ### 6. `find_symbol`
@@ -387,12 +416,14 @@ seu-claude /plan create "Learn seu-claude"
 **Purpose**: Locate functions, classes, methods across codebase
 
 **When to use**:
+
 - Finding where a function is defined
 - Locating all usages of a class
 - Understanding code organization
 - Navigating large codebases
 
 **Parameters**:
+
 ```typescript
 {
   symbolName: string;         // Symbol to find
@@ -401,6 +432,7 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Example**:
+
 ```json
 {
   "symbolName": "UserService",
@@ -409,19 +441,21 @@ seu-claude /plan create "Learn seu-claude"
 ```
 
 **Returns**:
+
 ```typescript
 {
   found: boolean;
   occurrences: Array<{
     file: string;
     line: number;
-    type: "function" | "class" | "method" | etc;
+    type: 'function' | 'class' | 'method' | etc;
     name: string;
-  }>
+  }>;
 }
 ```
 
 **Claude Code Prompt**:
+
 > "Find all occurrences of the handleRequest function starting from src/api"
 
 ---
@@ -443,11 +477,13 @@ seu-claude /help
 Manage task plans.
 
 #### Create Task
+
 ```bash
 seu-claude /plan create "Implement OAuth login"
 ```
 
 #### Create Subtask
+
 ```bash
 # Create root first
 seu-claude /plan create "Authentication System"
@@ -457,11 +493,13 @@ seu-claude /plan create "Database schema"
 ```
 
 #### List All Tasks
+
 ```bash
 seu-claude /plan list
 ```
 
 **Output**:
+
 ```
 Tasks:
 - [pending] abc-123: Authentication System
@@ -470,6 +508,7 @@ Tasks:
 ```
 
 #### Show Task Tree
+
 ```bash
 seu-claude /plan tree
 ```
@@ -477,6 +516,7 @@ seu-claude /plan tree
 **Output**: Visual tree structure
 
 #### Update Task Status
+
 ```bash
 seu-claude /plan update abc-123 completed
 ```
@@ -502,6 +542,7 @@ seu-claude /deps src/index.ts src/cli.ts
 ```
 
 **Output**:
+
 ```
 Dependency Analysis:
 - Total files: 42
@@ -533,6 +574,7 @@ seu-claude /check src/api src/core
 ```
 
 **Output**:
+
 ```
 Validation Results:
 ✅ ESLint: 0 errors, 2 warnings
@@ -561,6 +603,7 @@ seu-claude /test --all --timeout 60000
 ```
 
 **Output**:
+
 ```
 Test Results:
 ✅ 23 passing
@@ -586,6 +629,7 @@ seu-claude /find handleRequest src/api
 ```
 
 **Output**:
+
 ```
 Found 'authenticate' in 3 locations:
   src/auth/index.ts:42 (function)
@@ -621,12 +665,14 @@ Root Task
 ```
 
 **Properties**:
+
 - Each task has an ID, label, status, and optional parent
 - Tasks can have context (JSON blob for tool outputs)
 - Status transitions: pending → running → completed/failed
 - Persisted to SQLite (`${DATA_DIR}/tasks.db`)
 
 **Crash Recovery**:
+
 ```typescript
 // Before crash
 const task = await manager.createRootGoal('Big refactor');
@@ -654,6 +700,7 @@ Instead of treating code as text, v2 parses it into an Abstract Syntax Tree:
 ```
 
 **Benefits**:
+
 - Understands code structure (functions, classes, imports)
 - Resolves import paths accurately
 - Detects circular dependencies
@@ -668,6 +715,7 @@ Code → ESLint → TypeScript → ProcessSandbox → ✅ Approved
 ```
 
 **Validators**:
+
 - **ESLintValidator**: Linting rules, style checks
 - **TypeScriptValidator**: Type errors, strict mode
 - **ProcessSandbox**: Isolated test execution
@@ -683,6 +731,7 @@ Automates the Test-Driven Development flow:
 ```
 
 **Hypothesis**:
+
 ```typescript
 interface Hypothesis {
   description: string;
@@ -806,12 +855,14 @@ exit 0
 ### 1. Task Management
 
 **DO**:
+
 - ✅ Create task plans for multi-step work
 - ✅ Update task status as you progress
 - ✅ Use descriptive task labels
 - ✅ Keep task tree shallow (3-4 levels max)
 
 **DON'T**:
+
 - ❌ Create tasks for trivial operations
 - ❌ Let tasks stay "running" indefinitely
 - ❌ Create deep nested hierarchies (>5 levels)
@@ -820,12 +871,14 @@ exit 0
 ### 2. Dependency Analysis
 
 **DO**:
+
 - ✅ Analyze before major refactors
 - ✅ Check for circular dependencies regularly
 - ✅ Limit depth to avoid analysis paralysis
 - ✅ Exclude node_modules unless necessary
 
 **DON'T**:
+
 - ❌ Analyze entire monorepos at once
 - ❌ Include node_modules by default
 - ❌ Use maxDepth > 50 (performance impact)
@@ -833,12 +886,14 @@ exit 0
 ### 3. Code Validation
 
 **DO**:
+
 - ✅ Validate before committing
 - ✅ Use --fix for auto-fixable issues
 - ✅ Run Gatekeeper in CI/CD pipeline
 - ✅ Fix errors before warnings
 
 **DON'T**:
+
 - ❌ Skip validation "just this once"
 - ❌ Commit with validation errors
 - ❌ Disable validators without reason
@@ -846,12 +901,14 @@ exit 0
 ### 4. TDD Workflow
 
 **DO**:
+
 - ✅ Write test first (RED phase)
 - ✅ Implement minimal solution (GREEN phase)
 - ✅ Refactor with validation (REFACTOR phase)
 - ✅ Keep tests focused and isolated
 
 **DON'T**:
+
 - ❌ Write implementation before test
 - ❌ Skip refactor phase
 - ❌ Write tests that always pass
@@ -859,12 +916,14 @@ exit 0
 ### 5. Performance
 
 **DO**:
+
 - ✅ Use specific entry points for dependency analysis
 - ✅ Set reasonable timeouts for sandbox execution
 - ✅ Clear old tasks periodically with /nuke
 - ✅ Monitor ${DATA_DIR} size
 
 **DON'T**:
+
 - ❌ Analyze entire codebase every time
 - ❌ Set infinite timeouts
 - ❌ Accumulate thousands of completed tasks
@@ -878,6 +937,7 @@ exit 0
 **Symptom**: Claude Code shows "MCP server failed to start"
 
 **Solution**:
+
 1. Check Node.js version: `node --version` (must be >= 20)
 2. Verify installation: `npx seu-claude /help`
 3. Check `.claude/settings.json` syntax (valid JSON)
@@ -889,6 +949,7 @@ exit 0
 **Symptom**: "Database is locked" error
 
 **Solution**:
+
 1. Close all seu-claude instances
 2. Delete `${DATA_DIR}/tasks.db-wal` and `${DATA_DIR}/tasks.db-shm`
 3. Restart seu-claude
@@ -898,6 +959,7 @@ exit 0
 **Symptom**: "Dependency analysis timed out"
 
 **Solution**:
+
 1. Reduce maxDepth: `--depth 10`
 2. Exclude node_modules: `--no-node-modules`
 3. Use more specific entry points
@@ -908,6 +970,7 @@ exit 0
 **Symptom**: Gatekeeper shows errors that IDE doesn't
 
 **Solution**:
+
 1. Verify tsconfig.json is correct
 2. Check ESLint config (.eslintrc.js)
 3. Ensure dependencies are installed: `npm install`
@@ -918,6 +981,7 @@ exit 0
 **Symptom**: Tests pass locally but fail in sandbox
 
 **Solution**:
+
 1. Check working directory: `--cwd` option
 2. Verify test command: `--command` option
 3. Increase timeout: `--timeout 60000`
@@ -943,7 +1007,7 @@ class CustomValidator implements IGatekeeper {
       passed: true,
       errors: [],
       warnings: [],
-      durationMs: 100
+      durationMs: 100,
     };
   }
 
@@ -978,12 +1042,7 @@ export const KotlinStrategy: ILanguageStrategy = {
 Use v2 as a library:
 
 ```typescript
-import {
-  TaskManager,
-  RecursiveScout,
-  Gatekeeper,
-  HypothesisEngine
-} from 'seu-claude';
+import { TaskManager, RecursiveScout, Gatekeeper, HypothesisEngine } from 'seu-claude';
 
 // Task management
 const manager = new TaskManager(store);

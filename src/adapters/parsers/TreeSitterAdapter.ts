@@ -1,7 +1,11 @@
 import Parser from 'tree-sitter';
 import { readFile } from 'fs/promises';
 import { extname } from 'path';
-import type { LanguageStrategy, CodeSymbol, ImportStatement } from '../../config/LanguageStrategy.js';
+import type {
+  LanguageStrategy,
+  CodeSymbol,
+  ImportStatement,
+} from '../../config/LanguageStrategy.js';
 import { TypeScriptStrategy } from '../../config/TypeScriptStrategy.js';
 import { PythonStrategy } from '../../config/PythonStrategy.js';
 
@@ -257,7 +261,7 @@ export class TreeSitterAdapter {
     let hash = 0;
     for (let i = 0; i < source.length; i++) {
       const char = source.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32bit integer
     }
     return hash.toString(16);

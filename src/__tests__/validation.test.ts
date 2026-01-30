@@ -1,8 +1,6 @@
 /**
  * Tests for validation utilities
  */
-
-import { describe, it, expect, beforeEach } from 'vitest';
 import {
   validateFilePath,
   validateSearchQuery,

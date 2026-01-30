@@ -8,8 +8,6 @@
 import { loadConfig } from './utils/config.js';
 import { StatsCollector, type IndexStats } from './stats/index.js';
 
-/* eslint-disable no-console */
-
 function formatDate(date: Date | null): string {
   if (!date) return 'Never';
   return date.toLocaleString();
@@ -90,8 +88,6 @@ export async function runStats(): Promise<void> {
   printStats(stats);
   console.log('\n');
 }
-
-/* eslint-enable no-console */
 
 // Direct execution support
 if (import.meta.url === `file://${process.argv[1]}`) {

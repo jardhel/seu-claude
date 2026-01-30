@@ -58,7 +58,9 @@ const DEFAULT_MODEL = MODELS[0];
 const isBundled = process.argv.includes('--bundled');
 const modelArg = process.argv.find(arg => arg.startsWith('--model='));
 const selectedModelName = modelArg ? modelArg.split('=')[1] : DEFAULT_MODEL.name;
-const selectedModel = MODELS.find(m => m.name === selectedModelName || m.localName === selectedModelName) || DEFAULT_MODEL;
+const selectedModel =
+  MODELS.find(m => m.name === selectedModelName || m.localName === selectedModelName) ||
+  DEFAULT_MODEL;
 
 async function checkModelExists(path: string): Promise<boolean> {
   try {
@@ -137,20 +139,20 @@ async function main() {
 
     // Handle cache reorganization for bundled mode
     const hfCacheDir = join(targetDir, `models--Xenova--${selectedModel.localName}`);
-    
+
     if (isBundled && existsSync(hfCacheDir)) {
       console.log('📦 Preparing model for npm distribution...');
-      
+
       const snapshotsDir = join(hfCacheDir, 'snapshots');
       if (existsSync(snapshotsDir)) {
         const snapshots = readdirSync(snapshotsDir);
         if (snapshots.length > 0) {
           const latestSnapshot = join(snapshotsDir, snapshots[0]);
-          
+
           await mkdir(modelPath, { recursive: true });
           await cp(latestSnapshot, modelPath, { recursive: true });
           await rm(hfCacheDir, { recursive: true, force: true });
-          
+
           console.log(`✅ Model prepared at: ${modelPath}`);
         }
       }
@@ -159,7 +161,7 @@ async function main() {
     console.log('\n════════════════════════════════════════════════════════════════');
     console.log('                    Download Complete!                          ');
     console.log('════════════════════════════════════════════════════════════════\n');
-    
+
     if (isBundled) {
       console.log('The model is now bundled in ./models/ and will be included in npm package.');
       console.log('Users installing seu-claude will have offline embedding support.\n');
@@ -170,7 +172,6 @@ async function main() {
 
     // Save model info for the embedding engine to use
     console.log('💡 To use this model, update your config or set SEU_CLAUDE_MODEL env var.\n');
-
   } catch (err) {
     console.error('\n❌ Failed to download model:', err);
     console.error('\nTroubleshooting:');

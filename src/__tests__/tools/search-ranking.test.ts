@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { SearchCodebase, FormattedSearchResult } from '../../tools/search-codebase.js';
 import { EmbeddingEngine } from '../../vector/embed.js';
 import { VectorStore } from '../../vector/store.js';

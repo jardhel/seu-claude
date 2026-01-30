@@ -40,11 +40,13 @@ npx seu-claude /help
 ### Usage
 
 **MCP Server Mode** (for Claude Code/Desktop):
+
 ```bash
 seu-claude
 ```
 
 **CLI Mode** (for direct usage):
+
 ```bash
 seu-claude /help                # Show available commands
 seu-claude /plan create "Task"  # Create task plan
@@ -256,9 +258,11 @@ Find symbols across codebase using RecursiveScout.
 ## 💻 CLI Commands
 
 ### `/help`
+
 Show available commands and usage.
 
 ### `/plan <action> [options]`
+
 Manage task plans.
 
 ```bash
@@ -269,6 +273,7 @@ seu-claude /plan status <task-id>
 ```
 
 ### `/deps <entryPoint> [options]`
+
 Analyze code dependencies.
 
 ```bash
@@ -277,6 +282,7 @@ seu-claude /deps src/api --no-node-modules
 ```
 
 ### `/check <path> [options]`
+
 Validate code quality with Gatekeeper.
 
 ```bash
@@ -285,6 +291,7 @@ seu-claude /check src --fix
 ```
 
 ### `/test [options]`
+
 Run tests in ProcessSandbox.
 
 ```bash
@@ -293,6 +300,7 @@ seu-claude /test --file src/__tests__/auth.test.ts
 ```
 
 ### `/find <symbol> <path>`
+
 Find symbol across codebase.
 
 ```bash
@@ -301,6 +309,7 @@ seu-claude /find authenticate src
 ```
 
 ### `/nuke [options]`
+
 Reset state (clear task database).
 
 ```bash
@@ -309,14 +318,14 @@ seu-claude /nuke --confirm
 
 ## 📊 Performance
 
-| Operation | Latency | Notes |
-|-----------|---------|-------|
-| Task CRUD | < 1ms | SQLite in-memory + disk |
-| AST Parse (1000 LOC) | ~50ms | Tree-sitter WASM |
-| Dependency Graph (50 files) | ~500ms | Recursive parsing |
-| ESLint Validation | ~200ms | Per file |
-| TypeScript Check | ~1s | Per project |
-| Sandbox Execution | ~100ms + runtime | Process spawn |
+| Operation                   | Latency          | Notes                   |
+| --------------------------- | ---------------- | ----------------------- |
+| Task CRUD                   | < 1ms            | SQLite in-memory + disk |
+| AST Parse (1000 LOC)        | ~50ms            | Tree-sitter WASM        |
+| Dependency Graph (50 files) | ~500ms           | Recursive parsing       |
+| ESLint Validation           | ~200ms           | Per file                |
+| TypeScript Check            | ~1s              | Per project             |
+| Sandbox Execution           | ~100ms + runtime | Process spawn           |
 
 ## 🧪 Self-Hosting Validation
 
@@ -325,6 +334,7 @@ seu-claude /nuke --confirm
 ### Bootstrap (TaskManager)
 
 Created 24-task Phase 4 plan using TaskManager:
+
 - 21 files analyzed
 - 737 symbols found
 - 66 dependencies tracked
@@ -333,6 +343,7 @@ Created 24-task Phase 4 plan using TaskManager:
 ### Hypothesis (TDD)
 
 Validated TDD approach using HypothesisEngine:
+
 - ✅ RED Phase: Test fails as expected
 - ✅ GREEN Phase: Implementation passes
 - ✅ REFACTOR Phase: Full cycle complete
@@ -340,6 +351,7 @@ Validated TDD approach using HypothesisEngine:
 ### Gatekeeper (Quality)
 
 Validated all Phase 4 code:
+
 - ✅ 0 errors, 0 warnings
 - Duration: ~1100ms
 - Files: cli/index.ts, mcp/handler.ts, mcp/server.ts, v2.ts
@@ -347,6 +359,7 @@ Validated all Phase 4 code:
 ### Test Suite
 
 All tests passing:
+
 - ✅ 252 tests passing (119 v2 + 133 other)
 - ✅ 0 tests failing
 - ✅ 6 tests skipped (intentional)
@@ -402,11 +415,11 @@ const result = await engine.runTDDCycle(hypothesis);
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PROJECT_ROOT` | `process.cwd()` | Target codebase root |
-| `DATA_DIR` | `.seu-claude` | State storage directory |
-| `LOG_LEVEL` | `info` | Logging verbosity |
+| Variable       | Default         | Description             |
+| -------------- | --------------- | ----------------------- |
+| `PROJECT_ROOT` | `process.cwd()` | Target codebase root    |
+| `DATA_DIR`     | `.seu-claude`   | State storage directory |
+| `LOG_LEVEL`    | `info`          | Logging verbosity       |
 
 ### Data Storage
 
@@ -439,6 +452,7 @@ npm start
 ```
 
 **Test Coverage**:
+
 - Core layer: 95%+ (229 passing tests)
 - Adapters: 80%+ (22 passing tests)
 - MCP/CLI: 70%+ (27 passing tests)
@@ -448,6 +462,7 @@ npm start
 ### Crash-Resistant State
 
 All tasks persisted to SQLite immediately:
+
 ```typescript
 // State survives crashes
 const manager = new TaskManager(store);
@@ -457,6 +472,7 @@ await manager.recoverState(); // Resumes from last known state
 ### Sandbox Isolation
 
 Child process with timeout:
+
 - No network access (planned: Docker)
 - Resource limits (planned: cgroups)
 - Clean shutdown on exit

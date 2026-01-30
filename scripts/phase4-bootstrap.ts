@@ -185,11 +185,16 @@ function printTree(nodes: any[], indent: number): void {
 
 function getStatusIcon(status: string): string {
   switch (status) {
-    case 'pending': return '⏳';
-    case 'running': return '🔄';
-    case 'completed': return '✅';
-    case 'failed': return '❌';
-    default: return '❓';
+    case 'pending':
+      return '⏳';
+    case 'running':
+      return '🔄';
+    case 'completed':
+      return '✅';
+    case 'failed':
+      return '❌';
+    default:
+      return '❓';
   }
 }
 

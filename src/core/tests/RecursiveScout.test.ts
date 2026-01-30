@@ -23,11 +23,14 @@ describe('RecursiveScout', () => {
   describe('Dependency Graph Building', () => {
     it('builds graph from single file with no imports', async () => {
       const filePath = join(testDir, 'standalone.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         export function hello() {
           return 'Hello, World!';
         }
-      `);
+      `
+      );
 
       const graph = await scout.buildDependencyGraph([filePath]);
 
@@ -44,23 +47,32 @@ describe('RecursiveScout', () => {
       const utilsPath = join(testDir, 'utils.ts');
       const mainPath = join(testDir, 'main.ts');
 
-      await writeFile(helpersPath, `
+      await writeFile(
+        helpersPath,
+        `
         export function formatName(name: string) {
           return name.toUpperCase();
         }
-      `);
+      `
+      );
 
-      await writeFile(utilsPath, `
+      await writeFile(
+        utilsPath,
+        `
         import { formatName } from './helpers.js';
         export function greet(name: string) {
           return 'Hello, ' + formatName(name);
         }
-      `);
+      `
+      );
 
-      await writeFile(mainPath, `
+      await writeFile(
+        mainPath,
+        `
         import { greet } from './utils.js';
         console.log(greet('World'));
-      `);
+      `
+      );
 
       const graph = await scout.buildDependencyGraph([mainPath]);
 
@@ -80,7 +92,10 @@ describe('RecursiveScout', () => {
       const rootPath = join(testDir, 'root.ts');
 
       await writeFile(leafPath, `export const value = 42;`);
-      await writeFile(middlePath, `import { value } from './leaf.js'; export const doubled = value * 2;`);
+      await writeFile(
+        middlePath,
+        `import { value } from './leaf.js'; export const doubled = value * 2;`
+      );
       await writeFile(rootPath, `import { doubled } from './middle.js'; console.log(doubled);`);
 
       const graph = await scout.buildDependencyGraph([rootPath]);
@@ -112,15 +127,21 @@ describe('RecursiveScout', () => {
       const aPath = join(testDir, 'a.ts');
       const bPath = join(testDir, 'b.ts');
 
-      await writeFile(aPath, `
+      await writeFile(
+        aPath,
+        `
         import { funcB } from './b.js';
         export function funcA() { return funcB(); }
-      `);
+      `
+      );
 
-      await writeFile(bPath, `
+      await writeFile(
+        bPath,
+        `
         import { funcA } from './a.js';
         export function funcB() { return funcA(); }
-      `);
+      `
+      );
 
       const graph = await scout.buildDependencyGraph([aPath]);
 
@@ -148,11 +169,14 @@ describe('RecursiveScout', () => {
   describe('Symbol Resolution', () => {
     it('finds symbol definitions', async () => {
       const filePath = join(testDir, 'symbols.ts');
-      await writeFile(filePath, `
+      await writeFile(
+        filePath,
+        `
         export function myFunction() {}
         export class MyClass {}
         export const myArrow = () => {};
-      `);
+      `
+      );
 
       const graph = await scout.buildDependencyGraph([filePath]);
 
@@ -170,11 +194,14 @@ describe('RecursiveScout', () => {
       const mainPath = join(testDir, 'main.ts');
 
       await writeFile(utilsPath, `export function helper() { return 42; }`);
-      await writeFile(mainPath, `
+      await writeFile(
+        mainPath,
+        `
         import { helper } from './utils.js';
         const a = helper();
         const b = helper();
-      `);
+      `
+      );
 
       const graph = await scout.buildDependencyGraph([mainPath]);
 
@@ -221,11 +248,14 @@ describe('RecursiveScout', () => {
       const bPath = join(testDir, 'b.ts');
       const cPath = join(testDir, 'c.ts');
 
-      await writeFile(aPath, `
+      await writeFile(
+        aPath,
+        `
         import { b } from './b.js';
         import { c } from './c.js';
         export function a() { return b() + c(); }
-      `);
+      `
+      );
       await writeFile(bPath, `export function b() { return 1; }`);
       await writeFile(cPath, `export function c() { return 2; }`);
 
@@ -276,16 +306,22 @@ describe('RecursiveScout', () => {
       const utilsPath = join(testDir, 'utils.py');
       const mainPath = join(testDir, 'main.py');
 
-      await writeFile(utilsPath, `
+      await writeFile(
+        utilsPath,
+        `
 def helper():
     return 42
-      `);
+      `
+      );
 
-      await writeFile(mainPath, `
+      await writeFile(
+        mainPath,
+        `
 from utils import helper
 
 result = helper()
-      `);
+      `
+      );
 
       // Note: Python relative imports work differently, this tests basic parsing
       const graph = await scout.buildDependencyGraph([mainPath, utilsPath]);

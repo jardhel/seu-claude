@@ -1,8 +1,6 @@
 /**
  * Tests for GitTracker
  */
-
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { GitTracker } from '../indexer/git-tracker.js';
 import { mkdtemp, rm, writeFile } from 'fs/promises';
 import { tmpdir } from 'os';

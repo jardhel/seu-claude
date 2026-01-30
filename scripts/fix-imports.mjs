@@ -20,7 +20,7 @@ const srcDir = join(__dirname, '../src');
 async function getAllTsFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   const files = await Promise.all(
-    entries.map(async (entry) => {
+    entries.map(async entry => {
       const fullPath = join(dir, entry.name);
       if (entry.isDirectory()) {
         return getAllTsFiles(fullPath);

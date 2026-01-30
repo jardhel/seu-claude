@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach } from 'vitest';
 import { ASTParser, ParsedNode } from '../indexer/parser.js';
 
 describe('ASTParser', () => {

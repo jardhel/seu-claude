@@ -3,7 +3,7 @@
 /**
  * Download Tree-sitter WASM grammar files for supported languages.
  * Uses tree-sitter-wasms package (compatible with web-tree-sitter 0.22.x)
- * 
+ *
  * Run with: npx tsx scripts/download-grammars.ts
  */
 
@@ -19,7 +19,7 @@ const LANGUAGES_DIR = join(__dirname, '../languages');
 // Languages we support - these grammars are compatible with web-tree-sitter 0.22.x
 const SUPPORTED_GRAMMARS = [
   'tree-sitter-typescript',
-  'tree-sitter-javascript', 
+  'tree-sitter-javascript',
   'tree-sitter-python',
   'tree-sitter-rust',
   'tree-sitter-go',
@@ -30,7 +30,7 @@ const SUPPORTED_GRAMMARS = [
 
 async function downloadFromNpm(): Promise<void> {
   console.log('Installing tree-sitter-wasms (compatible with web-tree-sitter 0.22.x)...\n');
-  
+
   try {
     // Install the package temporarily - version 0.1.11 is compatible with web-tree-sitter 0.22.x
     execSync('npm install --no-save tree-sitter-wasms@0.1.11', {
@@ -45,15 +45,15 @@ async function downloadFromNpm(): Promise<void> {
 async function copyGrammars(): Promise<{ name: string; success: boolean; error?: string }[]> {
   const results: { name: string; success: boolean; error?: string }[] = [];
   const wasmDir = join(__dirname, '../node_modules/tree-sitter-wasms/out');
-  
+
   // Ensure languages directory exists
   await mkdir(LANGUAGES_DIR, { recursive: true });
-  
+
   for (const grammar of SUPPORTED_GRAMMARS) {
     const wasmFile = `${grammar}.wasm`;
     const srcPath = join(wasmDir, wasmFile);
     const destPath = join(LANGUAGES_DIR, wasmFile);
-    
+
     // Check if already exists
     try {
       await access(destPath);
@@ -63,7 +63,7 @@ async function copyGrammars(): Promise<{ name: string; success: boolean; error?:
     } catch {
       // File doesn't exist, copy it
     }
-    
+
     // Copy from npm package
     try {
       if (existsSync(srcPath)) {
@@ -80,30 +80,32 @@ async function copyGrammars(): Promise<{ name: string; success: boolean; error?:
       results.push({ name: wasmFile, success: false, error: message });
     }
   }
-  
+
   return results;
 }
 
 async function main(): Promise<void> {
   console.log('Downloading Tree-sitter WASM grammars...\n');
   console.log('Source: tree-sitter-wasms (MIT licensed)\n');
-  
+
   await downloadFromNpm();
   const results = await copyGrammars();
-  
+
   console.log('\n--- Summary ---');
   const successful = results.filter(r => r.success).length;
   const failed = results.filter(r => !r.success).length;
-  
+
   console.log(`Downloaded: ${successful}/${results.length}`);
   if (failed > 0) {
     console.log(`Failed: ${failed}`);
     console.log('\nFailed grammars:');
-    results.filter(r => !r.success).forEach(r => {
-      console.log(`  - ${r.name}: ${r.error}`);
-    });
+    results
+      .filter(r => !r.success)
+      .forEach(r => {
+        console.log(`  - ${r.name}: ${r.error}`);
+      });
   }
-  
+
   console.log('\nNote: Grammars are MIT licensed from the tree-sitter project.');
 }
 

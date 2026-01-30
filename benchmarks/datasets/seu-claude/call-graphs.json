@@ -1,0 +1,1657 @@
+[
+  {
+    "id": "callgraph:1",
+    "targetSymbol": "updateStatus",
+    "targetFile": "src/core/usecases/TaskManager.ts",
+    "callers": [
+      {
+        "name": "TaskManager",
+        "file": "src/core/usecases/TaskManager.ts",
+        "callLine": 241
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:2",
+    "targetSymbol": "deleteTask",
+    "targetFile": "src/core/usecases/TaskManager.ts",
+    "callers": [
+      {
+        "name": "TaskManager",
+        "file": "src/core/usecases/TaskManager.ts",
+        "callLine": 111
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:3",
+    "targetSymbol": "buildNode",
+    "targetFile": "src/core/usecases/TaskManager.ts",
+    "callers": [
+      {
+        "name": "TaskManager",
+        "file": "src/core/usecases/TaskManager.ts",
+        "callLine": 210
+      },
+      {
+        "name": "TaskManager",
+        "file": "src/core/usecases/TaskManager.ts",
+        "callLine": 216
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["function", "leaf"]
+  },
+  {
+    "id": "callgraph:4",
+    "targetSymbol": "getRunningTasks",
+    "targetFile": "src/core/usecases/TaskManager.ts",
+    "callers": [
+      {
+        "name": "TaskManager",
+        "file": "src/core/usecases/TaskManager.ts",
+        "callLine": 239
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:5",
+    "targetSymbol": "walkDependencies",
+    "targetFile": "src/core/usecases/RecursiveScout.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 82
+      },
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 171
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:6",
+    "targetSymbol": "parseFile",
+    "targetFile": "src/core/usecases/RecursiveScout.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 147
+      },
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 183
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 198
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 205
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 213
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 221
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 229
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:7",
+    "targetSymbol": "resolveImport",
+    "targetFile": "src/core/usecases/RecursiveScout.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 152
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:8",
+    "targetSymbol": "resolveRelativeImport",
+    "targetFile": "src/core/usecases/RecursiveScout.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 205
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:9",
+    "targetSymbol": "resolveWithExtensions",
+    "targetFile": "src/core/usecases/RecursiveScout.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 210
+      },
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 221
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:10",
+    "targetSymbol": "registerStrategy",
+    "targetFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 54
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 55
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:11",
+    "targetSymbol": "getStrategyForFile",
+    "targetFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 80
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 94
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 125
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:12",
+    "targetSymbol": "isSupported",
+    "targetFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 142
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:13",
+    "targetSymbol": "parseFile",
+    "targetFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 147
+      },
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 183
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 198
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 205
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 213
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 221
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 229
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:14",
+    "targetSymbol": "parseSource",
+    "targetFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 108
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:15",
+    "targetSymbol": "hashSource",
+    "targetFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 138
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:16",
+    "targetSymbol": "getParser",
+    "targetFile": "src/config/TypeScriptStrategy.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 149
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:17",
+    "targetSymbol": "extractSymbols",
+    "targetFile": "src/config/TypeScriptStrategy.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 160
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:18",
+    "targetSymbol": "visit",
+    "targetFile": "src/config/PythonStrategy.ts",
+    "callers": [
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 162
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 168
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 271
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 277
+      },
+      {
+        "name": "PythonStrategy",
+        "file": "src/config/PythonStrategy.ts",
+        "callLine": 125
+      },
+      {
+        "name": "PythonStrategy",
+        "file": "src/config/PythonStrategy.ts",
+        "callLine": 131
+      },
+      {
+        "name": "PythonStrategy",
+        "file": "src/config/PythonStrategy.ts",
+        "callLine": 231
+      },
+      {
+        "name": "PythonStrategy",
+        "file": "src/config/PythonStrategy.ts",
+        "callLine": 237
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["function", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:19",
+    "targetSymbol": "extractImports",
+    "targetFile": "src/config/TypeScriptStrategy.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 161
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:20",
+    "targetSymbol": "getParser",
+    "targetFile": "src/config/PythonStrategy.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 149
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:21",
+    "targetSymbol": "extractSymbols",
+    "targetFile": "src/config/PythonStrategy.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 160
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:22",
+    "targetSymbol": "extractImports",
+    "targetFile": "src/config/PythonStrategy.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 161
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:23",
+    "targetSymbol": "initialize",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 39
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 121
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:24",
+    "targetSymbol": "nodeToChunk",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 68
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:25",
+    "targetSymbol": "splitLargeChunk",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 81
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:26",
+    "targetSymbol": "createSubChunk",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 166
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 181
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:27",
+    "targetSymbol": "fallbackChunk",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 52
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 64
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 91
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:28",
+    "targetSymbol": "generateChunkId",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 136
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 202
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 236
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:29",
+    "targetSymbol": "estimateTokens",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 119
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 213
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 247
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:30",
+    "targetSymbol": "normalizeNodeType",
+    "targetFile": "src/indexer/chunker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 146
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:31",
+    "targetSymbol": "initialize",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 39
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 121
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:32",
+    "targetSymbol": "loadLanguage",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 123
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:33",
+    "targetSymbol": "parse",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 152
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 48
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 130
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 236
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 574
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:34",
+    "targetSymbol": "extractNodes",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 55
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 242
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:35",
+    "targetSymbol": "traverse",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 162
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 167
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 172
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 187
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 191
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["function", "leaf"]
+  },
+  {
+    "id": "callgraph:36",
+    "targetSymbol": "extractNodeName",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 143
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:37",
+    "targetSymbol": "extractDocstring",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 144
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:38",
+    "targetSymbol": "parseFile",
+    "targetFile": "src/indexer/parser.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 147
+      },
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 183
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 198
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 205
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 213
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 221
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 229
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:39",
+    "targetSymbol": "shouldLog",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 29
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 35
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 41
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 47
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:40",
+    "targetSymbol": "formatMessage",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 30
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 36
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 42
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 48
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:41",
+    "targetSymbol": "debug",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 94
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 112
+      },
+      {
+        "name": "HybridSearcher",
+        "file": "src/search/hybrid.ts",
+        "callLine": 122
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 89
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 157
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 173
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:42",
+    "targetSymbol": "info",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 86
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 524
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 31
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 44
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 46
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 85
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 195
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 224
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 35
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 51
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 60
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 76
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 78
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 85
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 86
+      }
+    ],
+    "callees": [],
+    "difficulty": "hard",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:43",
+    "targetSymbol": "warn",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 96
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 105
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 132
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 99
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:44",
+    "targetSymbol": "error",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 115
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 30
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 36
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 42
+      },
+      {
+        "name": "Logger",
+        "file": "src/utils/logger.ts",
+        "callLine": 48
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 49
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 92
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 117
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 145
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 159
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 182
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 197
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 89
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 90
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 91
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 92
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 93
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 94
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 95
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 147
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 177
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 217
+      }
+    ],
+    "callees": [],
+    "difficulty": "hard",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:45",
+    "targetSymbol": "child",
+    "targetFile": "src/utils/logger.ts",
+    "callers": [
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 70
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 190
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 196
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 209
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 220
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 224
+      },
+      {
+        "name": "TypeScriptStrategy",
+        "file": "src/config/TypeScriptStrategy.ts",
+        "callLine": 253
+      },
+      {
+        "name": "PythonStrategy",
+        "file": "src/config/PythonStrategy.ts",
+        "callLine": 146
+      },
+      {
+        "name": "PythonStrategy",
+        "file": "src/config/PythonStrategy.ts",
+        "callLine": 180
+      },
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 30
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 74
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 81
+      },
+      {
+        "name": "HybridSearcher",
+        "file": "src/search/hybrid.ts",
+        "callLine": 38
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 23
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 24
+      }
+    ],
+    "callees": [],
+    "difficulty": "hard",
+    "tags": ["method", "leaf", "high-fan-in"]
+  },
+  {
+    "id": "callgraph:46",
+    "targetSymbol": "extractReferences",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 59
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:47",
+    "targetSymbol": "collectDefinitions",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 129
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 140
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 146
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 163
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["function", "leaf"]
+  },
+  {
+    "id": "callgraph:48",
+    "targetSymbol": "collectCalls",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 159
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 164
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["function", "leaf"]
+  },
+  {
+    "id": "callgraph:49",
+    "targetSymbol": "extractCallsFromNode",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 122
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:50",
+    "targetSymbol": "extractCallReference",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 153
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 181
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:51",
+    "targetSymbol": "extractName",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 107
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 137
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:52",
+    "targetSymbol": "isClassLike",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 136
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:53",
+    "targetSymbol": "normalizeType",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 112
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:54",
+    "targetSymbol": "isBuiltInOrNoise",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 289
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:55",
+    "targetSymbol": "addToGraph",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 60
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:56",
+    "targetSymbol": "buildReverseReferences",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 102
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:57",
+    "targetSymbol": "getFullyQualifiedName",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 485
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 501
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:58",
+    "targetSymbol": "clear",
+    "targetFile": "src/indexer/xref-tracker.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 378
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 237
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 586
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 587
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:59",
+    "targetSymbol": "initialize",
+    "targetFile": "src/vector/store.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 39
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 121
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:60",
+    "targetSymbol": "search",
+    "targetFile": "src/vector/store.ts",
+    "callers": [
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 104
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 123
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 131
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:61",
+    "targetSymbol": "clear",
+    "targetFile": "src/vector/store.ts",
+    "callers": [
+      {
+        "name": "RecursiveScout",
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "callLine": 378
+      },
+      {
+        "name": "TreeSitterAdapter",
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "callLine": 237
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 586
+      },
+      {
+        "name": "CrossReferenceTracker",
+        "file": "src/indexer/xref-tracker.ts",
+        "callLine": 587
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:62",
+    "targetSymbol": "rowToChunk",
+    "targetFile": "src/vector/store.ts",
+    "callers": [
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 113
+      },
+      {
+        "name": "VectorStore",
+        "file": "src/vector/store.ts",
+        "callLine": 143
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:63",
+    "targetSymbol": "initialize",
+    "targetFile": "src/vector/embed.ts",
+    "callers": [
+      {
+        "name": "SemanticChunker",
+        "file": "src/indexer/chunker.ts",
+        "callLine": 39
+      },
+      {
+        "name": "ASTParser",
+        "file": "src/indexer/parser.ts",
+        "callLine": 121
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:64",
+    "targetSymbol": "findBundledModel",
+    "targetFile": "src/vector/embed.ts",
+    "callers": [
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 43
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:65",
+    "targetSymbol": "extractBatchEmbeddings",
+    "targetFile": "src/vector/embed.ts",
+    "callers": [
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 170
+      }
+    ],
+    "callees": [],
+    "difficulty": "easy",
+    "tags": ["method", "leaf"]
+  },
+  {
+    "id": "callgraph:66",
+    "targetSymbol": "getEffectiveDimensions",
+    "targetFile": "src/vector/embed.ts",
+    "callers": [
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 145
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 188
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 215
+      },
+      {
+        "name": "EmbeddingEngine",
+        "file": "src/vector/embed.ts",
+        "callLine": 238
+      }
+    ],
+    "callees": [],
+    "difficulty": "medium",
+    "tags": ["method", "leaf"]
+  }
+]

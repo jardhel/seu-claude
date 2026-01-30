@@ -231,11 +231,13 @@ export class ToolHandler {
       passed: result.phase === 'complete',
       suggestions: result.suggestions,
       error: result.error,
-      testResult: result.testResult ? {
-        exitCode: result.testResult.exitCode,
-        stdout: result.testResult.stdout.slice(0, 2000),
-        stderr: result.testResult.stderr.slice(0, 2000),
-      } : undefined,
+      testResult: result.testResult
+        ? {
+            exitCode: result.testResult.exitCode,
+            stdout: result.testResult.stdout.slice(0, 2000),
+            stderr: result.testResult.stderr.slice(0, 2000),
+          }
+        : undefined,
     };
   }
 

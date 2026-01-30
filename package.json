@@ -1,9 +1,16 @@
 {
   "name": "seu-claude",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Neuro-Symbolic AI Agent Architecture for Claude Code",
   "type": "module",
   "main": "dist/v2.js",
+  "exports": {
+    ".": "./dist/v2.js",
+    "./mcp": "./dist/mcp/index.js",
+    "./mcp/config": "./dist/mcp/config-generator.js",
+    "./mcp/server": "./dist/mcp/server.js",
+    "./mcp/tools": "./dist/mcp/tools.js"
+  },
   "bin": {
     "seu-claude": "dist/v2.js",
     "seu": "dist/v2.js"
@@ -12,10 +19,13 @@
     "test": "vitest run",
     "build": "tsc",
     "download-grammars": "tsx scripts/download-grammars.ts",
-    "lint": "eslint . --ext .ts,.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build && npm test",
     "start": "node dist/v2.js",
     "cli": "node dist/v2.js",
     "mcp": "node dist/mcp/server.js"
@@ -39,10 +49,12 @@
     "tmp": "^0.2.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/better-sqlite3": "^7.6.0",
     "@types/jest": "^30.0.0",
     "@types/micromatch": "^4.0.10",
     "@types/node": "^20.11.0",
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.2",
     "jest": "^30.2.0",
     "prettier": "^3.8.1",
@@ -50,6 +62,7 @@
     "ts-node": "^10.9.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.0",
+    "typescript-eslint": "^8.53.1",
     "vitest": "^4.0.18"
   }
 }

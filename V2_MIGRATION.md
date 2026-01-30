@@ -19,6 +19,7 @@ This guide explains the differences and how to migrate.
 **Focus**: Semantic code search and retrieval
 
 **Architecture**:
+
 ```
 Claude → MCP Server → Vector Database (LanceDB)
                    ↓
@@ -26,6 +27,7 @@ Claude → MCP Server → Vector Database (LanceDB)
 ```
 
 **Key Features**:
+
 - 9 MCP tools for code search
 - Semantic search with embeddings
 - AST-based chunking
@@ -33,6 +35,7 @@ Claude → MCP Server → Vector Database (LanceDB)
 - ~100MB RAM usage
 
 **Use Cases**:
+
 - Finding code snippets
 - Understanding code structure
 - Reading code with context
@@ -42,6 +45,7 @@ Claude → MCP Server → Vector Database (LanceDB)
 **Focus**: Autonomous development with persistent state
 
 **Architecture**:
+
 ```
 ┌─────────────────────────────────────┐
 │      MCP Protocol / CLI Layer       │
@@ -62,6 +66,7 @@ Claude → MCP Server → Vector Database (LanceDB)
 ```
 
 **Key Features**:
+
 - **Persistent Task DAG**: Survives crashes (SQLite)
 - **AST-Based Perception**: Understands code structure
 - **Gatekeeper**: Pre-flight validation (ESLint + TypeScript)
@@ -70,6 +75,7 @@ Claude → MCP Server → Vector Database (LanceDB)
 - **Self-hosting**: Framework built itself
 
 **Use Cases**:
+
 - Multi-step refactoring with crash recovery
 - Automated quality gates
 - Test-driven development automation
@@ -79,18 +85,18 @@ Claude → MCP Server → Vector Database (LanceDB)
 
 ## Feature Comparison
 
-| Feature | v1 | v2 |
-|---------|----|----|
-| **Semantic Search** | ✅ | ✅ (via RecursiveScout) |
-| **AST Parsing** | ✅ | ✅ (Enhanced) |
-| **Cross-References** | ✅ | ✅ (Improved) |
-| **Task Management** | ❌ | ✅ **NEW** (Persistent DAG) |
-| **Crash Recovery** | ❌ | ✅ **NEW** (SQLite state) |
-| **Code Validation** | ❌ | ✅ **NEW** (Gatekeeper) |
-| **TDD Automation** | ❌ | ✅ **NEW** (HypothesisEngine) |
-| **CLI Interface** | ❌ | ✅ **NEW** (7 commands) |
-| **Dependency Analysis** | Partial | ✅ **Enhanced** |
-| **Multi-Language** | ✅ | ✅ |
+| Feature                 | v1      | v2                            |
+| ----------------------- | ------- | ----------------------------- |
+| **Semantic Search**     | ✅      | ✅ (via RecursiveScout)       |
+| **AST Parsing**         | ✅      | ✅ (Enhanced)                 |
+| **Cross-References**    | ✅      | ✅ (Improved)                 |
+| **Task Management**     | ❌      | ✅ **NEW** (Persistent DAG)   |
+| **Crash Recovery**      | ❌      | ✅ **NEW** (SQLite state)     |
+| **Code Validation**     | ❌      | ✅ **NEW** (Gatekeeper)       |
+| **TDD Automation**      | ❌      | ✅ **NEW** (HypothesisEngine) |
+| **CLI Interface**       | ❌      | ✅ **NEW** (7 commands)       |
+| **Dependency Analysis** | Partial | ✅ **Enhanced**               |
+| **Multi-Language**      | ✅      | ✅                            |
 
 ---
 
@@ -98,26 +104,26 @@ Claude → MCP Server → Vector Database (LanceDB)
 
 ### v1 Tools → v2 Tools
 
-| v1 Tool | v2 Equivalent | Changes |
-|---------|---------------|---------|
-| `index_codebase` | `analyze_dependency` | Now AST-based, not vector-based |
-| `search_codebase` | `find_symbol` | Simplified, focus on symbols |
-| `read_semantic_context` | `find_symbol` | Merged functionality |
-| `search_xrefs` | `analyze_dependency` | Enhanced with full graph |
-| `get_stats` | CLI: `/deps` | Now CLI command |
-| `get_token_analytics` | *Removed* | Not needed in v2 |
-| `get_memory_profile` | *Removed* | Not needed in v2 |
-| `get_query_analytics` | *Removed* | Not needed in v2 |
-| `search_symbols` | `find_symbol` | Renamed, same functionality |
+| v1 Tool                 | v2 Equivalent        | Changes                         |
+| ----------------------- | -------------------- | ------------------------------- |
+| `index_codebase`        | `analyze_dependency` | Now AST-based, not vector-based |
+| `search_codebase`       | `find_symbol`        | Simplified, focus on symbols    |
+| `read_semantic_context` | `find_symbol`        | Merged functionality            |
+| `search_xrefs`          | `analyze_dependency` | Enhanced with full graph        |
+| `get_stats`             | CLI: `/deps`         | Now CLI command                 |
+| `get_token_analytics`   | _Removed_            | Not needed in v2                |
+| `get_memory_profile`    | _Removed_            | Not needed in v2                |
+| `get_query_analytics`   | _Removed_            | Not needed in v2                |
+| `search_symbols`        | `find_symbol`        | Renamed, same functionality     |
 
 ### NEW v2 Tools
 
-| Tool | Purpose |
-|------|---------|
-| `manage_task` | Persistent task DAG management |
-| `validate_code` | Gatekeeper validation (ESLint + TypeScript) |
-| `execute_sandbox` | Run commands in isolation |
-| `run_tdd` | Automated TDD cycles |
+| Tool              | Purpose                                     |
+| ----------------- | ------------------------------------------- |
+| `manage_task`     | Persistent task DAG management              |
+| `validate_code`   | Gatekeeper validation (ESLint + TypeScript) |
+| `execute_sandbox` | Run commands in isolation                   |
+| `run_tdd`         | Automated TDD cycles                        |
 
 ---
 
@@ -143,6 +149,7 @@ npm install -g seu-claude
 ### Step 3: Update Configuration
 
 **v1 Config** (`.claude/settings.json`):
+
 ```json
 {
   "mcpServers": {
@@ -159,6 +166,7 @@ npm install -g seu-claude
 ```
 
 **v2 Config** (same file):
+
 ```json
 {
   "mcpServers": {
@@ -175,6 +183,7 @@ npm install -g seu-claude
 ```
 
 **Changes**:
+
 - `DATA_DIR`: Now uses project-local `.seu-claude` instead of global `~/.seu-claude`
 - This allows per-project task management
 
@@ -281,10 +290,10 @@ Claude: [Uses run_tdd tool]
 
 ### 2. Tool Names
 
-| Old (v1) | New (v2) |
-|----------|----------|
-| `search_codebase` | `find_symbol` |
-| `index_codebase` | `analyze_dependency` |
+| Old (v1)          | New (v2)             |
+| ----------------- | -------------------- |
+| `search_codebase` | `find_symbol`        |
+| `index_codebase`  | `analyze_dependency` |
 
 **Migration**: Update prompts to use new tool names.
 
@@ -293,15 +302,15 @@ Claude: [Uses run_tdd tool]
 v2 tools return more structured data:
 
 **v1 search_codebase**:
+
 ```json
 {
-  "results": [
-    {"file": "...", "line": 42, "content": "..."}
-  ]
+  "results": [{ "file": "...", "line": 42, "content": "..." }]
 }
 ```
 
 **v2 find_symbol**:
+
 ```json
 {
   "found": true,
@@ -321,6 +330,7 @@ v2 tools return more structured data:
 v1 had no CLI. v2 has 7 CLI commands.
 
 **New in v2**:
+
 ```bash
 seu-claude /help
 seu-claude /plan create "Task"
@@ -391,11 +401,11 @@ seu-claude /nuke --confirm
 
 ## Timeline
 
-| Date | Event |
-|------|-------|
+| Date       | Event                             |
+| ---------- | --------------------------------- |
 | 2026-01-15 | v1.0.0 launched (traditional RAG) |
 | 2026-01-26 | v2.3.0 completed (neuro-symbolic) |
-| 2026-02-01 | v2 becomes default (planned) |
+| 2026-02-01 | v2 becomes default (planned)      |
 
 ---
 

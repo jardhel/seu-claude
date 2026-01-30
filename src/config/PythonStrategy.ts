@@ -1,6 +1,11 @@
 import Parser from 'tree-sitter';
 import Python from 'tree-sitter-python';
-import type { LanguageStrategy, CodeSymbol, QueryPatterns, ImportStatement } from './LanguageStrategy.js';
+import type {
+  LanguageStrategy,
+  CodeSymbol,
+  QueryPatterns,
+  ImportStatement,
+} from './LanguageStrategy.js';
 
 export class PythonStrategy implements LanguageStrategy {
   languageId = 'python';
@@ -182,7 +187,10 @@ export class PythonStrategy implements LanguageStrategy {
           }
 
           // Module name comes before 'import' keyword
-          if (!foundImportKeyword && (child.type === 'dotted_name' || child.type === 'relative_import')) {
+          if (
+            !foundImportKeyword &&
+            (child.type === 'dotted_name' || child.type === 'relative_import')
+          ) {
             modulePath = child.text;
           }
 

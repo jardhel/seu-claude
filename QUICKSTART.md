@@ -11,6 +11,7 @@ npm install -g seu-claude
 ```
 
 Verify:
+
 ```bash
 seu-claude /help
 ```
@@ -60,6 +61,7 @@ seu-claude /plan create "Refactor authentication"
 ```
 
 Output:
+
 ```
 ✓ Task created: Refactor authentication [abc-123]
 ```
@@ -71,6 +73,7 @@ seu-claude /deps src/index.ts
 ```
 
 Output:
+
 ```
 Dependency Analysis:
 - Total files: 12
@@ -85,6 +88,7 @@ seu-claude /check src/api
 ```
 
 Output:
+
 ```
 ✅ ESLint: 0 errors, 2 warnings
 ✅ TypeScript: 0 errors
@@ -162,14 +166,14 @@ fi
 
 ## 6. Key Features
 
-| Feature | Command/Tool | What It Does |
-|---------|--------------|--------------|
-| **Task Management** | `/plan` or `manage_task` | Persistent task DAG (survives crashes) |
-| **Dependency Analysis** | `/deps` or `analyze_dependency` | AST-based import graph |
-| **Code Validation** | `/check` or `validate_code` | ESLint + TypeScript checks |
-| **Sandbox Execution** | `/test` or `execute_sandbox` | Run commands safely |
-| **TDD Automation** | `run_tdd` | RED-GREEN-REFACTOR cycle |
-| **Symbol Search** | `/find` or `find_symbol` | Find functions/classes |
+| Feature                 | Command/Tool                    | What It Does                           |
+| ----------------------- | ------------------------------- | -------------------------------------- |
+| **Task Management**     | `/plan` or `manage_task`        | Persistent task DAG (survives crashes) |
+| **Dependency Analysis** | `/deps` or `analyze_dependency` | AST-based import graph                 |
+| **Code Validation**     | `/check` or `validate_code`     | ESLint + TypeScript checks             |
+| **Sandbox Execution**   | `/test` or `execute_sandbox`    | Run commands safely                    |
+| **TDD Automation**      | `run_tdd`                       | RED-GREEN-REFACTOR cycle               |
+| **Symbol Search**       | `/find` or `find_symbol`        | Find functions/classes                 |
 
 ---
 

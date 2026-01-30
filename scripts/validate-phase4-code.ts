@@ -34,7 +34,9 @@ async function main() {
   }
 
   console.log('\n' + '='.repeat(60));
-  console.log(result.passed ? '✅ Phase 4 Code Quality: PASSED' : '❌ Phase 4 Code Quality: FAILED');
+  console.log(
+    result.passed ? '✅ Phase 4 Code Quality: PASSED' : '❌ Phase 4 Code Quality: FAILED'
+  );
   console.log('='.repeat(60) + '\n');
 
   process.exit(result.passed ? 0 : 1);

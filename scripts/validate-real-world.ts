@@ -28,16 +28,16 @@ async function validateOnCodebase(projectPath: string) {
 
   // Load config for this project
   const config = loadConfig({ projectRoot: projectPath });
-  
+
   // Initialize components
   console.log('📦 Initializing components...');
   const embedder = new EmbeddingEngine(config);
   const store = new VectorStore(config);
-  
+
   try {
     await embedder.initialize();
     await store.initialize();
-    
+
     const indexer = new IndexCodebase(config, embedder, store);
     const searcher = new SearchCodebase(embedder, store);
     const reader = new ReadSemanticContext(store);
@@ -45,12 +45,14 @@ async function validateOnCodebase(projectPath: string) {
     // Index the codebase
     console.log('\n📂 Indexing codebase...');
     const indexResult = await indexer.execute(true); // force reindex
-    console.log(`✅ Indexed: ${indexResult.filesProcessed} files, ${indexResult.chunksCreated} chunks`);
+    console.log(
+      `✅ Indexed: ${indexResult.filesProcessed} files, ${indexResult.chunksCreated} chunks`
+    );
     console.log(`   Time: ${((Date.now() - startTime) / 1000).toFixed(2)}s`);
 
     // Test searches
     console.log('\n🔎 Testing search queries...');
-    
+
     const testQueries = [
       'function that handles errors',
       'main entry point',
@@ -66,7 +68,9 @@ async function validateOnCodebase(projectPath: string) {
         console.log(`   Found: ${results.length} results`);
         if (results.length > 0) {
           const top = results[0];
-          console.log(`   Top match: ${top.relativePath}:${top.startLine}-${top.endLine} (score: ${top.score.toFixed(3)})`);
+          console.log(
+            `   Top match: ${top.relativePath}:${top.startLine}-${top.endLine} (score: ${top.score.toFixed(3)})`
+          );
         }
       } catch (err) {
         console.log(`   Query: "${query}" - ⚠️ No results or error`);
@@ -80,14 +84,15 @@ async function validateOnCodebase(projectPath: string) {
       // Find a TypeScript file to read context from
       const srcPath = path.join(projectPath, 'src');
       if (fs.existsSync(srcPath)) {
-        const tsFiles = fs.readdirSync(srcPath)
+        const tsFiles = fs
+          .readdirSync(srcPath)
           .filter(f => f.endsWith('.ts'))
           .slice(0, 1);
-        
+
         if (tsFiles.length > 0) {
           const testFile = path.join(srcPath, tsFiles[0]);
           if (fs.existsSync(testFile)) {
-            const contextResult = await reader.execute({ 
+            const contextResult = await reader.execute({
               filePath: testFile,
               startLine: 1,
               endLine: 50,
@@ -111,7 +116,6 @@ async function validateOnCodebase(projectPath: string) {
 
     await store.close();
     return true;
-
   } catch (error) {
     console.error(`\n❌ Validation FAILED: ${error}`);
     await store.close();
@@ -121,12 +125,12 @@ async function validateOnCodebase(projectPath: string) {
 
 async function main() {
   console.log('🚀 seu-claude Real-World Validation\n');
-  
+
   // Test on the seu-claude project itself
   const seuClaudePath = process.cwd();
-  
+
   const results: { path: string; success: boolean }[] = [];
-  
+
   // Validate on seu-claude itself
   const success = await validateOnCodebase(seuClaudePath);
   results.push({ path: seuClaudePath, success });
@@ -137,10 +141,10 @@ async function main() {
   for (const r of results) {
     console.log(`${r.success ? '✅' : '❌'} ${path.basename(r.path)}`);
   }
-  
+
   const passed = results.filter(r => r.success).length;
   console.log(`\nTotal: ${passed}/${results.length} passed`);
-  
+
   process.exit(passed === results.length ? 0 : 1);
 }
 

@@ -11,7 +11,7 @@ export interface DependencyNode {
   imports: ImportStatement[];
   symbols: CodeSymbol[];
   dependencies: string[]; // Resolved file paths this file depends on
-  dependents: string[];   // Files that depend on this file
+  dependents: string[]; // Files that depend on this file
 }
 
 /**
@@ -19,8 +19,8 @@ export interface DependencyNode {
  */
 export interface DependencyGraph {
   nodes: Map<string, DependencyNode>;
-  roots: string[];        // Entry points (files with no dependents in the graph)
-  leaves: string[];       // Files with no dependencies
+  roots: string[]; // Entry points (files with no dependents in the graph)
+  leaves: string[]; // Files with no dependencies
   circularDeps: string[][]; // Detected circular dependencies
 }
 
@@ -190,7 +190,11 @@ export class RecursiveScout {
    */
   resolveImport(importPath: string, fromFile: string): string | null {
     // Skip node_modules unless explicitly included
-    if (!this.options.includeNodeModules && !importPath.startsWith('.') && !importPath.startsWith('/')) {
+    if (
+      !this.options.includeNodeModules &&
+      !importPath.startsWith('.') &&
+      !importPath.startsWith('/')
+    ) {
       return null;
     }
 
@@ -298,11 +302,7 @@ export class RecursiveScout {
   /**
    * Get the import chain from one file to another
    */
-  findImportPath(
-    fromFile: string,
-    toFile: string,
-    graph: DependencyGraph
-  ): string[] | null {
+  findImportPath(fromFile: string, toFile: string, graph: DependencyGraph): string[] | null {
     const visited = new Set<string>();
     const queue: { file: string; path: string[] }[] = [{ file: fromFile, path: [fromFile] }];
 
@@ -355,9 +355,11 @@ export class RecursiveScout {
     }
 
     const totalFiles = graph.nodes.size;
-    const avgDependencies = totalFiles > 0
-      ? Array.from(graph.nodes.values()).reduce((sum, n) => sum + n.dependencies.length, 0) / totalFiles
-      : 0;
+    const avgDependencies =
+      totalFiles > 0
+        ? Array.from(graph.nodes.values()).reduce((sum, n) => sum + n.dependencies.length, 0) /
+          totalFiles
+        : 0;
 
     return {
       totalFiles,

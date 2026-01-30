@@ -1,6 +1,6 @@
 # Building a Semantic Search Tool Using Itself: The seu-claude Story
 
-*How we used AI-powered code search to build AI-powered code search*
+_How we used AI-powered code search to build AI-powered code search_
 
 ---
 
@@ -29,13 +29,13 @@ Think of it as giving Claude Code a mental map of your codebase.
 
 Our roadmap for v1.2.0 included ambitious search improvements:
 
-| Feature | Goal |
-|---------|------|
-| Scoped Search | Filter by directories/patterns |
-| Hybrid Search | Combine BM25 + semantic search |
-| Fuzzy Symbol Search | Typo-tolerant function lookup |
-| Code Similarity | Find duplicate patterns |
-| Search Ranking | Boost important files |
+| Feature             | Goal                           |
+| ------------------- | ------------------------------ |
+| Scoped Search       | Filter by directories/patterns |
+| Hybrid Search       | Combine BM25 + semantic search |
+| Fuzzy Symbol Search | Typo-tolerant function lookup  |
+| Code Similarity     | Find duplicate patterns        |
+| Search Ranking      | Boost important files          |
 
 But first, we had a problem: **test coverage had slipped** during rapid Phase 2 development. Before adding new features, we needed a solid foundation.
 
@@ -66,7 +66,7 @@ Here's where it gets meta. We used `search_codebase` to find the problematic tes
 it('should handle empty directory', async () => {
   await store.initialize();
   try {
-    await embedder.initialize();  // ← This hangs!
+    await embedder.initialize(); // ← This hangs!
   } catch {
     return;
   }
@@ -81,10 +81,8 @@ The test was trying to initialize a real HuggingFace embedder, which either down
 ```typescript
 const createMockEmbedder = () => ({
   embed: (text: string): Promise<number[]> => {
-    const hash = text.split('').reduce((acc, char) =>
-      acc + char.charCodeAt(0), 0);
-    const vector = new Array(384).fill(0).map((_, i) =>
-      Math.sin(hash + i) * 0.5 + 0.5);
+    const hash = text.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const vector = new Array(384).fill(0).map((_, i) => Math.sin(hash + i) * 0.5 + 0.5);
     return Promise.resolve(normalize(vector));
   },
   // ... other methods
@@ -93,12 +91,12 @@ const createMockEmbedder = () => ({
 
 ### Results After Coverage Sprint
 
-| Metric | Before | After |
-|--------|--------|-------|
-| Statements | 79.5% | **87.2%** |
-| Branches | 71.8% | **77.0%** |
-| Functions | 90.5% | **96.9%** |
-| Lines | 79.9% | **87.5%** |
+| Metric     | Before | After     |
+| ---------- | ------ | --------- |
+| Statements | 79.5%  | **87.2%** |
+| Branches   | 71.8%  | **77.0%** |
+| Functions  | 90.5%  | **96.9%** |
+| Lines      | 79.9%  | **87.5%** |
 
 **394 tests passing**, up from 370. Foundation solid. Time to build.
 
@@ -109,6 +107,7 @@ const createMockEmbedder = () => ({
 ### The Need
 
 Users wanted to search within specific directories:
+
 - "Find authentication logic in `src/` but not in tests"
 - "Search `lib/**/*.ts` for utility functions"
 
@@ -188,8 +187,8 @@ export class BM25Engine {
 
   private tokenize(text: string): string[] {
     return text
-      .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase
-      .replace(/_/g, ' ')                     // snake_case
+      .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase
+      .replace(/_/g, ' ') // snake_case
       .toLowerCase()
       .split(/[^a-z0-9]+/)
       .filter(token => token.length > 1);
@@ -210,18 +209,17 @@ export class BM25Engine {
         const tf = entry.termFrequency;
         const docLength = this.documents.get(entry.docId)!.length;
         const numerator = tf * (this.k1 + 1);
-        const denominator = tf + this.k1 * (1 - this.b +
-          this.b * (docLength / this.avgDocLength));
+        const denominator = tf + this.k1 * (1 - this.b + this.b * (docLength / this.avgDocLength));
 
-        scores.set(entry.docId,
-          (scores.get(entry.docId) || 0) + termIdf * numerator / denominator);
+        scores.set(
+          entry.docId,
+          (scores.get(entry.docId) || 0) + (termIdf * numerator) / denominator
+        );
       }
     }
 
     // Sort and return top results
-    return [...scores.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, limit);
+    return [...scores.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
   }
 }
 ```
@@ -303,11 +301,13 @@ Real-time visibility into the index state.
 ## Engineering Standards Applied
 
 ### Test-Driven Development (TDD)
+
 - Write failing tests first
 - Implement until tests pass
 - Refactor with confidence
 
 ### Coverage Thresholds
+
 ```javascript
 // jest.config.js
 coverageThreshold: {
@@ -323,6 +323,7 @@ coverageThreshold: {
 CI fails if coverage drops below these thresholds.
 
 ### Documentation as Code
+
 Every public method has JSDoc comments. The MCP tool schemas serve as API documentation.
 
 ---
@@ -330,11 +331,13 @@ Every public method has JSDoc comments. The MCP tool schemas serve as API docume
 ## Results
 
 ### Before Phase 3
+
 - 370 tests
 - 79.5% statement coverage
 - Basic semantic search only
 
 ### After Phase 3 (In Progress)
+
 - 444 tests (+20%)
 - 88.4% statement coverage (+9%)
 - Scoped search ✅
@@ -346,15 +349,19 @@ Every public method has JSDoc comments. The MCP tool schemas serve as API docume
 ## Lessons Learned
 
 ### 1. Dogfooding Reveals Real UX Issues
+
 Using your own tool surfaces pain points you'd never find otherwise. We discovered scoped search was essential when trying to navigate our own growing codebase.
 
 ### 2. TDD + AI = Powerful Combination
+
 Claude Code writes tests, then implements features to make them pass. The test suite becomes a specification.
 
 ### 3. Coverage Matters (But So Does Velocity)
+
 We found the sweet spot: 76-80% coverage with thresholds. High enough to catch regressions, low enough to not slow down development.
 
 ### 4. Semantic + Keyword = Better Than Either Alone
+
 Pure semantic search misses exact function names. Pure keyword search misses conceptual similarity. Hybrid is the answer.
 
 ---
@@ -362,11 +369,13 @@ Pure semantic search misses exact function names. Pure keyword search misses con
 ## What's Next?
 
 Phase 3 continues with:
+
 - **Fuzzy Symbol Search**: Find `getUser` even when you type `gtUser`
 - **Code Similarity**: Detect copy-paste patterns
 - **Ranking Improvements**: Boost important files (entry points, exports)
 
 And Phase 4 brings:
+
 - Real-time file watching
 - VS Code extension
 - Configuration files
@@ -388,6 +397,7 @@ That's it. One command to give Claude Code semantic superpowers.
 Building a tool using itself isn't just dogfooding — it's a development superpower. Every feature we add makes the next feature easier to build. Every bug we find makes the tool more robust.
 
 seu-claude started as an experiment: "What if Claude Code could understand codebases semantically?" Today, it's a production tool with:
+
 - 63 indexed files
 - 928 semantic chunks
 - 6,234 cross-reference call sites
@@ -397,10 +407,10 @@ And we're just getting started.
 
 ---
 
-*seu-claude is open source. Star us on GitHub and join the journey.*
+_seu-claude is open source. Star us on GitHub and join the journey._
 
 **Tags**: #AI #DeveloperTools #TypeScript #SemanticSearch #ClaudeCode #MCP #Dogfooding
 
 ---
 
-*Written with assistance from Claude, using seu-claude to navigate the seu-claude codebase. 🤖*
+_Written with assistance from Claude, using seu-claude to navigate the seu-claude codebase. 🤖_

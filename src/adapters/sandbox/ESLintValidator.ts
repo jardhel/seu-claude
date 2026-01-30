@@ -30,7 +30,7 @@ export class ESLintValidator implements IGatekeeper {
     const warnings: ValidationWarning[] = [];
 
     try {
-      const paths = options.paths.filter(p => this.canValidate(p));
+      const paths = options.paths.filter((p: string) => this.canValidate(p));
       if (paths.length === 0) {
         return {
           passed: true,
@@ -42,8 +42,10 @@ export class ESLintValidator implements IGatekeeper {
 
       // Build ESLint command
       const args = [
-        'npx', 'eslint',
-        '--format', 'json',
+        'npx',
+        'eslint',
+        '--format',
+        'json',
         '--no-error-on-unmatched-pattern',
         ...paths,
       ];
@@ -52,7 +54,7 @@ export class ESLintValidator implements IGatekeeper {
         args.push('--fix');
       }
 
-  const { stdout } = await execAsync(args.join(' '), {
+      const { stdout } = await execAsync(args.join(' '), {
         cwd: process.cwd(),
         timeout: 60000,
       });
