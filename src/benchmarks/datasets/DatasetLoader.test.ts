@@ -170,13 +170,9 @@ describe('DatasetLoader', () => {
     it('should shuffle with seed', async () => {
       const shuffled1 = await loader.loadSymbolLookups(testDatasetDir, { seed: 42 });
       const shuffled2 = await loader.loadSymbolLookups(testDatasetDir, { seed: 42 });
-      const shuffled3 = await loader.loadSymbolLookups(testDatasetDir, { seed: 123 });
 
       // Same seed should produce same order
       expect(shuffled1.map(s => s.id)).toEqual(shuffled2.map(s => s.id));
-
-      // Different seed may produce different order (probabilistically)
-      // Note: with only 3 items, there's a chance they're the same
     });
   });
 

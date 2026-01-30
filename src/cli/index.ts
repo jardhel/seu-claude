@@ -14,6 +14,14 @@ import { join } from 'path';
 import { mkdir, rm } from 'fs/promises';
 import { existsSync } from 'fs';
 import { ToolHandler } from '../mcp/handler.js';
+import {
+  CodeUnderstandingSuite,
+  DependencyAnalysisSuite,
+  ScalabilitySuite,
+  AccuracySuite,
+  ReportGenerator,
+} from '../benchmarks/index.js';
+import type { IBenchmarkSuite } from '../benchmarks/framework/types.js';
 
 const PROJECT_ROOT = process.cwd();
 const DATA_DIR = join(PROJECT_ROOT, '.seu-claude-v2');
@@ -260,6 +268,44 @@ const COMMANDS: Record<string, Command> = {
     },
   },
 
+  bench: {
+    name: '/bench',
+    description: 'Run benchmark suites',
+    usage: '/bench run [suite] | /bench report [format]',
+    handler: async (args, _handler) => {
+      const subcommand = args[0] || 'help';
+
+      switch (subcommand) {
+        case 'run': {
+          const suiteName = args[1] || 'all';
+          await runBenchmarks(suiteName);
+          break;
+        }
+        case 'report': {
+          const format = args[1] || 'markdown';
+          console.log(`📊 Generating ${format} report...`);
+          console.log('   (Report generation from stored results not yet implemented)');
+          break;
+        }
+        case 'list': {
+          console.log('\n📋 Available Benchmark Suites:\n');
+          console.log('   code-understanding  - Symbol resolution and call graph accuracy');
+          console.log('   dependency          - Import resolution and circular detection');
+          console.log('   scalability         - Throughput, memory, and latency at scale');
+          console.log('   accuracy            - Precision/recall against ground truth');
+          console.log('   all                 - Run all suites');
+          break;
+        }
+        default:
+          console.log('Usage:', COMMANDS.bench.usage);
+          console.log('\nSubcommands:');
+          console.log('   run [suite]    - Run benchmark suite (default: all)');
+          console.log('   report [fmt]   - Generate report (markdown, json, html)');
+          console.log('   list           - List available suites');
+      }
+    },
+  },
+
   help: {
     name: '/help',
     description: 'Show available commands',
@@ -273,6 +319,86 @@ const COMMANDS: Record<string, Command> = {
     },
   },
 };
+
+/**
+ * Run benchmark suites
+ */
+async function runBenchmarks(suiteName: string): Promise<void> {
+  const datasetPath = join(PROJECT_ROOT, 'benchmarks', 'datasets', 'seu-claude');
+  const reportDir = join(PROJECT_ROOT, 'benchmarks', 'reports');
+
+  // Check if dataset exists
+  if (!existsSync(datasetPath)) {
+    console.log('⚠️  No ground truth dataset found.');
+    console.log('   Run: npx tsx scripts/generate-ground-truth.ts');
+    return;
+  }
+
+  const suites = new Map<string, IBenchmarkSuite>();
+  suites.set('code-understanding', new CodeUnderstandingSuite());
+  suites.set('dependency', new DependencyAnalysisSuite());
+  suites.set('scalability', new ScalabilitySuite());
+  suites.set('accuracy', new AccuracySuite());
+
+  const suitesToRun: IBenchmarkSuite[] = [];
+
+  if (suiteName === 'all') {
+    suitesToRun.push(...suites.values());
+  } else if (suites.has(suiteName)) {
+    suitesToRun.push(suites.get(suiteName)!);
+  } else {
+    console.error(`❌ Unknown suite: ${suiteName}`);
+    console.log('   Available: code-understanding, dependency, scalability, accuracy, all');
+    return;
+  }
+
+  console.log(`\n🔬 Running ${suitesToRun.length} benchmark suite(s)...\n`);
+
+  const reportGenerator = new ReportGenerator();
+  const config = {
+    name: 'cli-benchmark',
+    description: 'Benchmark run from CLI',
+  };
+
+  for (const suite of suitesToRun) {
+    console.log(`📊 Running: ${suite.name}`);
+    console.log(`   ${suite.description}\n`);
+
+    try {
+      const startTime = Date.now();
+      const result = await suite.run(config, datasetPath);
+      const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+
+      // Print summary
+      const passed = result.testResults.filter(r => r.passed).length;
+      const total = result.testResults.length;
+      const passRate = total > 0 ? ((passed / total) * 100).toFixed(1) : '0';
+
+      console.log(`   ✅ Completed in ${duration}s`);
+      console.log(`   📈 Results: ${passed}/${total} passed (${passRate}%)`);
+      console.log(`   ⏱️  Latency: P50=${result.latencyStats.p50.toFixed(0)}ms, P95=${result.latencyStats.p95.toFixed(0)}ms`);
+
+      if (result.irMetrics) {
+        console.log(`   🎯 IR Metrics: Precision=${(result.irMetrics.precisionAtK[1] || 0).toFixed(3)}, Recall=${result.irMetrics.recall.toFixed(3)}`);
+      }
+
+      // Generate report
+      await mkdir(reportDir, { recursive: true });
+      const reportPaths = await reportGenerator.generateSuiteReport(result, {
+        outputDir: reportDir,
+        formats: ['json', 'markdown'],
+      });
+      console.log(`   📄 Reports: ${reportPaths.map(p => p.split('/').pop()).join(', ')}`);
+      console.log('');
+    } catch (error) {
+      console.error(`   ❌ Error: ${error instanceof Error ? error.message : error}`);
+      console.log('');
+    }
+  }
+
+  console.log('🏁 Benchmark run complete!');
+  console.log(`   Reports saved to: ${reportDir}`);
+}
 
 function printTree(nodes: any[], indent: number): void {
   const prefix = '   '.repeat(indent);
