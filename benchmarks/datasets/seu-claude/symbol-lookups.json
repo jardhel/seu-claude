@@ -1,0 +1,2705 @@
+[
+  {
+    "id": "symbol:1",
+    "symbolName": "TaskManager",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 28,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:2",
+    "symbolName": "createRootGoal",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 36,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:3",
+    "symbolName": "spawnSubtask",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 50,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:4",
+    "symbolName": "getTask",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 70,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:5",
+    "symbolName": "getSubtasks",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 77,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:6",
+    "symbolName": "updateStatus",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 84,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 241,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:7",
+    "symbolName": "deleteTask",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 107,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 111,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:8",
+    "symbolName": "cacheToolOutput",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 122,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:9",
+    "symbolName": "getToolOutput",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 141,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:10",
+    "symbolName": "hasToolOutput",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 154,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:11",
+    "symbolName": "getToolOutputTimestamp",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 161,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:12",
+    "symbolName": "recoverState",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 176,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:13",
+    "symbolName": "getRootTasks",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 183,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:14",
+    "symbolName": "getTaskTree",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 190,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:15",
+    "symbolName": "buildNode",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 206,
+        "type": "function"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 210,
+        "caller": "module"
+      },
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 216,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["function"]
+  },
+  {
+    "id": "symbol:16",
+    "symbolName": "getPendingTasks",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 222,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:17",
+    "symbolName": "getRunningTasks",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 230,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 239,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:18",
+    "symbolName": "resetRunningTasks",
+    "definitions": [
+      {
+        "file": "src/core/usecases/TaskManager.ts",
+        "line": 238,
+        "type": "method",
+        "scope": "TaskManager"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:19",
+    "symbolName": "RecursiveScout",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 57,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:20",
+    "symbolName": "buildDependencyGraph",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 71,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:21",
+    "symbolName": "walkDependencies",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 114,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 82,
+        "caller": "module"
+      },
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 171,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:22",
+    "symbolName": "parseFile",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 178,
+        "type": "method",
+        "scope": "RecursiveScout"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 93,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 234,
+        "type": "method",
+        "scope": "ASTParser"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 147,
+        "caller": "module"
+      },
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 183,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 198,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 205,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 213,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 221,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 229,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "hard",
+    "tags": ["method", "scoped", "frequently-used", "multi-definition"]
+  },
+  {
+    "id": "symbol:23",
+    "symbolName": "resolveImport",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 191,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 152,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:24",
+    "symbolName": "resolveRelativeImport",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 219,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 205,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:25",
+    "symbolName": "resolveWithExtensions",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 227,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 210,
+        "caller": "module"
+      },
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 221,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:26",
+    "symbolName": "findSymbolDefinitions",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 265,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:27",
+    "symbolName": "findCallSites",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 285,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:28",
+    "symbolName": "findImportPath",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 305,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:29",
+    "symbolName": "getGraphStats",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 337,
+        "type": "method",
+        "scope": "RecursiveScout"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:30",
+    "symbolName": "clearCache",
+    "definitions": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 377,
+        "type": "method",
+        "scope": "RecursiveScout"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 236,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "unused", "multi-definition"]
+  },
+  {
+    "id": "symbol:31",
+    "symbolName": "TreeSitterAdapter",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 41,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:32",
+    "symbolName": "registerStrategy",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 61,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 54,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 55,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:33",
+    "symbolName": "getStrategyForFile",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 71,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 80,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 94,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 125,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:34",
+    "symbolName": "isSupported",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 79,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 142,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:35",
+    "symbolName": "getSupportedExtensions",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 86,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:36",
+    "symbolName": "parseSource",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 124,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 108,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:37",
+    "symbolName": "parseFiles",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 197,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:38",
+    "symbolName": "getFunctions",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 204,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:39",
+    "symbolName": "getClasses",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 212,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:40",
+    "symbolName": "getCallSites",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 220,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:41",
+    "symbolName": "getImports",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 228,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:42",
+    "symbolName": "invalidateCache",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 243,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:43",
+    "symbolName": "getCacheStats",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 250,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:44",
+    "symbolName": "hashSource",
+    "definitions": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 260,
+        "type": "method",
+        "scope": "TreeSitterAdapter"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 138,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:45",
+    "symbolName": "TypeScriptStrategy",
+    "definitions": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 10,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:46",
+    "symbolName": "getParser",
+    "definitions": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 14,
+        "type": "method",
+        "scope": "TypeScriptStrategy"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 14,
+        "type": "method",
+        "scope": "PythonStrategy"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 149,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "multi-definition"]
+  },
+  {
+    "id": "symbol:47",
+    "symbolName": "getQueryPatterns",
+    "definitions": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 18,
+        "type": "method",
+        "scope": "TypeScriptStrategy"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 18,
+        "type": "method",
+        "scope": "PythonStrategy"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "unused", "multi-definition"]
+  },
+  {
+    "id": "symbol:48",
+    "symbolName": "extractSymbols",
+    "definitions": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 45,
+        "type": "method",
+        "scope": "TypeScriptStrategy"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 42,
+        "type": "method",
+        "scope": "PythonStrategy"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 160,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "multi-definition"]
+  },
+  {
+    "id": "symbol:49",
+    "symbolName": "visit",
+    "definitions": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 49,
+        "type": "function"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 176,
+        "type": "function"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 46,
+        "type": "function"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 139,
+        "type": "function"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 162,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 168,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 271,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 277,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 125,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 131,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 231,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 237,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "hard",
+    "tags": ["function", "frequently-used", "multi-definition"]
+  },
+  {
+    "id": "symbol:50",
+    "symbolName": "extractImports",
+    "definitions": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 172,
+        "type": "method",
+        "scope": "TypeScriptStrategy"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 135,
+        "type": "method",
+        "scope": "PythonStrategy"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 161,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "multi-definition"]
+  },
+  {
+    "id": "symbol:51",
+    "symbolName": "PythonStrategy",
+    "definitions": [
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 10,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:52",
+    "symbolName": "SemanticChunker",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 26,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:53",
+    "symbolName": "initialize",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 38,
+        "type": "method",
+        "scope": "SemanticChunker"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 81,
+        "type": "method",
+        "scope": "ASTParser"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 30,
+        "type": "method",
+        "scope": "VectorStore"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 32,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 39,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 121,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "hard",
+    "tags": ["method", "scoped", "multi-definition"]
+  },
+  {
+    "id": "symbol:54",
+    "symbolName": "chunkFile",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 42,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:55",
+    "symbolName": "finalizeXrefs",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 101,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:56",
+    "symbolName": "getXrefTracker",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 108,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:57",
+    "symbolName": "nodeToChunk",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 112,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 68,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:58",
+    "symbolName": "splitLargeChunk",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 154,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 81,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:59",
+    "symbolName": "createSubChunk",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 194,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 166,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 181,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:60",
+    "symbolName": "fallbackChunk",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 217,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 52,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 64,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 91,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:61",
+    "symbolName": "generateChunkId",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 255,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 136,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 202,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 236,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:62",
+    "symbolName": "estimateTokens",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 265,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 119,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 213,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 247,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:63",
+    "symbolName": "normalizeNodeType",
+    "definitions": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 270,
+        "type": "method",
+        "scope": "SemanticChunker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 146,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:64",
+    "symbolName": "ASTParser",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 71,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:65",
+    "symbolName": "loadLanguage",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 89,
+        "type": "method",
+        "scope": "ASTParser"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 123,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:66",
+    "symbolName": "parse",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 120,
+        "type": "method",
+        "scope": "ASTParser"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 152,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 48,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 130,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 236,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 574,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:67",
+    "symbolName": "extractNodes",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 137,
+        "type": "method",
+        "scope": "ASTParser"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 55,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 242,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:68",
+    "symbolName": "traverse",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 141,
+        "type": "function"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 179,
+        "type": "function"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 162,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 167,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 172,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 187,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 191,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["function", "multi-definition"]
+  },
+  {
+    "id": "symbol:69",
+    "symbolName": "extractNodeName",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 176,
+        "type": "method",
+        "scope": "ASTParser"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 143,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:70",
+    "symbolName": "extractDocstring",
+    "definitions": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 200,
+        "type": "method",
+        "scope": "ASTParser"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 144,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:71",
+    "symbolName": "Logger",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 10,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:72",
+    "symbolName": "shouldLog",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 19,
+        "type": "method",
+        "scope": "Logger"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 29,
+        "caller": "module"
+      },
+      {
+        "file": "src/utils/logger.ts",
+        "line": 35,
+        "caller": "module"
+      },
+      {
+        "file": "src/utils/logger.ts",
+        "line": 41,
+        "caller": "module"
+      },
+      {
+        "file": "src/utils/logger.ts",
+        "line": 47,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:73",
+    "symbolName": "formatMessage",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 23,
+        "type": "method",
+        "scope": "Logger"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 30,
+        "caller": "module"
+      },
+      {
+        "file": "src/utils/logger.ts",
+        "line": 36,
+        "caller": "module"
+      },
+      {
+        "file": "src/utils/logger.ts",
+        "line": 42,
+        "caller": "module"
+      },
+      {
+        "file": "src/utils/logger.ts",
+        "line": 48,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:74",
+    "symbolName": "debug",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 28,
+        "type": "method",
+        "scope": "Logger"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 94,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 112,
+        "caller": "module"
+      },
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 122,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 89,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 157,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 173,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "frequently-used"]
+  },
+  {
+    "id": "symbol:75",
+    "symbolName": "info",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 34,
+        "type": "method",
+        "scope": "Logger"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 86,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 524,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 31,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 44,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 46,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 85,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 195,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 224,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 35,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 51,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 60,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 76,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 78,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 85,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 86,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "hard",
+    "tags": ["method", "scoped", "frequently-used"]
+  },
+  {
+    "id": "symbol:76",
+    "symbolName": "warn",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 40,
+        "type": "method",
+        "scope": "Logger"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 96,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 105,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 132,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 99,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:77",
+    "symbolName": "child",
+    "definitions": [
+      {
+        "file": "src/utils/logger.ts",
+        "line": 52,
+        "type": "method",
+        "scope": "Logger"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 70,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 190,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 196,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 209,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 220,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 224,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/TypeScriptStrategy.ts",
+        "line": 253,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 146,
+        "caller": "module"
+      },
+      {
+        "file": "src/config/PythonStrategy.ts",
+        "line": 180,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 30,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/parser.ts",
+        "line": 74,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 81,
+        "caller": "module"
+      },
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 38,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 23,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 24,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "hard",
+    "tags": ["method", "scoped", "frequently-used"]
+  },
+  {
+    "id": "symbol:78",
+    "symbolName": "CrossReferenceTracker",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 80,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:79",
+    "symbolName": "extractReferences",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 94,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 59,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:80",
+    "symbolName": "collectDefinitions",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 105,
+        "type": "function"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 129,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 140,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 146,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 163,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["function"]
+  },
+  {
+    "id": "symbol:81",
+    "symbolName": "collectCalls",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 151,
+        "type": "function"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 159,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 164,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["function"]
+  },
+  {
+    "id": "symbol:82",
+    "symbolName": "extractCallsFromNode",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 172,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 122,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:83",
+    "symbolName": "extractCallReference",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 198,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 153,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 181,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:84",
+    "symbolName": "extractName",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 304,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 107,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 137,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:85",
+    "symbolName": "isClassLike",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 327,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 136,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:86",
+    "symbolName": "normalizeType",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 341,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 112,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:87",
+    "symbolName": "isBuiltInOrNoise",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 358,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 289,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:88",
+    "symbolName": "addToGraph",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 482,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 60,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:89",
+    "symbolName": "buildReverseReferences",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 509,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/chunker.ts",
+        "line": 102,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:90",
+    "symbolName": "getFullyQualifiedName",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 533,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 485,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 501,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:91",
+    "symbolName": "getGraph",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 540,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:92",
+    "symbolName": "getCallers",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 547,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:93",
+    "symbolName": "getCallees",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 554,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:94",
+    "symbolName": "serialize",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 562,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:95",
+    "symbolName": "deserialize",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 573,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:96",
+    "symbolName": "clear",
+    "definitions": [
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 585,
+        "type": "method",
+        "scope": "CrossReferenceTracker"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 187,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/core/usecases/RecursiveScout.ts",
+        "line": 378,
+        "caller": "module"
+      },
+      {
+        "file": "src/adapters/parsers/TreeSitterAdapter.ts",
+        "line": 237,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 586,
+        "caller": "module"
+      },
+      {
+        "file": "src/indexer/xref-tracker.ts",
+        "line": 587,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped", "multi-definition"]
+  },
+  {
+    "id": "symbol:97",
+    "symbolName": "loadConfig",
+    "definitions": [
+      {
+        "file": "src/utils/config.ts",
+        "line": 53,
+        "type": "function"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["function", "unused"]
+  },
+  {
+    "id": "symbol:98",
+    "symbolName": "getLanguageFromExtension",
+    "definitions": [
+      {
+        "file": "src/utils/config.ts",
+        "line": 98,
+        "type": "function"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["function", "unused"]
+  },
+  {
+    "id": "symbol:99",
+    "symbolName": "HybridSearcher",
+    "definitions": [
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 36,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:100",
+    "symbolName": "setSemanticWeight",
+    "definitions": [
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 51,
+        "type": "method",
+        "scope": "HybridSearcher"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:101",
+    "symbolName": "getSemanticWeight",
+    "definitions": [
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 61,
+        "type": "method",
+        "scope": "HybridSearcher"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:102",
+    "symbolName": "combine",
+    "definitions": [
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 72,
+        "type": "method",
+        "scope": "HybridSearcher"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:103",
+    "symbolName": "combineRRF",
+    "definitions": [
+      {
+        "file": "src/search/hybrid.ts",
+        "line": 136,
+        "type": "method",
+        "scope": "HybridSearcher"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:104",
+    "symbolName": "VectorStore",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 20,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:105",
+    "symbolName": "upsert",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 54,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:106",
+    "symbolName": "search",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 97,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 104,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 123,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 131,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:107",
+    "symbolName": "searchByType",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 122,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:108",
+    "symbolName": "searchByLanguage",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 126,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:109",
+    "symbolName": "getByFilePath",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 134,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:110",
+    "symbolName": "deleteByFilePath",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 150,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:111",
+    "symbolName": "getStats",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 163,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:112",
+    "symbolName": "rowToChunk",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 201,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 113,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/store.ts",
+        "line": 143,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:113",
+    "symbolName": "close",
+    "definitions": [
+      {
+        "file": "src/vector/store.ts",
+        "line": 220,
+        "type": "method",
+        "scope": "VectorStore"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:114",
+    "symbolName": "EmbeddingEngine",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 21,
+        "type": "class"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["class", "unused"]
+  },
+  {
+    "id": "symbol:115",
+    "symbolName": "findBundledModel",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 100,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 43,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:116",
+    "symbolName": "embed",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 127,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:117",
+    "symbolName": "embedBatch",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 152,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:118",
+    "symbolName": "extractBatchEmbeddings",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 185,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 170,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "easy",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:119",
+    "symbolName": "embedQuery",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 200,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:120",
+    "symbolName": "getEffectiveDimensions",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 226,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 145,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 188,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 215,
+        "caller": "module"
+      },
+      {
+        "file": "src/vector/embed.ts",
+        "line": 238,
+        "caller": "module"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["method", "scoped"]
+  },
+  {
+    "id": "symbol:121",
+    "symbolName": "getDimensions",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 236,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  },
+  {
+    "id": "symbol:122",
+    "symbolName": "isInitialized",
+    "definitions": [
+      {
+        "file": "src/vector/embed.ts",
+        "line": 241,
+        "type": "method",
+        "scope": "EmbeddingEngine"
+      }
+    ],
+    "callSites": [],
+    "difficulty": "easy",
+    "tags": ["method", "scoped", "unused"]
+  }
+]

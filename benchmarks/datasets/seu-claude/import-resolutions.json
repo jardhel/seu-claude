@@ -1,0 +1,462 @@
+[
+  {
+    "id": "import:1",
+    "sourceFile": "src/core/usecases/TaskManager.ts",
+    "importPath": "../interfaces/ITaskStore.js",
+    "resolvedPath": "src/core/interfaces/ITaskStore.ts",
+    "importedSymbols": ["ITaskStore"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:2",
+    "sourceFile": "src/core/usecases/TaskManager.ts",
+    "importPath": "../entities/Task.js",
+    "resolvedPath": "src/core/entities/Task.ts",
+    "importedSymbols": ["Task", "TaskStatus"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:3",
+    "sourceFile": "src/core/interfaces/ITaskStore.ts",
+    "importPath": "../entities/Task.js",
+    "resolvedPath": "src/core/entities/Task.ts",
+    "importedSymbols": ["Task"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:4",
+    "sourceFile": "src/core/usecases/RecursiveScout.ts",
+    "importPath": "path",
+    "resolvedPath": null,
+    "importedSymbols": ["resolve", "dirname"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:5",
+    "sourceFile": "src/core/usecases/RecursiveScout.ts",
+    "importPath": "fs",
+    "resolvedPath": null,
+    "importedSymbols": ["existsSync", "statSync"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:6",
+    "sourceFile": "src/core/usecases/RecursiveScout.ts",
+    "importPath": "../../adapters/parsers/TreeSitterAdapter.js",
+    "resolvedPath": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importedSymbols": ["TreeSitterAdapter", "ParseResult"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:7",
+    "sourceFile": "src/core/usecases/RecursiveScout.ts",
+    "importPath": "../../config/LanguageStrategy.js",
+    "resolvedPath": "src/config/LanguageStrategy.ts",
+    "importedSymbols": ["CodeSymbol", "ImportStatement"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:8",
+    "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importPath": "tree-sitter",
+    "resolvedPath": null,
+    "importedSymbols": ["Parser"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "default"]
+  },
+  {
+    "id": "import:9",
+    "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importPath": "fs/promises",
+    "resolvedPath": null,
+    "importedSymbols": ["readFile"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:10",
+    "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importPath": "path",
+    "resolvedPath": null,
+    "importedSymbols": ["extname"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:11",
+    "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importPath": "../../config/LanguageStrategy.js",
+    "resolvedPath": "src/config/LanguageStrategy.ts",
+    "importedSymbols": ["LanguageStrategy", "CodeSymbol", "ImportStatement"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:12",
+    "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importPath": "../../config/TypeScriptStrategy.js",
+    "resolvedPath": "src/config/TypeScriptStrategy.ts",
+    "importedSymbols": ["TypeScriptStrategy"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:13",
+    "sourceFile": "src/adapters/parsers/TreeSitterAdapter.ts",
+    "importPath": "../../config/PythonStrategy.js",
+    "resolvedPath": "src/config/PythonStrategy.ts",
+    "importedSymbols": ["PythonStrategy"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:14",
+    "sourceFile": "src/config/TypeScriptStrategy.ts",
+    "importPath": "tree-sitter",
+    "resolvedPath": null,
+    "importedSymbols": ["Parser"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "default"]
+  },
+  {
+    "id": "import:15",
+    "sourceFile": "src/config/TypeScriptStrategy.ts",
+    "importPath": "tree-sitter-typescript",
+    "resolvedPath": null,
+    "importedSymbols": ["TypeScript"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "default"]
+  },
+  {
+    "id": "import:16",
+    "sourceFile": "src/config/TypeScriptStrategy.ts",
+    "importPath": "./LanguageStrategy.js",
+    "resolvedPath": "src/config/LanguageStrategy.ts",
+    "importedSymbols": ["LanguageStrategy", "CodeSymbol", "QueryPatterns", "ImportStatement"],
+    "importType": "relative",
+    "difficulty": "easy",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:17",
+    "sourceFile": "src/config/PythonStrategy.ts",
+    "importPath": "tree-sitter",
+    "resolvedPath": null,
+    "importedSymbols": ["Parser"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "default"]
+  },
+  {
+    "id": "import:18",
+    "sourceFile": "src/config/PythonStrategy.ts",
+    "importPath": "tree-sitter-python",
+    "resolvedPath": null,
+    "importedSymbols": ["Python"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "default"]
+  },
+  {
+    "id": "import:19",
+    "sourceFile": "src/config/PythonStrategy.ts",
+    "importPath": "./LanguageStrategy.js",
+    "resolvedPath": "src/config/LanguageStrategy.ts",
+    "importedSymbols": ["LanguageStrategy", "CodeSymbol", "QueryPatterns", "ImportStatement"],
+    "importType": "relative",
+    "difficulty": "easy",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:20",
+    "sourceFile": "src/indexer/chunker.ts",
+    "importPath": "./parser.js",
+    "resolvedPath": "src/indexer/parser.ts",
+    "importedSymbols": ["ASTParser", "ParsedNode"],
+    "importType": "relative",
+    "difficulty": "easy",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:21",
+    "sourceFile": "src/indexer/chunker.ts",
+    "importPath": "./xref-tracker.js",
+    "resolvedPath": "src/indexer/xref-tracker.ts",
+    "importedSymbols": ["CrossReferenceTracker"],
+    "importType": "relative",
+    "difficulty": "easy",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:22",
+    "sourceFile": "src/indexer/chunker.ts",
+    "importPath": "../utils/config.js",
+    "resolvedPath": "src/utils/config.ts",
+    "importedSymbols": ["Config"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:23",
+    "sourceFile": "src/indexer/chunker.ts",
+    "importPath": "../utils/logger.js",
+    "resolvedPath": "src/utils/logger.ts",
+    "importedSymbols": ["logger"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:24",
+    "sourceFile": "src/indexer/chunker.ts",
+    "importPath": "crypto",
+    "resolvedPath": null,
+    "importedSymbols": ["createHash"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:25",
+    "sourceFile": "src/indexer/parser.ts",
+    "importPath": "web-tree-sitter",
+    "resolvedPath": null,
+    "importedSymbols": ["Parser", "Language", "Tree", "SyntaxNode"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "default"]
+  },
+  {
+    "id": "import:26",
+    "sourceFile": "src/indexer/parser.ts",
+    "importPath": "path",
+    "resolvedPath": null,
+    "importedSymbols": ["join", "dirname"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:27",
+    "sourceFile": "src/indexer/parser.ts",
+    "importPath": "url",
+    "resolvedPath": null,
+    "importedSymbols": ["fileURLToPath"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:28",
+    "sourceFile": "src/indexer/parser.ts",
+    "importPath": "fs/promises",
+    "resolvedPath": null,
+    "importedSymbols": ["readFile", "access"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:29",
+    "sourceFile": "src/indexer/parser.ts",
+    "importPath": "../utils/logger.js",
+    "resolvedPath": "src/utils/logger.ts",
+    "importedSymbols": ["logger"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:30",
+    "sourceFile": "src/indexer/xref-tracker.ts",
+    "importPath": "web-tree-sitter",
+    "resolvedPath": null,
+    "importedSymbols": ["Tree", "SyntaxNode"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:31",
+    "sourceFile": "src/indexer/xref-tracker.ts",
+    "importPath": "../utils/logger.js",
+    "resolvedPath": "src/utils/logger.ts",
+    "importedSymbols": ["logger"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:32",
+    "sourceFile": "src/utils/config.ts",
+    "importPath": "os",
+    "resolvedPath": null,
+    "importedSymbols": ["homedir"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:33",
+    "sourceFile": "src/utils/config.ts",
+    "importPath": "path",
+    "resolvedPath": null,
+    "importedSymbols": ["join"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:34",
+    "sourceFile": "src/search/hybrid.ts",
+    "importPath": "../utils/logger.js",
+    "resolvedPath": "src/utils/logger.ts",
+    "importedSymbols": ["logger"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:35",
+    "sourceFile": "src/vector/store.ts",
+    "importPath": "@lancedb/lancedb",
+    "resolvedPath": null,
+    "importedSymbols": ["lancedb"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named", "namespace"]
+  },
+  {
+    "id": "import:36",
+    "sourceFile": "src/vector/store.ts",
+    "importPath": "../utils/config.js",
+    "resolvedPath": "src/utils/config.ts",
+    "importedSymbols": ["Config"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:37",
+    "sourceFile": "src/vector/store.ts",
+    "importPath": "../utils/logger.js",
+    "resolvedPath": "src/utils/logger.ts",
+    "importedSymbols": ["logger"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:38",
+    "sourceFile": "src/vector/store.ts",
+    "importPath": "../indexer/chunker.js",
+    "resolvedPath": "src/indexer/chunker.ts",
+    "importedSymbols": ["CodeChunk"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:39",
+    "sourceFile": "src/vector/store.ts",
+    "importPath": "fs/promises",
+    "resolvedPath": null,
+    "importedSymbols": ["mkdir"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:40",
+    "sourceFile": "src/vector/store.ts",
+    "importPath": "path",
+    "resolvedPath": null,
+    "importedSymbols": ["join"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:41",
+    "sourceFile": "src/vector/embed.ts",
+    "importPath": "@huggingface/transformers",
+    "resolvedPath": null,
+    "importedSymbols": ["pipeline", "FeatureExtractionPipeline", "env"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:42",
+    "sourceFile": "src/vector/embed.ts",
+    "importPath": "../utils/config.js",
+    "resolvedPath": "src/utils/config.ts",
+    "importedSymbols": ["Config"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:43",
+    "sourceFile": "src/vector/embed.ts",
+    "importPath": "../utils/logger.js",
+    "resolvedPath": "src/utils/logger.ts",
+    "importedSymbols": ["logger"],
+    "importType": "relative",
+    "difficulty": "medium",
+    "tags": ["relative", "named"]
+  },
+  {
+    "id": "import:44",
+    "sourceFile": "src/vector/embed.ts",
+    "importPath": "path",
+    "resolvedPath": null,
+    "importedSymbols": ["join", "dirname"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:45",
+    "sourceFile": "src/vector/embed.ts",
+    "importPath": "url",
+    "resolvedPath": null,
+    "importedSymbols": ["fileURLToPath"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  },
+  {
+    "id": "import:46",
+    "sourceFile": "src/vector/embed.ts",
+    "importPath": "fs/promises",
+    "resolvedPath": null,
+    "importedSymbols": ["access", "mkdir", "readdir"],
+    "importType": "package",
+    "difficulty": "medium",
+    "tags": ["package", "named"]
+  }
+]
