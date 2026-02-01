@@ -68,6 +68,10 @@ export class SQLiteTaskStore implements ITaskStore {
     this.db.prepare('DELETE FROM tasks WHERE id = ?').run(id);
   }
 
+  async clearAll(): Promise<void> {
+    this.db.prepare('DELETE FROM tasks').run();
+  }
+
   close(): void {
     this.db.close();
   }

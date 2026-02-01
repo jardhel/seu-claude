@@ -28,7 +28,9 @@
     "prepublishOnly": "npm run build && npm test",
     "start": "node dist/v2.js",
     "cli": "node dist/v2.js",
-    "mcp": "node dist/mcp/server.js"
+    "mcp": "node dist/mcp/server.js",
+    "benchmark": "node --import tsx src/benchmarks/run-benchmark.ts",
+    "benchmark:report": "node --import tsx src/benchmarks/run-benchmark.ts report"
   },
   "dependencies": {
     "@anthropic-ai/tokenizer": "^0.0.4",

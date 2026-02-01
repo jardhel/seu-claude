@@ -1,0 +1,186 @@
+{
+  "name": "seu-claude-vscode",
+  "displayName": "Seu-Claude",
+  "description": "AI-powered development with persistent task management, TDD workflows, and dependency analysis",
+  "version": "0.1.0",
+  "publisher": "seu-claude",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jardhel/seu-claude"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "claude",
+    "mcp",
+    "tdd",
+    "task-management",
+    "code-analysis"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "seu-claude",
+          "title": "Seu-Claude",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "seu-claude": [
+        {
+          "id": "seuClaudeTasks",
+          "name": "Task DAG",
+          "icon": "resources/tasks.svg",
+          "contextualTitle": "Seu-Claude Tasks"
+        },
+        {
+          "id": "seuClaudeDependencies",
+          "name": "Dependencies",
+          "icon": "resources/deps.svg",
+          "contextualTitle": "Seu-Claude Dependencies"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "seu-claude.refreshTasks",
+        "title": "Refresh Tasks",
+        "icon": "$(refresh)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.createTask",
+        "title": "Create Task",
+        "icon": "$(add)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.completeTask",
+        "title": "Complete Task",
+        "icon": "$(check)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.analyzeDependencies",
+        "title": "Analyze Dependencies",
+        "icon": "$(symbol-structure)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.runTDD",
+        "title": "Run TDD Cycle",
+        "icon": "$(beaker)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.findSymbol",
+        "title": "Find Symbol",
+        "icon": "$(search)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.validateCode",
+        "title": "Validate Code",
+        "icon": "$(shield)",
+        "category": "Seu-Claude"
+      },
+      {
+        "command": "seu-claude.showDependencyGraph",
+        "title": "Show Dependency Graph",
+        "icon": "$(type-hierarchy)",
+        "category": "Seu-Claude"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "seu-claude.refreshTasks",
+          "when": "view == seuClaudeTasks",
+          "group": "navigation"
+        },
+        {
+          "command": "seu-claude.createTask",
+          "when": "view == seuClaudeTasks",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "seu-claude.completeTask",
+          "when": "view == seuClaudeTasks && viewItem == task",
+          "group": "inline"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "seu-claude.findSymbol",
+          "group": "seu-claude@1"
+        },
+        {
+          "command": "seu-claude.analyzeDependencies",
+          "group": "seu-claude@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Seu-Claude",
+      "properties": {
+        "seu-claude.mcpServerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the seu-claude MCP server executable"
+        },
+        "seu-claude.autoRefreshTasks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh task tree on file changes"
+        },
+        "seu-claude.showTddStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show TDD status in the status bar"
+        },
+        "seu-claude.enableCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CodeLens for symbol definitions and references"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.22.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0"
+  }
+}

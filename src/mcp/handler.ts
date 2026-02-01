@@ -14,12 +14,14 @@ import { TreeSitterAdapter } from '../adapters/parsers/TreeSitterAdapter.js';
 import { Gatekeeper } from '../core/usecases/Gatekeeper.js';
 import { HypothesisEngine } from '../core/usecases/HypothesisEngine.js';
 import { ProcessSandbox } from '../adapters/sandbox/ProcessSandbox.js';
+import { SymbolResolver } from '../lsp/symbol-resolver.js';
 
 export class ToolHandler {
   private projectRoot: string;
   private dataDir: string;
   private taskManager: TaskManager | null = null;
   private store: SQLiteTaskStore | null = null;
+  private symbolResolver: SymbolResolver | null = null;
 
   constructor(projectRoot: string, dataDir: string) {
     this.projectRoot = projectRoot;
@@ -194,6 +196,11 @@ export class ToolHandler {
         return { tree: this.serializeTree(tree) };
       }
 
+      case 'clear': {
+        const deletedCount = await manager.clearAll();
+        return { cleared: true, deletedCount };
+      }
+
       default:
         throw new Error(`Unknown task action: ${action}`);
     }
@@ -214,6 +221,8 @@ export class ToolHandler {
     const implementationCode = args.implementationCode as string;
     const testFilePath = args.testFilePath as string;
     const implementationFilePath = args.implementationFilePath as string;
+    const testTimeout = args.testTimeout as number | undefined;
+    const autoFix = args.autoFix as boolean | undefined;
 
     const engine = new HypothesisEngine();
     const hypothesis = engine.createHypothesis(
@@ -224,7 +233,12 @@ export class ToolHandler {
       join(this.projectRoot, implementationFilePath)
     );
 
-    const result = await engine.runTDDCycle(hypothesis);
+    const options = {
+      ...(testTimeout !== undefined && { testTimeout }),
+      ...(autoFix !== undefined && { autoFix }),
+    };
+
+    const result = await engine.runTDDCycle(hypothesis, options);
 
     return {
       phase: result.phase,
@@ -247,28 +261,37 @@ export class ToolHandler {
       p.startsWith('/') ? p : join(this.projectRoot, p)
     );
 
-    const adapter = new TreeSitterAdapter();
-    const scout = new RecursiveScout(adapter);
-
-    const graph = await scout.buildDependencyGraph(entryPoints);
-
-    const definitions = await scout.findSymbolDefinitions(symbolName, graph);
-    const callSites = await scout.findCallSites(symbolName, graph);
+    // Use LSP-enhanced symbol resolver (falls back to TreeSitter if LSP unavailable)
+    const resolver = await this.getSymbolResolver();
+    const result = await resolver.findSymbol(symbolName, entryPoints);
 
     return {
-      symbolName,
-      definitions: definitions.map(d => ({
-        file: d.filePath,
-        line: d.symbol.startLine,
-        type: d.symbol.type,
+      symbolName: result.symbolName,
+      definitions: result.definitions.map(d => ({
+        file: d.file,
+        line: d.line,
+        type: d.type,
+        name: d.name,
+        source: d.source,
       })),
-      callSites: callSites.map(c => ({
-        file: c.filePath,
-        line: c.symbol.startLine,
+      callSites: result.references.map(r => ({
+        file: r.file,
+        line: r.line,
+        source: r.source,
       })),
-      definitionCount: definitions.length,
-      callSiteCount: callSites.length,
+      definitionCount: result.definitionCount,
+      callSiteCount: result.referenceCount,
+      source: result.source,
+      lspAvailable: resolver.isLSPAvailable(),
     };
+  }
+
+  private async getSymbolResolver(): Promise<SymbolResolver> {
+    if (!this.symbolResolver) {
+      this.symbolResolver = new SymbolResolver(this.projectRoot);
+      await this.symbolResolver.initialize();
+    }
+    return this.symbolResolver;
   }
 
   private async getTaskManager(): Promise<TaskManager> {
@@ -285,6 +308,10 @@ export class ToolHandler {
       this.store.close();
       this.store = null;
       this.taskManager = null;
+    }
+    if (this.symbolResolver) {
+      await this.symbolResolver.stop();
+      this.symbolResolver = null;
     }
   }
 }

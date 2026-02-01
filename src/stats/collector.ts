@@ -3,6 +3,7 @@ import { join, extname } from 'path';
 import { existsSync } from 'fs';
 import { logger } from '../utils/logger.js';
 import { type Config, LANGUAGE_EXTENSIONS } from '../utils/config.js';
+import { GitTracker } from '../indexer/git-tracker.js';
 
 export interface LanguageStats {
   files: number;
@@ -21,6 +22,15 @@ export interface StorageStats {
   totalSize: number;
 }
 
+export interface GitStats {
+  isGitRepo: boolean;
+  branch: string;
+  lastIndexedCommit: string | null;
+  lastIndexedAt: Date | null;
+  uncommittedChanges: number;
+  isClean: boolean;
+}
+
 export interface IndexStats {
   projectRoot: string;
   dataDir: string;
@@ -31,6 +41,7 @@ export interface IndexStats {
   types: Record<string, number>;
   xrefs: XrefStats;
   storage: StorageStats;
+  git?: GitStats;
 }
 
 interface FileIndexData {
@@ -78,6 +89,7 @@ export class StatsCollector {
       this.collectFileIndexStats(stats),
       this.collectXrefStats(stats),
       this.collectStorageStats(stats),
+      this.collectGitStats(stats),
     ]);
 
     return stats;
@@ -194,6 +206,53 @@ export class StatsCollector {
     }
 
     return totalSize;
+  }
+
+  private async collectGitStats(stats: IndexStats): Promise<void> {
+    const gitTracker = new GitTracker(this.config.projectRoot);
+    const isGitRepo = await gitTracker.initialize();
+
+    if (!isGitRepo) {
+      stats.git = {
+        isGitRepo: false,
+        branch: 'unknown',
+        lastIndexedCommit: null,
+        lastIndexedAt: null,
+        uncommittedChanges: 0,
+        isClean: true,
+      };
+      return;
+    }
+
+    const branch = await gitTracker.getCurrentBranch();
+    const uncommittedChanges = await gitTracker.getUncommittedChanges();
+    const isClean = await gitTracker.isClean();
+
+    // Load index state if available
+    let lastIndexedCommit: string | null = null;
+    let lastIndexedAt: Date | null = null;
+
+    try {
+      const indexStatePath = join(this.config.dataDir, 'index-state.json');
+      const content = await readFile(indexStatePath, 'utf-8');
+      const indexState = JSON.parse(content) as {
+        lastIndexedCommit?: string;
+        lastIndexedAt?: number;
+      };
+      lastIndexedCommit = indexState.lastIndexedCommit || null;
+      lastIndexedAt = indexState.lastIndexedAt ? new Date(indexState.lastIndexedAt) : null;
+    } catch {
+      // No index state file
+    }
+
+    stats.git = {
+      isGitRepo: true,
+      branch,
+      lastIndexedCommit,
+      lastIndexedAt,
+      uncommittedChanges: uncommittedChanges.length,
+      isClean,
+    };
   }
 
   private getLanguageFromPath(filePath: string): string {

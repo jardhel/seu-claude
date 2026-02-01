@@ -1,6 +1,7 @@
 import { Crawler } from '../indexer/crawler.js';
 import { SemanticChunker, CodeChunk } from '../indexer/chunker.js';
 import { FileIndex } from '../indexer/file-index.js';
+import { GitAwareIndexer } from '../indexer/git-aware-indexer.js';
 import { EmbeddingEngine } from '../vector/embed.js';
 import { VectorStore, StoredChunk } from '../vector/store.js';
 import { BM25Engine } from '../search/bm25.js';
@@ -20,6 +21,10 @@ export interface IndexResult {
   filesUpdated: number;
   filesDeleted: number;
   error?: string;
+  /** Whether git-based change detection was used */
+  gitAware?: boolean;
+  /** Last indexed commit (if git-aware) */
+  lastIndexedCommit?: string;
 }
 
 export type IndexPhase = 'crawling' | 'analyzing' | 'embedding' | 'saving' | 'complete';
@@ -68,6 +73,224 @@ export class IndexCodebase {
 
     await this.chunker.initialize();
     this.initialized = true;
+  }
+
+  /**
+   * Execute git-aware incremental indexing
+   * Uses git diff for efficient change detection in git repositories
+   */
+  async executeGitAware(
+    options: {
+      force?: boolean;
+      includeUncommitted?: boolean;
+    } = {},
+    onProgress?: ProgressCallback
+  ): Promise<IndexResult> {
+    const { force = false, includeUncommitted = true } = options;
+    const startTime = Date.now();
+    const report = (progress: IndexProgress) => {
+      if (onProgress) onProgress(progress);
+    };
+
+    try {
+      await this.initialize();
+
+      this.log.info(
+        `Starting git-aware indexing of ${this.config.projectRoot}${force ? ' (force)' : ''}`
+      );
+      report({ phase: 'crawling', message: 'Analyzing git changes...' });
+
+      const gitIndexer = new GitAwareIndexer(this.config);
+      await gitIndexer.initialize();
+
+      // If force, do regular full index
+      if (force) {
+        await this.store.clear();
+        await gitIndexer.getFileIndex().clear();
+        this.bm25Engine.clear();
+        this.fuzzyMatcher.clear();
+
+        // Run standard execute
+        const result = await this.execute(true, onProgress);
+        await gitIndexer.recordIndexSuccess(result.filesProcessed, includeUncommitted);
+        return { ...result, gitAware: true };
+      }
+
+      // Plan incremental index using git
+      const plan = await gitIndexer.planIncrementalIndex(includeUncommitted);
+
+      this.log.info(`Index plan: ${plan.reason}`);
+      this.log.info(
+        `Stats: ${plan.stats.filesToAdd} to add, ${plan.stats.filesToUpdate} to update, ${plan.stats.filesToDelete} to delete, ${plan.stats.filesUnchanged} unchanged`
+      );
+
+      if (plan.filesToIndex.length === 0 && plan.filesToRemove.length === 0) {
+        this.log.info('No changes detected, index is up to date');
+        const state = gitIndexer.getState();
+        return {
+          success: true,
+          filesProcessed: 0,
+          chunksCreated: 0,
+          languages: {},
+          durationMs: Date.now() - startTime,
+          filesSkipped: plan.stats.filesUnchanged,
+          filesUpdated: 0,
+          filesDeleted: 0,
+          gitAware: true,
+          lastIndexedCommit: state?.lastIndexedCommit || undefined,
+        };
+      }
+
+      report({
+        phase: 'analyzing',
+        message: `Processing ${plan.filesToIndex.length} files (${plan.stats.filesUnchanged} unchanged)`,
+        current: 0,
+        total: plan.filesToIndex.length,
+      });
+
+      // Handle deleted files
+      for (const relativePath of plan.filesToRemove) {
+        const absolutePath = join(this.config.projectRoot, relativePath);
+        await this.store.deleteByFilePath(absolutePath);
+        this.removeBM25DocsForFile(relativePath);
+        this.removeFuzzySymbolsForFile(relativePath);
+        gitIndexer.removeFromFileIndex(relativePath);
+        this.log.debug(`Removed deleted file: ${relativePath}`);
+      }
+
+      // Process changed files
+      let chunksCreated = 0;
+      const batchSize = 50;
+      const allChunks: CodeChunk[] = [];
+      const fileChunkCounts = new Map<string, number>();
+      const languageCounts: Record<string, number> = {};
+      let processedCount = 0;
+
+      for (const file of plan.filesToIndex) {
+        processedCount++;
+        report({
+          phase: 'analyzing',
+          message: `Analyzing ${file.relativePath}`,
+          current: processedCount,
+          total: plan.filesToIndex.length,
+          currentFile: file.relativePath,
+        });
+
+        try {
+          // Delete old chunks if file was previously indexed
+          const existingRecord = gitIndexer.getFileIndex().getFile(file.relativePath);
+          if (existingRecord) {
+            await this.store.deleteByFilePath(file.path);
+            this.removeBM25DocsForFile(file.relativePath);
+            this.removeFuzzySymbolsForFile(file.relativePath);
+          }
+
+          const content = await readFile(file.path, 'utf-8');
+          const chunks = await this.chunker.chunkFile(
+            file.path,
+            file.relativePath,
+            content,
+            file.language
+          );
+
+          fileChunkCounts.set(file.relativePath, chunks.length);
+          allChunks.push(...chunks);
+
+          // Track language
+          languageCounts[file.language] = (languageCounts[file.language] || 0) + 1;
+
+          if (allChunks.length >= batchSize) {
+            report({
+              phase: 'embedding',
+              message: `Generating embeddings (${chunksCreated + allChunks.length} chunks)`,
+              current: chunksCreated + allChunks.length,
+            });
+            await this.embedAndStore(allChunks);
+            chunksCreated += allChunks.length;
+            allChunks.length = 0;
+          }
+        } catch (err) {
+          this.log.warn(`Failed to process file ${file.relativePath}:`, err);
+        }
+      }
+
+      // Process remaining chunks
+      if (allChunks.length > 0) {
+        report({
+          phase: 'embedding',
+          message: `Generating final embeddings (${chunksCreated + allChunks.length} total chunks)`,
+          current: chunksCreated + allChunks.length,
+        });
+        await this.embedAndStore(allChunks);
+        chunksCreated += allChunks.length;
+      }
+
+      report({ phase: 'saving', message: 'Saving index...' });
+
+      // Update file index
+      for (const file of plan.filesToIndex) {
+        const chunkCount = fileChunkCounts.get(file.relativePath) ?? 0;
+        gitIndexer.updateFileIndex(file.relativePath, {
+          hash: file.hash,
+          mtime: file.modifiedAt.getTime(),
+          indexedAt: Date.now(),
+          chunkCount,
+        });
+      }
+
+      // Save everything
+      await gitIndexer.saveFileIndex();
+      this.chunker.finalizeXrefs();
+      await this.saveXrefGraph();
+      await this.saveBM25Index();
+      await this.saveFuzzyIndex();
+
+      // Record success
+      await gitIndexer.recordIndexSuccess(plan.stats.totalFilesInRepo, includeUncommitted);
+
+      const durationMs = Date.now() - startTime;
+      const state = gitIndexer.getState();
+
+      this.log.info(
+        `Git-aware indexing complete: ${chunksCreated} chunks from ${plan.filesToIndex.length} files in ${(durationMs / 1000).toFixed(1)}s`
+      );
+
+      report({
+        phase: 'complete',
+        message: `Indexed ${chunksCreated} chunks from ${plan.filesToIndex.length} files`,
+        current: plan.filesToIndex.length,
+        total: plan.filesToIndex.length,
+      });
+
+      return {
+        success: true,
+        filesProcessed: plan.filesToIndex.length,
+        chunksCreated,
+        languages: languageCounts,
+        durationMs,
+        filesSkipped: plan.stats.filesUnchanged,
+        filesUpdated: plan.stats.filesToUpdate,
+        filesDeleted: plan.filesToRemove.length,
+        gitAware: true,
+        lastIndexedCommit: state?.lastIndexedCommit || undefined,
+      };
+    } catch (err) {
+      const error = err instanceof Error ? err.message : String(err);
+      this.log.error('Git-aware indexing failed:', error);
+
+      return {
+        success: false,
+        filesProcessed: 0,
+        chunksCreated: 0,
+        languages: {},
+        durationMs: Date.now() - startTime,
+        filesSkipped: 0,
+        filesUpdated: 0,
+        filesDeleted: 0,
+        error,
+        gitAware: true,
+      };
+    }
   }
 
   async execute(force = false, onProgress?: ProgressCallback): Promise<IndexResult> {

@@ -10,6 +10,21 @@ export interface GitFileInfo {
   authors: string[];
 }
 
+export interface GitDiffResult {
+  /** Files added since base */
+  added: string[];
+  /** Files modified since base */
+  modified: string[];
+  /** Files deleted since base */
+  deleted: string[];
+  /** Files renamed (old path -> new path) */
+  renamed: Map<string, string>;
+  /** Base commit/ref used for comparison */
+  baseRef: string;
+  /** Head commit/ref used for comparison */
+  headRef: string;
+}
+
 export interface GitStatus {
   isGitRepo: boolean;
   branch: string;
@@ -216,5 +231,219 @@ export class GitTracker {
       uncommittedChanges: await this.getUncommittedChanges(),
       recentlyModified: await this.getRecentlyModifiedFiles(20),
     };
+  }
+
+  /**
+   * Get the current HEAD commit hash
+   */
+  async getHeadCommit(): Promise<string | null> {
+    if (!this.isGitRepo) return null;
+
+    try {
+      const output = await Promise.resolve(
+        execSync('git rev-parse HEAD', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+      return output.trim();
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get diff between two refs (commits, branches, tags)
+   * If headRef is not provided, uses working directory (including uncommitted changes)
+   */
+  async getDiff(baseRef: string, headRef?: string): Promise<GitDiffResult> {
+    const result: GitDiffResult = {
+      added: [],
+      modified: [],
+      deleted: [],
+      renamed: new Map(),
+      baseRef,
+      headRef: headRef || 'HEAD',
+    };
+
+    if (!this.isGitRepo) return result;
+
+    try {
+      // Use --name-status to get the status of each file
+      const diffCmd = headRef
+        ? `git diff --name-status -M ${baseRef} ${headRef}`
+        : `git diff --name-status -M ${baseRef}`;
+
+      const output = await Promise.resolve(
+        execSync(diffCmd, {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+
+      for (const line of output.trim().split('\n')) {
+        if (!line) continue;
+
+        const parts = line.split('\t');
+        const status = parts[0];
+        const filePath = parts[1];
+
+        if (status === 'A') {
+          result.added.push(filePath);
+        } else if (status === 'M') {
+          result.modified.push(filePath);
+        } else if (status === 'D') {
+          result.deleted.push(filePath);
+        } else if (status.startsWith('R')) {
+          // Renamed: Rxx oldpath newpath
+          const oldPath = parts[1];
+          const newPath = parts[2];
+          result.renamed.set(oldPath, newPath);
+        }
+      }
+    } catch (err) {
+      this.log.warn('Failed to get git diff:', err);
+    }
+
+    return result;
+  }
+
+  /**
+   * Get files changed in working directory (uncommitted changes)
+   * compared to HEAD, including staged and unstaged changes
+   */
+  async getWorkingTreeChanges(): Promise<GitDiffResult> {
+    const result: GitDiffResult = {
+      added: [],
+      modified: [],
+      deleted: [],
+      renamed: new Map(),
+      baseRef: 'HEAD',
+      headRef: 'working-tree',
+    };
+
+    if (!this.isGitRepo) return result;
+
+    try {
+      // Get staged changes
+      const stagedOutput = await Promise.resolve(
+        execSync('git diff --name-status --cached -M', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+
+      // Get unstaged changes
+      const unstagedOutput = await Promise.resolve(
+        execSync('git diff --name-status -M', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+
+      // Get untracked files
+      const untrackedOutput = await Promise.resolve(
+        execSync('git ls-files --others --exclude-standard', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+
+      // Process staged changes
+      this.parseDiffOutput(stagedOutput, result);
+
+      // Process unstaged changes (may overlap with staged)
+      this.parseDiffOutput(unstagedOutput, result);
+
+      // Add untracked files as added
+      for (const line of untrackedOutput.trim().split('\n')) {
+        if (line && !result.added.includes(line)) {
+          result.added.push(line);
+        }
+      }
+    } catch (err) {
+      this.log.warn('Failed to get working tree changes:', err);
+    }
+
+    return result;
+  }
+
+  /**
+   * Parse git diff --name-status output and populate result
+   */
+  private parseDiffOutput(output: string, result: GitDiffResult): void {
+    for (const line of output.trim().split('\n')) {
+      if (!line) continue;
+
+      const parts = line.split('\t');
+      const status = parts[0];
+      const filePath = parts[1];
+
+      if (status === 'A' && !result.added.includes(filePath)) {
+        result.added.push(filePath);
+      } else if (status === 'M' && !result.modified.includes(filePath)) {
+        result.modified.push(filePath);
+      } else if (status === 'D' && !result.deleted.includes(filePath)) {
+        result.deleted.push(filePath);
+      } else if (status.startsWith('R')) {
+        const oldPath = parts[1];
+        const newPath = parts[2];
+        if (!result.renamed.has(oldPath)) {
+          result.renamed.set(oldPath, newPath);
+        }
+      }
+    }
+  }
+
+  /**
+   * Check if the repository is clean (no uncommitted changes)
+   */
+  async isClean(): Promise<boolean> {
+    if (!this.isGitRepo) return true;
+
+    try {
+      const output = await Promise.resolve(
+        execSync('git status --porcelain', {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+      return output.trim().length === 0;
+    } catch {
+      return true;
+    }
+  }
+
+  /**
+   * Get commit hash for a given ref (branch, tag, etc.)
+   */
+  async resolveRef(ref: string): Promise<string | null> {
+    if (!this.isGitRepo) return null;
+
+    try {
+      const output = await Promise.resolve(
+        execSync(`git rev-parse ${ref}`, {
+          cwd: this.projectRoot,
+          stdio: 'pipe',
+          encoding: 'utf-8',
+        })
+      );
+      return output.trim();
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Check if git repo is available
+   */
+  isGitRepository(): boolean {
+    return this.isGitRepo;
   }
 }

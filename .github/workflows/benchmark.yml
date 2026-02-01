@@ -1,0 +1,87 @@
+name: Run Benchmarks
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sunday at midnight
+  push:
+    branches: [main]
+    paths:
+      - 'src/benchmarks/**'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'benchmark'
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run benchmarks
+        run: npm run benchmark
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Generate report
+        run: npm run benchmark:report
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './benchmark-results'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  update-readme:
+    needs: benchmark
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download latest results
+        run: |
+          mkdir -p benchmark-results
+          # Download the latest benchmark results if available
+          curl -sSf -o benchmark-results/latest.json \
+            "https://raw.githubusercontent.com/${{ github.repository }}/gh-pages/latest.json" || true
+
+      - name: Update README badges
+        if: success()
+        run: |
+          if [ -f benchmark-results/latest.json ]; then
+            # Extract success rate and update README badge
+            SUCCESS_RATE=$(jq -r '.summary.avgSuccessRate // 0' benchmark-results/latest.json)
+            echo "Benchmark success rate: $SUCCESS_RATE%"
+          fi
