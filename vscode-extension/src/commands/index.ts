@@ -184,7 +184,7 @@ export async function findSymbol(client: SeuClaudeClient): Promise<void> {
         }
 
         // Show QuickPick with references
-        const items = symbol.references.map((ref) => ({
+  const items = (symbol.references ?? []).map((ref) => ({
           label: `$(file) ${ref.file.split('/').pop()}`,
           description: `Line ${ref.line}`,
           detail: ref.file,

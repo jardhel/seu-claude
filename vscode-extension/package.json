@@ -2,7 +2,7 @@
   "name": "seu-claude-vscode",
   "displayName": "Seu-Claude",
   "description": "AI-powered development with persistent task management, TDD workflows, and dependency analysis",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "seu-claude",
   "repository": {
     "type": "git",
@@ -162,13 +162,16 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
-    "package": "vsce package",
-    "publish": "vsce publish"
+  "vscode:prepublish": "npm run compile",
+  "compile": "tsc -p ./",
+  "watch": "tsc -watch -p ./",
+  "lint": "eslint src --ext ts",
+  "typecheck": "tsc --noEmit",
+  "test": "node ./out/test/runTest.js",
+  "test:coverage": "vitest run --coverage --coverage.reporter=text --coverage.reporter=lcov",
+  "package": "vsce package",
+  "publish": "vsce publish",
+  "prepublishOnly": "npm run typecheck && npm test"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
