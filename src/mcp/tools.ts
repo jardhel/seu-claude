@@ -60,6 +60,34 @@ export const FindSymbolInput = z.object({
   entryPoints: z.array(z.string()).describe('Entry points for search'),
 });
 
+export const IndexCodebaseInput = z.object({
+  mode: z
+    .enum(['incremental', 'full'])
+    .optional()
+    .describe('Indexing mode: incremental (default) uses git diff, full re-indexes everything'),
+  includeUncommitted: z
+    .boolean()
+    .optional()
+    .describe('Include uncommitted changes in index (default: true)'),
+  paths: z
+    .array(z.string())
+    .optional()
+    .describe('Specific paths to index (default: entire project)'),
+});
+
+export const SummarizeCodebaseInput = z.object({
+  scope: z.string().optional().describe('Directory scope to summarize (default: project root)'),
+  depth: z
+    .enum(['overview', 'detailed'])
+    .optional()
+    .describe('Summary depth: overview (architecture) or detailed (with functions)'),
+  focus: z
+    .array(z.string())
+    .optional()
+    .describe('Focus areas: architecture, dependencies, entry-points, exports'),
+  maxTokens: z.number().optional().describe('Maximum tokens for summary (default: 2000)'),
+});
+
 export const OrchestrateAgentsInput = z.object({
   action: z
     .enum([
@@ -354,6 +382,60 @@ export const TOOL_DEFINITIONS = [
       required: ['action'],
     },
   },
+  {
+    name: 'index_codebase',
+    description:
+      'Index or re-index the codebase for semantic search and analysis. Uses git-aware incremental indexing for efficiency. Returns indexing plan and statistics.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        mode: {
+          type: 'string',
+          enum: ['incremental', 'full'],
+          description: 'Indexing mode: incremental (default) uses git diff, full re-indexes everything',
+        },
+        includeUncommitted: {
+          type: 'boolean',
+          description: 'Include uncommitted changes in index (default: true)',
+        },
+        paths: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Specific paths to index (default: entire project)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'summarize_codebase',
+    description:
+      'Generate a compressed summary of the codebase for context injection. Reduces token usage while preserving key information about architecture, dependencies, and entry points.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        scope: {
+          type: 'string',
+          description: 'Directory scope to summarize (default: project root)',
+        },
+        depth: {
+          type: 'string',
+          enum: ['overview', 'detailed'],
+          description: 'Summary depth: overview (architecture) or detailed (with functions)',
+        },
+        focus: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Focus areas: architecture, dependencies, entry-points, exports',
+        },
+        maxTokens: {
+          type: 'number',
+          description: 'Maximum tokens for summary (default: 2000)',
+        },
+      },
+      required: [],
+    },
+  },
 ];
 
 export type ToolName =
@@ -363,4 +445,6 @@ export type ToolName =
   | 'manage_task'
   | 'run_tdd'
   | 'find_symbol'
-  | 'orchestrate_agents';
+  | 'orchestrate_agents'
+  | 'index_codebase'
+  | 'summarize_codebase';

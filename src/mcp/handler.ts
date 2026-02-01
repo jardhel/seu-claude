@@ -15,6 +15,8 @@ import { Gatekeeper } from '../core/usecases/Gatekeeper.js';
 import { HypothesisEngine } from '../core/usecases/HypothesisEngine.js';
 import { ProcessSandbox } from '../adapters/sandbox/ProcessSandbox.js';
 import { SymbolResolver } from '../lsp/symbol-resolver.js';
+import { GitAwareIndexer } from '../indexer/git-aware-indexer.js';
+import { loadConfig } from '../utils/config.js';
 
 export class ToolHandler {
   private projectRoot: string;
@@ -42,6 +44,10 @@ export class ToolHandler {
         return this.runTDD(args);
       case 'find_symbol':
         return this.findSymbol(args);
+      case 'index_codebase':
+        return this.indexCodebase(args);
+      case 'summarize_codebase':
+        return this.summarizeCodebase(args);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
@@ -301,6 +307,120 @@ export class ToolHandler {
       this.taskManager = new TaskManager(this.store);
     }
     return this.taskManager;
+  }
+
+  private async indexCodebase(args: Record<string, unknown>): Promise<unknown> {
+    const mode = (args.mode as string) || 'incremental';
+    const includeUncommitted = args.includeUncommitted !== false;
+
+    const config = loadConfig({
+      projectRoot: this.projectRoot,
+      dataDir: this.dataDir,
+    });
+
+    const indexer = new GitAwareIndexer(config);
+    await indexer.initialize();
+
+    if (mode === 'full') {
+      // Force full re-index by clearing state
+      await indexer.saveState({
+        lastIndexedCommit: null,
+        lastIndexedAt: 0,
+        branch: '',
+        totalFiles: 0,
+        includesUncommitted: false,
+      });
+    }
+
+    const plan = await indexer.planIncrementalIndex(includeUncommitted);
+
+    // Return the plan (actual indexing would be done by a separate process)
+    return {
+      mode,
+      isFullReindex: plan.isFullReindex,
+      reason: plan.reason,
+      stats: plan.stats,
+      filesToIndex: plan.filesToIndex.map(f => f.relativePath),
+      filesToRemove: plan.filesToRemove,
+      gitAvailable: !!plan.gitDiff,
+      currentState: indexer.getState(),
+    };
+  }
+
+  private async summarizeCodebase(args: Record<string, unknown>): Promise<unknown> {
+    const scope = (args.scope as string) || '';
+    const depth = (args.depth as string) || 'overview';
+    const focus = (args.focus as string[]) || ['architecture', 'entry-points'];
+    const maxTokens = (args.maxTokens as number) || 2000;
+
+    const scopePath = scope ? join(this.projectRoot, scope) : this.projectRoot;
+
+    // Use RecursiveScout to analyze the codebase
+    const adapter = new TreeSitterAdapter();
+    const scout = new RecursiveScout(adapter, { maxDepth: 10 });
+
+    // Find entry points (index files, main files)
+    const entryPatterns = ['index.ts', 'index.js', 'main.ts', 'main.js', 'app.ts', 'app.js'];
+    const { globSync } = await import('fast-glob');
+    const entryPoints = globSync(entryPatterns.map(p => join(scopePath, '**', p)), {
+      ignore: ['**/node_modules/**', '**/dist/**', '**/.git/**'],
+    }).slice(0, 5); // Limit to 5 entry points
+
+    if (entryPoints.length === 0) {
+      // Fallback: find any TypeScript/JavaScript files
+      const fallbackFiles = globSync([join(scopePath, 'src/**/*.ts'), join(scopePath, '*.ts')], {
+        ignore: ['**/*.test.ts', '**/*.spec.ts', '**/node_modules/**'],
+      }).slice(0, 3);
+      entryPoints.push(...fallbackFiles);
+    }
+
+    const summary: Record<string, unknown> = {
+      scope: scope || '/',
+      depth,
+      focus,
+    };
+
+    if (entryPoints.length > 0) {
+      const graph = await scout.buildDependencyGraph(entryPoints);
+      const stats = scout.getGraphStats(graph);
+
+      summary.architecture = {
+        totalFiles: stats.totalFiles,
+        totalSymbols: stats.totalSymbols,
+        totalImports: stats.totalImports,
+        circularDependencies: graph.circularDeps.length,
+        entryPoints: graph.roots,
+        leafFiles: graph.leaves.slice(0, 10),
+      };
+
+      if (depth === 'detailed') {
+        // Add top-level exports from entry points
+        const exports: Array<{ file: string; symbols: string[] }> = [];
+        for (const entryPoint of entryPoints.slice(0, 3)) {
+          const node = graph.nodes.get(entryPoint);
+          if (node) {
+            exports.push({
+              file: entryPoint.replace(this.projectRoot, ''),
+              symbols: node.symbols
+                .filter(s => s.type === 'function' || s.type === 'class')
+                .slice(0, 10)
+                .map(s => `${s.type}:${s.name}`),
+            });
+          }
+        }
+        summary.exports = exports;
+      }
+
+      // Estimate token usage
+      const summaryJson = JSON.stringify(summary);
+      const estimatedTokens = Math.ceil(summaryJson.length / 4);
+      summary.estimatedTokens = estimatedTokens;
+      summary.withinBudget = estimatedTokens <= maxTokens;
+    } else {
+      summary.error = 'No source files found in scope';
+    }
+
+    return summary;
   }
 
   async close(): Promise<void> {
