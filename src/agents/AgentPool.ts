@@ -189,7 +189,7 @@ export class AgentPool extends EventEmitter {
       case 'random':
         return availableAgents[Math.floor(Math.random() * availableAgents.length)];
 
-      case 'capability-match':
+      case 'capability-match': {
         // Prefer agents with exact capability match
         const exactMatch = availableAgents.find((agent) => {
           const caps = agent.getIdentity().capabilities;
@@ -201,6 +201,7 @@ export class AgentPool extends EventEmitter {
           );
         });
         return exactMatch ?? availableAgents[0];
+      }
 
       case 'least-busy':
       default:
