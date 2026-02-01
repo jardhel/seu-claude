@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benchmark Comparison Report - comparison-1769969953626</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --text-primary: #eee;
+      --text-secondary: #aaa;
+      --accent: #0f4c75;
+      --success: #4ade80;
+      --warning: #fbbf24;
+      --error: #f87171;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.5rem; margin: 2rem 0 1rem; color: var(--text-secondary); }
+    .meta { color: var(--text-secondary); margin-bottom: 2rem; }
+    .winner-badge {
+      display: inline-block;
+      background: var(--success);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .chart-container {
+      background: var(--bg-secondary);
+      border-radius: 1rem;
+      padding: 1.5rem;
+    }
+    .chart-title { font-size: 1.1rem; margin-bottom: 1rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: var(--bg-secondary);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    th, td { padding: 1rem; text-align: left; }
+    th { background: var(--accent); }
+    tr:nth-child(even) { background: rgba(255,255,255,0.05); }
+    .pass { color: var(--success); }
+    .fail { color: var(--error); }
+    .case-section { margin: 2rem 0; padding: 1.5rem; background: var(--bg-secondary); border-radius: 1rem; }
+    footer { margin-top: 3rem; color: var(--text-secondary); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Benchmark Comparison Report</h1>
+    <div class="meta">
+      <p>Run ID: comparison-1769969953626</p>
+      <p>Generated: 2026-02-01T18:19:13.627Z</p>
+      <p>Total Cases: 6</p>
+    </div>
+
+    <div class="winner-badge">Winner: seu-claude</div>
+
+    <h2>Performance Overview</h2>
+    <div class="charts-grid">
+      <div class="chart-container">
+        <div class="chart-title">Wins by Agent</div>
+        <canvas id="winsChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Success Rate (%)</div>
+        <canvas id="successChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Average Execution Time (ms)</div>
+        <canvas id="timeChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Average Tokens Used</div>
+        <canvas id="tokensChart"></canvas>
+      </div>
+    </div>
+
+    <h2>Summary Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Agent</th>
+          <th>Wins</th>
+          <th>Success Rate</th>
+          <th>Avg Time (ms)</th>
+          <th>Avg Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>seu-claude</td>
+          <td>6</td>
+          <td>100.0%</td>
+          <td>0</td>
+          <td>500</td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+    <h2>Detailed Results</h2>
+    
+    <div class="case-section">
+      <h3>Fix pagination off-by-one error</h3>
+      <p><strong>Winner:</strong> seu-claude</p>
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Status</th><th>Time (ms)</th><th>Tokens</th></tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>seu-claude</td>
+            <td class="pass">Pass</td>
+            <td>0</td>
+            <td>500</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="case-section">
+      <h3>Fix async race condition</h3>
+      <p><strong>Winner:</strong> seu-claude</p>
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Status</th><th>Time (ms)</th><th>Tokens</th></tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>seu-claude</td>
+            <td class="pass">Pass</td>
+            <td>0</td>
+            <td>500</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="case-section">
+      <h3>Add API response caching</h3>
+      <p><strong>Winner:</strong> seu-claude</p>
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Status</th><th>Time (ms)</th><th>Tokens</th></tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>seu-claude</td>
+            <td class="pass">Pass</td>
+            <td>0</td>
+            <td>500</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="case-section">
+      <h3>Add JWT authentication</h3>
+      <p><strong>Winner:</strong> seu-claude</p>
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Status</th><th>Time (ms)</th><th>Tokens</th></tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>seu-claude</td>
+            <td class="pass">Pass</td>
+            <td>0</td>
+            <td>500</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="case-section">
+      <h3>Extract UserManager class</h3>
+      <p><strong>Winner:</strong> seu-claude</p>
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Status</th><th>Time (ms)</th><th>Tokens</th></tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>seu-claude</td>
+            <td class="pass">Pass</td>
+            <td>0</td>
+            <td>500</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="case-section">
+      <h3>Convert callbacks to async/await</h3>
+      <p><strong>Winner:</strong> seu-claude</p>
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Status</th><th>Time (ms)</th><th>Tokens</th></tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>seu-claude</td>
+            <td class="pass">Pass</td>
+            <td>0</td>
+            <td>500</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+
+    <footer>
+      <p>Generated by seu-claude benchmark suite</p>
+    </footer>
+  </div>
+
+  <script>
+    const colors = ['#4ade80', '#60a5fa', '#fbbf24', '#f87171', '#a78bfa', '#f472b6'];
+    const chartConfig = {
+      responsive: true,
+      plugins: { legend: { display: false } }
+    };
+
+    new Chart(document.getElementById('winsChart'), {
+      type: 'bar',
+      data: {
+        labels: ["seu-claude"],
+        datasets: [{ data: [6], backgroundColor: colors }]
+      },
+      options: chartConfig
+    });
+
+    new Chart(document.getElementById('successChart'), {
+      type: 'bar',
+      data: {
+        labels: ["seu-claude"],
+        datasets: [{ data: ["100.0"], backgroundColor: colors }]
+      },
+      options: chartConfig
+    });
+
+    new Chart(document.getElementById('timeChart'), {
+      type: 'bar',
+      data: {
+        labels: ["seu-claude"],
+        datasets: [{ data: ["0"], backgroundColor: colors }]
+      },
+      options: chartConfig
+    });
+
+    new Chart(document.getElementById('tokensChart'), {
+      type: 'bar',
+      data: {
+        labels: ["seu-claude"],
+        datasets: [{ data: ["500"], backgroundColor: colors }]
+      },
+      options: chartConfig
+    });
+  </script>
+</body>
+</html>

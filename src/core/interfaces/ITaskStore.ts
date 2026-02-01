@@ -19,6 +19,9 @@ export interface ITaskStore {
   /** Delete a task by ID */
   delete(id: string): Promise<void>;
 
+  /** Delete all tasks from the store */
+  clearAll(): Promise<void>;
+
   /** Close the database connection */
   close(): void;
 }

@@ -31,7 +31,7 @@ export const ExecuteSandboxInput = z.object({
 });
 
 export const ManageTaskInput = z.object({
-  action: z.enum(['create', 'update', 'get', 'list', 'tree']).describe('Task action'),
+  action: z.enum(['create', 'update', 'get', 'list', 'tree', 'clear']).describe('Task action'),
   taskId: z.string().optional().describe('Task ID for update/get'),
   label: z.string().optional().describe('Task label for create'),
   parentId: z.string().optional().describe('Parent task ID'),
@@ -51,11 +51,57 @@ export const RunTDDInput = z.object({
   implementationCode: z.string().describe('Implementation code'),
   testFilePath: z.string().describe('Path for test file'),
   implementationFilePath: z.string().describe('Path for implementation'),
+  testTimeout: z.number().optional().describe('Timeout per test run in ms (default: 30000)'),
+  autoFix: z.boolean().optional().describe('Whether to auto-fix lint issues'),
 });
 
 export const FindSymbolInput = z.object({
   symbolName: z.string().describe('Symbol name to find'),
   entryPoints: z.array(z.string()).describe('Entry points for search'),
+});
+
+export const OrchestrateAgentsInput = z.object({
+  action: z
+    .enum([
+      'create_pool',
+      'remove_pool',
+      'submit_task',
+      'get_status',
+      'execute_workflow',
+      'create_checkpoint',
+      'restore_checkpoint',
+      'shutdown',
+    ])
+    .describe('Orchestration action'),
+  role: z
+    .enum(['orchestrator', 'coder', 'reviewer', 'tester', 'documenter', 'analyst', 'debugger'])
+    .optional()
+    .describe('Agent role for pool operations'),
+  poolSpec: z
+    .object({
+      replicas: z.number().optional(),
+      autoscaling: z
+        .object({
+          enabled: z.boolean(),
+          minReplicas: z.number().optional(),
+          maxReplicas: z.number().optional(),
+        })
+        .optional(),
+    })
+    .optional()
+    .describe('Pool specification'),
+  task: z
+    .object({
+      description: z.string(),
+      context: z.record(z.any()).optional(),
+      files: z.array(z.string()).optional(),
+    })
+    .optional()
+    .describe('Task to submit'),
+  workflowId: z.string().optional().describe('Workflow ID to execute'),
+  workflowInput: z.record(z.any()).optional().describe('Input for workflow execution'),
+  executionId: z.string().optional().describe('Execution ID for checkpoint operations'),
+  checkpointId: z.string().optional().describe('Checkpoint ID for restore'),
 });
 
 // Tool Definitions
@@ -141,7 +187,7 @@ export const TOOL_DEFINITIONS = [
       properties: {
         action: {
           type: 'string',
-          enum: ['create', 'update', 'get', 'list', 'tree'],
+          enum: ['create', 'update', 'get', 'list', 'tree', 'clear'],
           description: 'Action to perform',
         },
         taskId: {
@@ -200,6 +246,14 @@ export const TOOL_DEFINITIONS = [
           type: 'string',
           description: 'Path to write implementation',
         },
+        testTimeout: {
+          type: 'number',
+          description: 'Timeout per test run in ms (default: 30000)',
+        },
+        autoFix: {
+          type: 'boolean',
+          description: 'Whether to auto-fix lint issues',
+        },
       },
       required: [
         'description',
@@ -213,7 +267,7 @@ export const TOOL_DEFINITIONS = [
   {
     name: 'find_symbol',
     description:
-      'Find where a symbol (function, class, etc.) is defined and where it is called across the codebase.',
+      'Find where a symbol (function, class, etc.) is defined and where it is called across the codebase. Uses LSP (Language Server Protocol) for accurate resolution when available, with TreeSitter fallback.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -230,6 +284,76 @@ export const TOOL_DEFINITIONS = [
       required: ['symbolName', 'entryPoints'],
     },
   },
+  {
+    name: 'orchestrate_agents',
+    description:
+      'Manage multi-agent workflows with specialized agents (Coder, Reviewer, Tester). Supports Kubernetes-style pool management, workflow execution, and checkpoint-based recovery.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        action: {
+          type: 'string',
+          enum: [
+            'create_pool',
+            'remove_pool',
+            'submit_task',
+            'get_status',
+            'execute_workflow',
+            'create_checkpoint',
+            'restore_checkpoint',
+            'shutdown',
+          ],
+          description: 'Action to perform',
+        },
+        role: {
+          type: 'string',
+          enum: ['orchestrator', 'coder', 'reviewer', 'tester', 'documenter', 'analyst', 'debugger'],
+          description: 'Agent role for pool operations',
+        },
+        poolSpec: {
+          type: 'object',
+          properties: {
+            replicas: { type: 'number', description: 'Number of agent replicas' },
+            autoscaling: {
+              type: 'object',
+              properties: {
+                enabled: { type: 'boolean' },
+                minReplicas: { type: 'number' },
+                maxReplicas: { type: 'number' },
+              },
+            },
+          },
+          description: 'Pool specification for create_pool',
+        },
+        task: {
+          type: 'object',
+          properties: {
+            description: { type: 'string' },
+            context: { type: 'object' },
+            files: { type: 'array', items: { type: 'string' } },
+          },
+          description: 'Task for submit_task',
+        },
+        workflowId: {
+          type: 'string',
+          description: 'Workflow ID for execute_workflow',
+        },
+        workflowInput: {
+          type: 'object',
+          description: 'Input for workflow execution',
+        },
+        executionId: {
+          type: 'string',
+          description: 'Execution ID for checkpoint operations',
+        },
+        checkpointId: {
+          type: 'string',
+          description: 'Checkpoint ID for restore_checkpoint',
+        },
+      },
+      required: ['action'],
+    },
+  },
 ];
 
 export type ToolName =
@@ -238,4 +362,5 @@ export type ToolName =
   | 'execute_sandbox'
   | 'manage_task'
   | 'run_tdd'
-  | 'find_symbol';
+  | 'find_symbol'
+  | 'orchestrate_agents';

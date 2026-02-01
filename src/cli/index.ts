@@ -11,7 +11,7 @@
  */
 
 import { join } from 'path';
-import { mkdir, rm } from 'fs/promises';
+import { mkdir, rm, readdir, readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { ToolHandler } from '../mcp/handler.js';
 import {
@@ -22,7 +22,8 @@ import {
   MemoryEfficiencySuite,
   ReportGenerator,
 } from '../benchmarks/index.js';
-import type { IBenchmarkSuite } from '../benchmarks/framework/types.js';
+import type { IBenchmarkSuite, BenchmarkSuiteResult } from '../benchmarks/framework/types.js';
+import type { ReportFormat } from '../benchmarks/framework/ReportGenerator.js';
 import {
   writeConfig,
   writeConfigs,
@@ -292,9 +293,8 @@ const COMMANDS: Record<string, Command> = {
           break;
         }
         case 'report': {
-          const format = args[1] || 'markdown';
-          console.log(`📊 Generating ${format} report...`);
-          console.log('   (Report generation from stored results not yet implemented)');
+          const format = (args[1] || 'markdown') as 'json' | 'markdown' | 'html' | 'latex';
+          await generateReportFromStored(format);
           break;
         }
         case 'list': {
@@ -399,6 +399,128 @@ const COMMANDS: Record<string, Command> = {
     },
   },
 };
+
+/**
+ * Generate reports from stored benchmark results
+ */
+async function generateReportFromStored(format: ReportFormat): Promise<void> {
+  const reportDir = join(PROJECT_ROOT, 'benchmarks', 'reports');
+
+  if (!existsSync(reportDir)) {
+    console.log('⚠️  No benchmark reports directory found.');
+    console.log('   Run benchmarks first: /bench run');
+    return;
+  }
+
+  // Find all JSON result files
+  const files = await readdir(reportDir);
+  const jsonFiles = files.filter(f => f.endsWith('.json') && f.startsWith('benchmark-'));
+
+  if (jsonFiles.length === 0) {
+    console.log('⚠️  No benchmark results found.');
+    console.log('   Run benchmarks first: /bench run');
+    return;
+  }
+
+  // Sort by modification time (newest first)
+  const fileStats = await Promise.all(
+    jsonFiles.map(async f => {
+      const path = join(reportDir, f);
+      const content = await readFile(path, 'utf-8');
+      const data = JSON.parse(content) as { metadata?: { timestamp?: string } };
+      return { file: f, path, timestamp: data.metadata?.timestamp || '' };
+    })
+  );
+  fileStats.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+
+  console.log(`\n📊 Found ${fileStats.length} benchmark result(s)\n`);
+
+  // Show available results
+  console.log('Available results:');
+  for (let i = 0; i < Math.min(5, fileStats.length); i++) {
+    const stat = fileStats[i];
+    console.log(`   ${i + 1}. ${stat.file}`);
+  }
+  if (fileStats.length > 5) {
+    console.log(`   ... and ${fileStats.length - 5} more`);
+  }
+
+  // Generate report from most recent result
+  const latestFile = fileStats[0];
+  console.log(`\n📄 Generating ${format} report from: ${latestFile.file}\n`);
+
+  const content = await readFile(latestFile.path, 'utf-8');
+  const storedResult = JSON.parse(content) as {
+    metadata: { title: string; timestamp: string; systemVersion: string; gitCommit?: string };
+    summary: { totalTests: number; passed: number; failed: number; totalExecutionTimeMs: number };
+    metrics: Array<{ name: string; value: number; unit: string; stdDev?: number }>;
+    latencyStats: {
+      p50: number;
+      p75: number;
+      p90: number;
+      p95: number;
+      p99: number;
+      min: number;
+      max: number;
+      mean: number;
+      stdDev: number;
+    };
+    irMetrics?: {
+      precisionAtK: Record<number, number>;
+      recall: number;
+      f1: number;
+      mrr: number;
+      map: number;
+      ndcg: number;
+    };
+    testResults?: Array<{
+      testCaseId: string;
+      passed: boolean;
+      actual: unknown;
+      executionTimeMs: number;
+      metrics: Array<{ name: string; value: number; unit: string }>;
+      error?: string;
+    }>;
+  };
+
+  // Convert stored format back to BenchmarkSuiteResult
+  const suiteResult: BenchmarkSuiteResult = {
+    config: {
+      name: latestFile.file.replace('benchmark-', '').replace(/-\d{4}-\d{2}-\d{2}.*\.json$/, ''),
+      description: storedResult.metadata.title,
+    },
+    testResults: storedResult.testResults || [],
+    aggregatedMetrics: storedResult.metrics || [],
+    latencyStats: storedResult.latencyStats || {
+      p50: 0,
+      p75: 0,
+      p90: 0,
+      p95: 0,
+      p99: 0,
+      min: 0,
+      max: 0,
+      mean: 0,
+      stdDev: 0,
+    },
+    irMetrics: storedResult.irMetrics,
+    totalExecutionTimeMs: storedResult.summary?.totalExecutionTimeMs || 0,
+    timestamp: storedResult.metadata.timestamp,
+    systemVersion: storedResult.metadata.systemVersion,
+    gitCommit: storedResult.metadata.gitCommit,
+  };
+
+  const reportGenerator = new ReportGenerator();
+  const outputPaths = await reportGenerator.generateSuiteReport(suiteResult, {
+    outputDir: reportDir,
+    formats: [format],
+    title: storedResult.metadata.title,
+  });
+
+  console.log(`✅ Generated report(s):`);
+  for (const path of outputPaths) {
+    console.log(`   ${path}`);
+  }
+}
 
 /**
  * Run benchmark suites

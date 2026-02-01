@@ -11,12 +11,11 @@ import type { ValidationResult } from '../interfaces/IGatekeeper.js';
 import { ProcessSandbox } from '../../adapters/sandbox/ProcessSandbox.js';
 import { Gatekeeper } from './Gatekeeper.js';
 
-// Reserved for future use when TDDOptions are fully implemented
-// const DEFAULT_OPTIONS: Required<TDDOptions> = {
-//   maxIterations: 3,
-//   testTimeout: 30000,
-//   autoFix: false,
-// };
+const DEFAULT_OPTIONS: Required<TDDOptions> = {
+  maxIterations: 3,
+  testTimeout: 30000,
+  autoFix: false,
+};
 
 /**
  * HypothesisEngine - Automated TDD loop executor
@@ -109,14 +108,14 @@ export class HypothesisEngine implements IHypothesisEngine {
     }
   }
 
-  async runTDDCycle(hypothesis: Hypothesis, _options?: TDDOptions): Promise<HypothesisResult> {
-    // Options reserved for future use (timeout, auto-fix, etc.)
+  async runTDDCycle(hypothesis: Hypothesis, options?: TDDOptions): Promise<HypothesisResult> {
+    const opts = { ...DEFAULT_OPTIONS, ...options };
 
     // Write files
     await this.writeHypothesisFiles(hypothesis);
 
-    // Run tests
-    const testResult = await this.runTests(hypothesis);
+    // Run tests with configured timeout
+    const testResult = await this.runTests(hypothesis, opts.testTimeout);
 
     if (testResult.exitCode === 0) {
       // Tests pass - validate code quality
@@ -129,6 +128,36 @@ export class HypothesisEngine implements IHypothesisEngine {
           testResult,
           validationResult,
           suggestions: ['TDD cycle complete!', 'All tests pass', 'Code quality validated'],
+        };
+      } else if (opts.autoFix) {
+        // Attempt auto-fix via gatekeeper
+        const fixedValidation = await this.gatekeeper.preflightCheck(
+          [hypothesis.implementationFilePath, hypothesis.testFilePath],
+          { fix: true }
+        );
+        if (fixedValidation.passed) {
+          return {
+            hypothesis,
+            phase: 'complete',
+            testResult,
+            validationResult: {
+              passed: true,
+              errors: [],
+              warnings: fixedValidation.totalWarnings > 0 ? validationResult.warnings : [],
+              durationMs: validationResult.durationMs + fixedValidation.durationMs,
+            },
+            suggestions: ['TDD cycle complete!', 'Code quality issues auto-fixed'],
+          };
+        }
+        return {
+          hypothesis,
+          phase: 'refactor',
+          testResult,
+          validationResult,
+          suggestions: [
+            'Tests pass but some code quality issues could not be auto-fixed',
+            ...validationResult.errors.map(e => `Fix: ${e.message} at ${e.file}:${e.line}`),
+          ],
         };
       } else {
         return {
@@ -154,14 +183,14 @@ export class HypothesisEngine implements IHypothesisEngine {
     }
   }
 
-  async runTests(hypothesis: Hypothesis): Promise<ExecutionResult> {
+  async runTests(hypothesis: Hypothesis, timeout: number = 30000): Promise<ExecutionResult> {
     await this.sandbox.initialize();
 
     try {
       return await this.sandbox.execute({
         command: 'node',
         args: ['--test', hypothesis.testFilePath],
-        timeout: 30000,
+        timeout,
       });
     } finally {
       await this.sandbox.destroy();

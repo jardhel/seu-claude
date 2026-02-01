@@ -185,9 +185,19 @@ describe('ToolHandler', () => {
       expect(result.tree[0].children).toHaveLength(1);
     });
 
-    it.skip('clears all tasks', async () => {
-      // 'clear' action not yet implemented - placeholder for future
-      // await handler.handleTool('manage_task', { action: 'clear' });
+    it('clears all tasks', async () => {
+      await handler.handleTool('manage_task', { action: 'create', label: 'Task 1' });
+      await handler.handleTool('manage_task', { action: 'create', label: 'Task 2' });
+
+      const beforeClear = (await handler.handleTool('manage_task', { action: 'list' })) as any;
+      expect(beforeClear.total).toBe(2);
+
+      const clearResult = (await handler.handleTool('manage_task', { action: 'clear' })) as any;
+      expect(clearResult.cleared).toBe(true);
+      expect(clearResult.deletedCount).toBe(2);
+
+      const afterClear = (await handler.handleTool('manage_task', { action: 'list' })) as any;
+      expect(afterClear.total).toBe(0);
     });
   });
 

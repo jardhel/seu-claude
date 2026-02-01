@@ -9,13 +9,14 @@ describe('MCP Server', () => {
 
   it('should list available tools', () => {
     // Server has tools defined
-    expect(TOOL_DEFINITIONS).toHaveLength(6);
+    expect(TOOL_DEFINITIONS).toHaveLength(7);
     expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('analyze_dependency');
     expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('validate_code');
     expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('execute_sandbox');
     expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('manage_task');
     expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('run_tdd');
     expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('find_symbol');
+    expect(TOOL_DEFINITIONS.map(t => t.name)).toContain('orchestrate_agents');
   });
 
   it.skip('should call a tool and return result', async () => {

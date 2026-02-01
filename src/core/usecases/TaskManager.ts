@@ -242,4 +242,14 @@ export class TaskManager {
     }
     return running.length;
   }
+
+  /**
+   * Clear all tasks from the store (context nuke)
+   */
+  async clearAll(): Promise<number> {
+    const tasks = await this.store.getAll();
+    const count = tasks.length;
+    await this.store.clearAll();
+    return count;
+  }
 }
