@@ -1,0 +1,1 @@
+![Benchmark](https://img.shields.io/badge/benchmark-100%25-brightgreen?style=flat) ![Winner](https://img.shields.io/badge/winner-seu-claude-gold?style=for-the-badge)

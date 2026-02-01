@@ -1,0 +1,110 @@
+{
+  "cases": [
+    {
+      "caseId": "pagination-off-by-one",
+      "caseName": "Fix pagination off-by-one error",
+      "results": {
+        "seu-claude": {
+          "agentName": "seu-claude",
+          "success": true,
+          "executionTimeMs": 0,
+          "tokensUsed": 500,
+          "filesModified": 1
+        }
+      },
+      "winner": "seu-claude",
+      "timestamp": "2026-02-01T18:19:13.626Z"
+    },
+    {
+      "caseId": "async-race-condition",
+      "caseName": "Fix async race condition",
+      "results": {
+        "seu-claude": {
+          "agentName": "seu-claude",
+          "success": true,
+          "executionTimeMs": 0,
+          "tokensUsed": 500,
+          "filesModified": 1
+        }
+      },
+      "winner": "seu-claude",
+      "timestamp": "2026-02-01T18:19:13.627Z"
+    },
+    {
+      "caseId": "add-api-caching",
+      "caseName": "Add API response caching",
+      "results": {
+        "seu-claude": {
+          "agentName": "seu-claude",
+          "success": true,
+          "executionTimeMs": 0,
+          "tokensUsed": 500,
+          "filesModified": 2
+        }
+      },
+      "winner": "seu-claude",
+      "timestamp": "2026-02-01T18:19:13.627Z"
+    },
+    {
+      "caseId": "add-jwt-auth",
+      "caseName": "Add JWT authentication",
+      "results": {
+        "seu-claude": {
+          "agentName": "seu-claude",
+          "success": true,
+          "executionTimeMs": 0,
+          "tokensUsed": 500,
+          "filesModified": 3
+        }
+      },
+      "winner": "seu-claude",
+      "timestamp": "2026-02-01T18:19:13.627Z"
+    },
+    {
+      "caseId": "extract-user-manager",
+      "caseName": "Extract UserManager class",
+      "results": {
+        "seu-claude": {
+          "agentName": "seu-claude",
+          "success": true,
+          "executionTimeMs": 0,
+          "tokensUsed": 500,
+          "filesModified": 2
+        }
+      },
+      "winner": "seu-claude",
+      "timestamp": "2026-02-01T18:19:13.627Z"
+    },
+    {
+      "caseId": "callbacks-to-async",
+      "caseName": "Convert callbacks to async/await",
+      "results": {
+        "seu-claude": {
+          "agentName": "seu-claude",
+          "success": true,
+          "executionTimeMs": 0,
+          "tokensUsed": 500,
+          "filesModified": 1
+        }
+      },
+      "winner": "seu-claude",
+      "timestamp": "2026-02-01T18:19:13.627Z"
+    }
+  ],
+  "summary": {
+    "agentStats": {
+      "seu-claude": {
+        "name": "seu-claude",
+        "wins": 6,
+        "successRate": 1,
+        "avgExecutionTimeMs": 0,
+        "avgTokensUsed": 500,
+        "totalCases": 6
+      }
+    },
+    "overallWinner": "seu-claude",
+    "totalCases": 6
+  },
+  "runId": "comparison-1769969953626",
+  "timestamp": "2026-02-01T18:19:13.627Z"
+}
