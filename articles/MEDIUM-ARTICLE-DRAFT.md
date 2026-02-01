@@ -1,12 +1,12 @@
-# Building a Semantic Search Tool Using Itself: The seu-claude Story
+# Building an AI Agent Architecture Using Itself: The Seu-Claude Story
 
-_How we used AI-powered code search to build AI-powered code search_
+_How we used AI-powered code tools to build AI-powered code tools_
 
 ---
 
 ## Introduction
 
-What if you could use the very tool you're building to help build it? That's exactly what we did with **seu-claude** — a semantic code understanding MCP server for Claude Code. This article tells the story of developing Phase 3 of seu-claude while using seu-claude's own features to navigate, understand, and improve the codebase.
+What if you could use the very tool you're building to help build it? That's exactly what we did with **seu-claude** — a neuro-symbolic AI agent architecture for Claude Code. This article tells the story of developing seu-claude v3.0 while using seu-claude's own features to navigate, understand, and improve the codebase.
 
 This is the ultimate form of dogfooding.
 
@@ -14,30 +14,31 @@ This is the ultimate form of dogfooding.
 
 ## What is seu-claude?
 
-**seu-claude** (Semantic Embedding Utilities for Claude) is an MCP (Model Context Protocol) server that gives Claude Code superpowers for understanding codebases:
+**seu-claude** (Semantic Embedding Utilities for Claude) is an MCP (Model Context Protocol) server that gives Claude Code superpowers:
 
-- **Semantic Search**: Find code by meaning, not just keywords. Ask "where is user authentication handled?" and get relevant results.
-- **Cross-Reference Tracking**: Understand who calls what — trace function calls across your entire codebase.
-- **AST-Based Chunking**: Intelligent code splitting that respects function/class boundaries using Tree-sitter.
-- **Git-Aware Indexing**: Prioritize recently modified and uncommitted files.
+- **Task DAG Management**: Persistent task tracking with dependency graphs and checkpoint recovery
+- **TDD Workflow**: Red-green-refactor cycles with automatic validation
+- **Dependency Analysis**: Understand who calls what — trace imports across your entire codebase
+- **Multi-Agent Orchestration**: Coordinate specialized agents (Coder, Reviewer, Tester) for complex tasks
+- **Enterprise Security**: Docker sandboxing, RBAC, encrypted secrets, and audit trails
 
-Think of it as giving Claude Code a mental map of your codebase.
+Think of it as giving Claude Code a brain, memory, and security layer.
 
 ---
 
-## The Challenge: Phase 3 — Enhanced Search
+## The Journey: From Prototype to v3.0
 
-Our roadmap for v1.2.0 included ambitious search improvements:
+Our roadmap evolved through five major phases:
 
-| Feature             | Goal                           |
-| ------------------- | ------------------------------ |
-| Scoped Search       | Filter by directories/patterns |
-| Hybrid Search       | Combine BM25 + semantic search |
-| Fuzzy Symbol Search | Typo-tolerant function lookup  |
-| Code Similarity     | Find duplicate patterns        |
-| Search Ranking      | Boost important files          |
+| Phase | Feature Set | Status |
+|-------|-------------|--------|
+| Phase 1 | Competitive Benchmark Suite | Complete |
+| Phase 2 | VS Code Extension | Complete |
+| Phase 3 | Multi-Agent Orchestration | Complete |
+| Phase 4 | Enterprise Security | Complete |
+| Phase 5 | Content & Community | In Progress |
 
-But first, we had a problem: **test coverage had slipped** during rapid Phase 2 development. Before adding new features, we needed a solid foundation.
+But before we could add features, we had a problem: **test coverage had slipped** during rapid early development. Before scaling up, we needed a solid foundation.
 
 ---
 
@@ -57,7 +58,7 @@ The core indexing tool at 11% coverage? That's a ticking time bomb.
 
 ### Using seu-claude to Fix seu-claude
 
-Here's where it gets meta. We used `search_codebase` to find the problematic test:
+Here's where it gets meta. We used our own tools to find the problematic test:
 
 ```typescript
 // Query: "empty directory test embedder"
@@ -89,173 +90,83 @@ const createMockEmbedder = () => ({
 });
 ```
 
-### Results After Coverage Sprint
-
-| Metric     | Before | After     |
-| ---------- | ------ | --------- |
-| Statements | 79.5%  | **87.2%** |
-| Branches   | 71.8%  | **77.0%** |
-| Functions  | 90.5%  | **96.9%** |
-| Lines      | 79.9%  | **87.5%** |
-
-**394 tests passing**, up from 370. Foundation solid. Time to build.
-
 ---
 
-## Feature 1: Scoped Search
+## Feature Highlight: Multi-Agent Orchestration
 
-### The Need
-
-Users wanted to search within specific directories:
-
-- "Find authentication logic in `src/` but not in tests"
-- "Search `lib/**/*.ts` for utility functions"
-
-### Implementation (TDD Style)
-
-Following Test-Driven Development, we wrote failing tests first:
+Phase 3 introduced Kubernetes-style agent pool management:
 
 ```typescript
-it('should filter results by includePaths', async () => {
-  // ... setup chunks in src/ and lib/
+import { orchestrate_agents } from 'seu-claude';
 
-  const results = await searchTool.execute({
-    query: 'function',
-    scope: {
-      includePaths: ['src/**'],
-    },
-  });
+// Create agent pools
+await orchestrate_agents({
+  action: 'create_pool',
+  role: 'coder',
+  poolSpec: { replicas: 3, autoscaling: { enabled: true } }
+});
 
-  expect(results.length).toBe(1);
-  expect(results[0].relativePath).toBe('src/app.ts');
+// Execute coordinated workflow
+await orchestrate_agents({
+  action: 'execute_workflow',
+  workflowId: 'feature-development',
+  workflowInput: { feature: 'Add user authentication' }
 });
 ```
 
-Then implemented using `micromatch` for glob pattern matching:
+The system coordinates specialized agents:
+- **Coder**: Writes implementation code
+- **Reviewer**: Checks for bugs and style issues
+- **Tester**: Writes and runs tests
+- **Documenter**: Generates documentation
 
-```typescript
-private applyScopeFilter(
-  results: FormattedSearchResult[],
-  scope: SearchScope
-): FormattedSearchResult[] {
-  return results.filter(result => {
-    const path = result.relativePath;
-
-    if (scope.includePaths?.length > 0) {
-      if (!micromatch.isMatch(path, scope.includePaths)) {
-        return false;
-      }
-    }
-
-    if (scope.excludePaths?.length > 0) {
-      if (micromatch.isMatch(path, scope.excludePaths)) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-}
-```
-
-**5 new tests, all passing. Feature shipped.**
+Each agent operates independently but shares context through the task DAG.
 
 ---
 
-## Feature 2: Hybrid Search (BM25 + Semantic)
+## Feature Highlight: Enterprise Security
 
-This is the big one. Pure semantic search is great for conceptual queries ("find user authentication"), but struggles with exact matches ("find `getUserById`").
+Phase 4 added the security layer enterprises need:
 
-### The Hybrid Approach
-
-```
-Query ──┬──> BM25 (Keywords) ────┐
-        │                        ├──> Score Fusion ──> Results
-        └──> Semantic (Vectors) ─┘
-
-final_score = α × semantic + (1-α) × keyword
-Default α = 0.7 (70% semantic, 30% keyword)
-```
-
-### Building BM25 from Scratch
-
-BM25 (Best Match 25) is a probabilistic ranking function. We implemented it in ~250 lines:
+### Docker Sandbox Isolation
 
 ```typescript
-export class BM25Engine {
-  private invertedIndex: Map<string, TermEntry[]> = new Map();
+const sandbox = new DockerSandbox({
+  image: 'node:20-alpine',
+  memoryLimit: '256m',
+  networkEnabled: false, // Complete isolation
+});
 
-  private tokenize(text: string): string[] {
-    return text
-      .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase
-      .replace(/_/g, ' ') // snake_case
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .filter(token => token.length > 1);
-  }
-
-  search(query: string, limit = 10): BM25Result[] {
-    const queryTerms = this.tokenize(query);
-    const scores = new Map<string, number>();
-
-    for (const term of queryTerms) {
-      const entries = this.invertedIndex.get(term);
-      if (!entries) continue;
-
-      const termIdf = this.idf(term);
-
-      for (const entry of entries) {
-        // BM25 formula
-        const tf = entry.termFrequency;
-        const docLength = this.documents.get(entry.docId)!.length;
-        const numerator = tf * (this.k1 + 1);
-        const denominator = tf + this.k1 * (1 - this.b + this.b * (docLength / this.avgDocLength));
-
-        scores.set(
-          entry.docId,
-          (scores.get(entry.docId) || 0) + (termIdf * numerator) / denominator
-        );
-      }
-    }
-
-    // Sort and return top results
-    return [...scores.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
-  }
-}
+await sandbox.execute({
+  command: 'npm',
+  args: ['test'],
+  timeout: 30000,
+});
 ```
 
-### The HybridSearcher
-
-Combining BM25 and semantic results with score normalization:
+### Role-Based Access Control
 
 ```typescript
-export class HybridSearcher {
-  combine(
-    semanticResults: SearchResult[],
-    keywordResults: SearchResult[],
-    limit = 10
-  ): HybridResult[] {
-    // Normalize BM25 scores to 0-1
-    const maxBM25 = Math.max(...keywordResults.map(r => r.score));
+rbac.createRole('developer', [
+  'file:read:/src/*',
+  'file:write:/src/*',
+  'tool:execute:validate_code',
+]);
 
-    // Combine all unique results
-    for (const id of allIds) {
-      const semanticScore = semanticMap.get(id)?.score ?? 0;
-      const keywordScore = (keywordMap.get(id)?.score ?? 0) / maxBM25;
-
-      const combinedScore =
-        this.semanticWeight * semanticScore +
-        (1 - this.semanticWeight) * keywordScore;
-
-      results.push({ id, combinedScore, ... });
-    }
-
-    return results.sort((a, b) => b.combinedScore - a.combinedScore);
-  }
-}
+rbac.hasPermission('user-123', 'file:write:/etc/passwd'); // false
 ```
 
-**45 new tests (26 for BM25, 19 for Hybrid), all passing.**
+### Encrypted Secrets
+
+```typescript
+const secrets = new SecretsManager();
+await secrets.set('production/api-key', 'sk-...', {
+  versioned: true,
+  description: 'OpenAI API key',
+});
+```
+
+AES-256-GCM encryption with PBKDF2 key derivation. Version history for rotation. Export encrypted backups.
 
 ---
 
@@ -263,38 +174,47 @@ export class HybridSearcher {
 
 Throughout development, we used seu-claude's own features:
 
-### Semantic Search for Code Discovery
+### Task DAG for Project Management
 
 ```
-Query: "hybrid search combining BM25 keyword and semantic vector search"
-Result: src/search/hybrid.ts:72-127 - The combine() method
+Query: manage_task({ action: 'tree' })
+Result:
+├── Phase 1: Benchmark Suite ✅
+├── Phase 2: VSCode Extension ✅
+├── Phase 3: Multi-Agent Orchestration ✅
+├── Phase 4: Enterprise Security ✅
+└── Phase 5: Content & Community 🔄
+    ├── 5.1 Demo videos ⏸️
+    ├── 5.2 Blog posts ✅
+    └── ...
 ```
 
-This immediately showed us our own implementation, helping verify the indexing worked correctly.
+We tracked every feature, every subtask, every dependency.
 
-### Cross-Reference Tracking
+### TDD Workflow
+
+```typescript
+await run_tdd({
+  description: 'RBAC permission check',
+  testCode: `it('denies access to unauthorized paths', ...`,
+  implementationCode: `hasPermission(user, permission) { ...`,
+  testFilePath: 'src/security/rbac.test.ts',
+  implementationFilePath: 'src/security/rbac.ts',
+});
+// RED → GREEN → REFACTOR, automatically
+```
+
+### Dependency Analysis
 
 ```
-Symbol: "combine"
+Symbol: "DockerSandbox"
 Callers:
-  - hybrid.test.ts:54 (test)
-  - hybrid.test.ts:75 (test)
-  - hybrid.test.ts:93 (test)
-  ...
+  - sandbox.test.ts (28 tests)
+  - execute-sandbox.ts (tool)
+  - orchestrator.ts (agent pool)
 ```
 
-We could see exactly where our new function was being used.
-
-### Stats for Health Monitoring
-
-```
-Total Files: 63
-Total Chunks: 928
-Cross-References: 329 definitions, 6234 call sites
-Storage: 3.8 MB total
-```
-
-Real-time visibility into the index state.
+We could see exactly where our new classes were being used.
 
 ---
 
@@ -309,7 +229,7 @@ Real-time visibility into the index state.
 ### Coverage Thresholds
 
 ```javascript
-// jest.config.js
+// vitest.config.js
 coverageThreshold: {
   global: {
     statements: 76,
@@ -330,19 +250,25 @@ Every public method has JSDoc comments. The MCP tool schemas serve as API docume
 
 ## Results
 
-### Before Phase 3
+### The Numbers
 
-- 370 tests
-- 79.5% statement coverage
-- Basic semantic search only
+| Metric | Value |
+|--------|-------|
+| Source Files | 104 |
+| Test Files | 56 |
+| Tests Passing | 1,041+ |
+| Statement Coverage | 87%+ |
+| MCP Tools | 7 |
 
-### After Phase 3 (In Progress)
+### Feature Summary
 
-- 444 tests (+20%)
-- 88.4% statement coverage (+9%)
-- Scoped search ✅
-- Hybrid search (BM25 + Semantic) 🔄
-- And more coming...
+- **Task Management**: Persistent DAG with caching and checkpoints
+- **TDD Workflow**: Automated red-green-refactor cycles
+- **Dependency Analysis**: Cross-file import tracing
+- **Code Validation**: ESLint + TypeScript checking
+- **Sandbox Execution**: Isolated command execution
+- **Multi-Agent Orchestration**: Kubernetes-style agent pools
+- **Enterprise Security**: RBAC, secrets, audit trails, compliance
 
 ---
 
@@ -350,7 +276,7 @@ Every public method has JSDoc comments. The MCP tool schemas serve as API docume
 
 ### 1. Dogfooding Reveals Real UX Issues
 
-Using your own tool surfaces pain points you'd never find otherwise. We discovered scoped search was essential when trying to navigate our own growing codebase.
+Using your own tool surfaces pain points you'd never find otherwise. We discovered task dependencies were essential when trying to manage our own growing feature set.
 
 ### 2. TDD + AI = Powerful Combination
 
@@ -360,35 +286,23 @@ Claude Code writes tests, then implements features to make them pass. The test s
 
 We found the sweet spot: 76-80% coverage with thresholds. High enough to catch regressions, low enough to not slow down development.
 
-### 4. Semantic + Keyword = Better Than Either Alone
+### 4. Security Can't Be an Afterthought
 
-Pure semantic search misses exact function names. Pure keyword search misses conceptual similarity. Hybrid is the answer.
-
----
-
-## What's Next?
-
-Phase 3 continues with:
-
-- **Fuzzy Symbol Search**: Find `getUser` even when you type `gtUser`
-- **Code Similarity**: Detect copy-paste patterns
-- **Ranking Improvements**: Boost important files (entry points, exports)
-
-And Phase 4 brings:
-
-- Real-time file watching
-- VS Code extension
-- Configuration files
+Enterprise adoption requires isolation, access control, and audit trails from the start. We added them in Phase 4, but wish we'd started earlier.
 
 ---
 
 ## Try It Yourself
 
 ```bash
+# Install
+npm install seu-claude
+
+# Or use with Claude Code
 npx seu-claude setup
 ```
 
-That's it. One command to give Claude Code semantic superpowers.
+Configure in your Claude Code MCP settings and start using semantic tools immediately.
 
 ---
 
@@ -396,21 +310,24 @@ That's it. One command to give Claude Code semantic superpowers.
 
 Building a tool using itself isn't just dogfooding — it's a development superpower. Every feature we add makes the next feature easier to build. Every bug we find makes the tool more robust.
 
-seu-claude started as an experiment: "What if Claude Code could understand codebases semantically?" Today, it's a production tool with:
+Seu-claude started as an experiment: "What if Claude Code could understand codebases semantically?" Today, it's a production-ready v3.0 with:
 
-- 63 indexed files
-- 928 semantic chunks
-- 6,234 cross-reference call sites
-- Sub-100ms query latency
+- 1,041+ passing tests
+- Enterprise security features
+- Multi-agent orchestration
+- VS Code extension
+- Competitive benchmarks
 
 And we're just getting started.
 
 ---
 
-_seu-claude is open source. Star us on GitHub and join the journey._
+_Seu-claude is open source. Star us on GitHub and join the journey._
 
-**Tags**: #AI #DeveloperTools #TypeScript #SemanticSearch #ClaudeCode #MCP #Dogfooding
+**GitHub**: [github.com/jardhel/seu-claude](https://github.com/jardhel/seu-claude)
+
+**Tags**: #AI #DeveloperTools #TypeScript #ClaudeCode #MCP #AgentArchitecture #TDD
 
 ---
 
-_Written with assistance from Claude, using seu-claude to navigate the seu-claude codebase. 🤖_
+_Written with assistance from Claude, using seu-claude to navigate the seu-claude codebase._

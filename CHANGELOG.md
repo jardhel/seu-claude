@@ -5,6 +5,59 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-02-01
+
+### Major Release: Enterprise-Ready AI Agent Architecture
+
+This release transforms seu-claude from a developer tool into a production-ready enterprise platform with comprehensive security, multi-agent orchestration, and professional tooling.
+
+### Added
+
+#### Phase 1: Competitive Benchmark Suite
+- **Benchmark Framework**: Standardized coding challenge suite
+  - Bug fix, feature addition, and refactoring challenges
+  - Automated comparison runner (seu-claude vs raw Claude vs Aider vs Continue)
+  - Crash recovery benchmarks with failure simulation
+- **Reporting**: Shareable benchmark reports with charts and GitHub badges
+- **Results Publishing**: GitHub Pages integration for public benchmarks
+
+#### Phase 2: VS Code Extension
+- **Task DAG TreeView**: Visual task hierarchy in sidebar
+- **CodeLens Integration**: Show definitions/references inline
+- **TDD Status Bar**: RED/GREEN/REFACTOR indicator
+- **Dependency Graph Visualization**: D3.js-powered webview
+- **Command Palette**: All seu-claude tools accessible via commands
+- **Marketplace Ready**: Published to VS Code Marketplace
+
+#### Phase 3: Multi-Agent Orchestration
+- **Agent Communication Protocol**: Message passing and shared state
+- **AgentPool Manager**: Kubernetes-style pool management with autoscaling
+- **Specialized Agents**: Coder, Reviewer, Tester, Documenter, Analyst, Debugger
+- **Task Distribution**: Capability-based task assignment
+- **Conflict Resolution**: Merge conflict and resource contention handling
+- **Observability**: Traces, metrics, and agent communication logs
+- **`orchestrate_agents` MCP Tool**: Full orchestration control
+
+#### Phase 4: Enterprise Security Features
+- **Docker Sandbox Isolation**: Network isolation, resource limits, read-only mounts
+- **Resource Limiter**: cgroup-based memory, CPU, and disk I/O limits
+- **Audit Trail System**: JSON Lines logging with rotation and integrity hashing
+- **RBAC**: Role-based access control with hierarchical inheritance
+- **Secrets Manager**: AES-256-GCM encryption with PBKDF2 key derivation
+- **Compliance Reporter**: SOC2-style evidence collection and gap analysis
+
+### Changed
+- Upgraded to 7 MCP tools (added `orchestrate_agents`)
+- Test suite expanded to 1,041+ tests
+- Statement coverage maintained at 87%+
+
+### Technical Stats
+- 104 source files
+- 56 test files
+- 153 new tests for Phase 4 security features alone
+
+---
+
 ## [2.3.0] - 2026-01-26
 
 ### 🎉 Major Release: Neuro-Symbolic Architecture
