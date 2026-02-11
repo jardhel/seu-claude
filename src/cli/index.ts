@@ -10,8 +10,8 @@
  * - /check  - Run pre-flight validation
  */
 
-import { join } from 'path';
-import { mkdir, rm, readdir, readFile } from 'fs/promises';
+import { basename, join, resolve } from 'path';
+import { mkdir, rm, readdir, readFile, stat } from 'fs/promises';
 import { existsSync } from 'fs';
 import { ToolHandler } from '../mcp/handler.js';
 import {
@@ -21,6 +21,7 @@ import {
   AccuracySuite,
   MemoryEfficiencySuite,
   ReportGenerator,
+  GroundTruthGenerator,
 } from '../benchmarks/index.js';
 import type { IBenchmarkSuite, BenchmarkSuiteResult } from '../benchmarks/framework/types.js';
 import type { ReportFormat } from '../benchmarks/framework/ReportGenerator.js';
@@ -282,14 +283,30 @@ const COMMANDS: Record<string, Command> = {
   bench: {
     name: '/bench',
     description: 'Run benchmark suites',
-    usage: '/bench run [suite] | /bench report [format]',
+    usage:
+      '/bench run [suite] [--repo <path> | --repos-dir <path>] [--refresh-dataset] | /bench report [format]',
     handler: async (args, _handler) => {
       const subcommand = args[0] || 'help';
 
       switch (subcommand) {
         case 'run': {
-          const suiteName = args[1] || 'all';
-          await runBenchmarks(suiteName);
+          const parsed = parseBenchRunArgs(args.slice(1));
+          if (parsed.error) {
+            console.error(`❌ ${parsed.error}`);
+            console.log('   Usage: /bench run [suite] [--repo <path> | --repos-dir <path>]');
+            return;
+          }
+
+          if (parsed.reposDir) {
+            await runBenchmarksForReposDir(parsed.suiteName, parsed.reposDir, {
+              refreshDataset: parsed.refreshDataset,
+            });
+          } else {
+            await runBenchmarks(parsed.suiteName, {
+              targetRepoPath: parsed.repoPath,
+              refreshDataset: parsed.refreshDataset,
+            });
+          }
           break;
         }
         case 'report': {
@@ -311,6 +328,9 @@ const COMMANDS: Record<string, Command> = {
           console.log('Usage:', COMMANDS.bench.usage);
           console.log('\nSubcommands:');
           console.log('   run [suite]    - Run benchmark suite (default: all)');
+          console.log('                    --repo <path>        Run against a specific repo');
+          console.log('                    --repos-dir <path>   Run against all repos in a directory');
+          console.log('                    --refresh-dataset    Regenerate accuracy dataset');
           console.log('   report [fmt]   - Generate report (markdown, json, html)');
           console.log('   list           - List available suites');
       }
@@ -399,6 +419,120 @@ const COMMANDS: Record<string, Command> = {
     },
   },
 };
+
+interface BenchRunExecutionOptions {
+  targetRepoPath?: string;
+  refreshDataset?: boolean;
+}
+
+interface BenchRunParseResult {
+  suiteName: string;
+  repoPath?: string;
+  reposDir?: string;
+  refreshDataset: boolean;
+  error?: string;
+}
+
+interface MultiRepoBenchmarkOptions {
+  refreshDataset?: boolean;
+}
+
+function parseBenchRunArgs(args: string[]): BenchRunParseResult {
+  let i = 0;
+  let suiteName = 'all';
+
+  if (args[0] && !args[0].startsWith('--')) {
+    suiteName = args[0];
+    i = 1;
+  }
+
+  let repoPath: string | undefined;
+  let reposDir: string | undefined;
+  let refreshDataset = false;
+
+  while (i < args.length) {
+    const flag = args[i];
+
+    switch (flag) {
+      case '--repo': {
+        repoPath = args[i + 1];
+        if (!repoPath) {
+          return {
+            suiteName,
+            refreshDataset,
+            error: 'Missing value for --repo',
+          };
+        }
+        i += 2;
+        break;
+      }
+      case '--repos-dir': {
+        reposDir = args[i + 1];
+        if (!reposDir) {
+          return {
+            suiteName,
+            refreshDataset,
+            error: 'Missing value for --repos-dir',
+          };
+        }
+        i += 2;
+        break;
+      }
+      case '--refresh-dataset': {
+        refreshDataset = true;
+        i += 1;
+        break;
+      }
+      default:
+        return {
+          suiteName,
+          refreshDataset,
+          error: `Unknown option: ${flag}`,
+        };
+    }
+  }
+
+  if (repoPath && reposDir) {
+    return {
+      suiteName,
+      refreshDataset,
+      error: 'Use either --repo or --repos-dir, not both',
+    };
+  }
+
+  return { suiteName, repoPath, reposDir, refreshDataset };
+}
+
+function createBenchmarkSuites(): Map<string, IBenchmarkSuite> {
+  const suites = new Map<string, IBenchmarkSuite>();
+  suites.set('code-understanding', new CodeUnderstandingSuite());
+  suites.set('dependency', new DependencyAnalysisSuite());
+  suites.set('scalability', new ScalabilitySuite());
+  suites.set('accuracy', new AccuracySuite());
+  suites.set('memory-efficiency', new MemoryEfficiencySuite());
+  return suites;
+}
+
+function resolveSuitesToRun(suiteName: string, suites: Map<string, IBenchmarkSuite>): IBenchmarkSuite[] {
+  const normalizedSuiteName = suiteName === 'dependency-analysis' ? 'dependency' : suiteName;
+
+  if (normalizedSuiteName === 'all') {
+    return [...suites.values()];
+  }
+
+  const suite = suites.get(normalizedSuiteName);
+  if (!suite) {
+    throw new Error(
+      `Unknown suite: ${suiteName}. Available: code-understanding, dependency, scalability, accuracy, memory-efficiency, all`
+    );
+  }
+
+  return [suite];
+}
+
+function sanitizePathSegment(value: string): string {
+  return value.replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'repo';
+}
 
 /**
  * Generate reports from stored benchmark results
@@ -525,56 +659,213 @@ async function generateReportFromStored(format: ReportFormat): Promise<void> {
 /**
  * Run benchmark suites
  */
-async function runBenchmarks(suiteName: string): Promise<void> {
+async function runBenchmarks(
+  suiteName: string,
+  options: BenchRunExecutionOptions = {}
+): Promise<void> {
+  if (options.targetRepoPath) {
+    await runBenchmarksForRepo(suiteName, options.targetRepoPath, {
+      refreshDataset: options.refreshDataset,
+    });
+    return;
+  }
+
   const datasetPath = join(PROJECT_ROOT, 'benchmarks', 'datasets', 'seu-claude');
   const reportDir = join(PROJECT_ROOT, 'benchmarks', 'reports');
 
-  // Check if dataset exists
   if (!existsSync(datasetPath)) {
     console.log('⚠️  No ground truth dataset found.');
     console.log('   Run: npx tsx scripts/generate-ground-truth.ts');
+    console.log('   Or benchmark a repo directly: /bench run all --repo ../my-repo');
     return;
   }
 
-  const suites = new Map<string, IBenchmarkSuite>();
-  suites.set('code-understanding', new CodeUnderstandingSuite());
-  suites.set('dependency', new DependencyAnalysisSuite());
-  suites.set('scalability', new ScalabilitySuite());
-  suites.set('accuracy', new AccuracySuite());
-  suites.set('memory-efficiency', new MemoryEfficiencySuite());
+  const suites = createBenchmarkSuites();
+  const suitesToRun = resolveSuitesToRun(suiteName, suites);
 
-  const suitesToRun: IBenchmarkSuite[] = [];
+  await executeBenchmarkSuites(suitesToRun, {
+    reportDir,
+    nonAccuracyDatasetPath: datasetPath,
+    accuracyDatasetPath: datasetPath,
+    runName: 'cli-benchmark',
+  });
+}
 
-  if (suiteName === 'all') {
-    suitesToRun.push(...suites.values());
-  } else if (suites.has(suiteName)) {
-    suitesToRun.push(suites.get(suiteName)!);
-  } else {
-    console.error(`❌ Unknown suite: ${suiteName}`);
-    console.log(
-      '   Available: code-understanding, dependency, scalability, accuracy, memory-efficiency, all'
-    );
+async function runBenchmarksForReposDir(
+  suiteName: string,
+  reposDir: string,
+  options: MultiRepoBenchmarkOptions = {}
+): Promise<void> {
+  const resolvedDir = resolve(reposDir);
+  if (!existsSync(resolvedDir)) {
+    console.error(`❌ Repos directory not found: ${resolvedDir}`);
     return;
   }
 
+  const dirStats = await stat(resolvedDir);
+  if (!dirStats.isDirectory()) {
+    console.error(`❌ Not a directory: ${resolvedDir}`);
+    return;
+  }
+
+  const repos = await discoverReposInDirectory(resolvedDir);
+  if (repos.length === 0) {
+    console.log(`⚠️  No repos found in: ${resolvedDir}`);
+    console.log('   A repo is detected by presence of .git or package.json');
+    return;
+  }
+
+  console.log(`\n📦 Found ${repos.length} repo(s) in ${resolvedDir}\n`);
+
+  for (const repoPath of repos) {
+    try {
+      await runBenchmarksForRepo(suiteName, repoPath, options);
+    } catch (error) {
+      console.error(
+        `❌ Failed benchmarking ${repoPath}: ${error instanceof Error ? error.message : error}`
+      );
+    }
+  }
+}
+
+async function runBenchmarksForRepo(
+  suiteName: string,
+  repoPath: string,
+  options: MultiRepoBenchmarkOptions = {}
+): Promise<void> {
+  const resolvedRepoPath = resolve(repoPath);
+  if (!existsSync(resolvedRepoPath)) {
+    console.error(`❌ Repo path not found: ${resolvedRepoPath}`);
+    return;
+  }
+
+  const repoStats = await stat(resolvedRepoPath);
+  if (!repoStats.isDirectory()) {
+    console.error(`❌ Repo path is not a directory: ${resolvedRepoPath}`);
+    return;
+  }
+
+  const repoName = sanitizePathSegment(basename(resolvedRepoPath));
+  const reportDir = join(PROJECT_ROOT, 'benchmarks', 'reports', repoName);
+  const suites = createBenchmarkSuites();
+  const suitesToRun = resolveSuitesToRun(suiteName, suites);
+  const includeAccuracy = suitesToRun.some(suite => suite.name === 'accuracy');
+
+  let accuracyDatasetPath: string | undefined;
+  if (includeAccuracy) {
+    accuracyDatasetPath = await ensureAccuracyDataset(resolvedRepoPath, repoName, {
+      refresh: options.refreshDataset,
+    });
+  }
+
+  console.log(`\n🎯 Target repo: ${resolvedRepoPath}`);
+  await executeBenchmarkSuites(suitesToRun, {
+    reportDir,
+    nonAccuracyDatasetPath: resolvedRepoPath,
+    accuracyDatasetPath,
+    runName: `cli-benchmark-${repoName}`,
+    targetRepoPath: resolvedRepoPath,
+  });
+}
+
+async function discoverReposInDirectory(directoryPath: string): Promise<string[]> {
+  const entries = await readdir(directoryPath, { withFileTypes: true });
+  const repos: string[] = [];
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+
+    const candidatePath = join(directoryPath, entry.name);
+    const hasGitDir = existsSync(join(candidatePath, '.git'));
+    const hasPackageJson = existsSync(join(candidatePath, 'package.json'));
+
+    if (hasGitDir || hasPackageJson) {
+      repos.push(candidatePath);
+    }
+  }
+
+  repos.sort((a, b) => a.localeCompare(b));
+  return repos;
+}
+
+async function ensureAccuracyDataset(
+  repoPath: string,
+  repoName: string,
+  options: { refresh?: boolean } = {}
+): Promise<string> {
+  const datasetPath = join(PROJECT_ROOT, 'benchmarks', 'datasets', repoName);
+  const metadataPath = join(datasetPath, 'metadata.json');
+  const shouldRefresh = options.refresh === true;
+
+  if (!shouldRefresh && existsSync(metadataPath)) {
+    console.log(`🧬 Reusing accuracy dataset: ${datasetPath}`);
+    return datasetPath;
+  }
+
+  console.log('🧬 Generating accuracy dataset...');
+  console.log(`   Source: ${repoPath}`);
+  console.log(`   Output: ${datasetPath}`);
+
+  const generator = new GroundTruthGenerator();
+  await generator.generate(repoPath, {
+    entryPoints: [],
+    outputDir: datasetPath,
+    maxSymbols: 300,
+    excludePatterns: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/.git/**',
+      '**/*.test.*',
+      '**/*.spec.*',
+      '**/__tests__/**',
+    ],
+  });
+
+  return datasetPath;
+}
+
+async function executeBenchmarkSuites(
+  suitesToRun: IBenchmarkSuite[],
+  context: {
+    reportDir: string;
+    nonAccuracyDatasetPath: string;
+    accuracyDatasetPath?: string;
+    runName: string;
+    targetRepoPath?: string;
+  }
+): Promise<void> {
   console.log(`\n🔬 Running ${suitesToRun.length} benchmark suite(s)...\n`);
 
   const reportGenerator = new ReportGenerator();
   const config = {
-    name: 'cli-benchmark',
-    description: 'Benchmark run from CLI',
+    name: context.runName,
+    description: context.targetRepoPath
+      ? `Benchmark run from CLI for ${context.targetRepoPath}`
+      : 'Benchmark run from CLI',
   };
 
   for (const suite of suitesToRun) {
+    const datasetPath =
+      suite.name === 'accuracy' ? context.accuracyDatasetPath : context.nonAccuracyDatasetPath;
+
+    if (!datasetPath) {
+      console.log(`📊 Skipping: ${suite.name}`);
+      console.log('   Accuracy suite requires a generated ground truth dataset\n');
+      continue;
+    }
+
     console.log(`📊 Running: ${suite.name}`);
-    console.log(`   ${suite.description}\n`);
+    console.log(`   ${suite.description}`);
+    console.log(`   Dataset: ${datasetPath}\n`);
 
     try {
       const startTime = Date.now();
       const result = await suite.run(config, datasetPath);
       const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
-      // Print summary
       const passed = result.testResults.filter(r => r.passed).length;
       const total = result.testResults.length;
       const passRate = total > 0 ? ((passed / total) * 100).toFixed(1) : '0';
@@ -591,10 +882,9 @@ async function runBenchmarks(suiteName: string): Promise<void> {
         );
       }
 
-      // Generate report
-      await mkdir(reportDir, { recursive: true });
+      await mkdir(context.reportDir, { recursive: true });
       const reportPaths = await reportGenerator.generateSuiteReport(result, {
-        outputDir: reportDir,
+        outputDir: context.reportDir,
         formats: ['json', 'markdown'],
       });
       console.log(`   📄 Reports: ${reportPaths.map(p => p.split('/').pop()).join(', ')}`);
@@ -606,7 +896,7 @@ async function runBenchmarks(suiteName: string): Promise<void> {
   }
 
   console.log('🏁 Benchmark run complete!');
-  console.log(`   Reports saved to: ${reportDir}`);
+  console.log(`   Reports saved to: ${context.reportDir}`);
 }
 
 function printTree(nodes: any[], indent: number): void {

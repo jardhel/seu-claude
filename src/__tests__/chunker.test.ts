@@ -235,6 +235,49 @@ function world() {
       }
     });
   });
+
+  describe('chunkFile - file context enrichment', () => {
+    it('should include multi-line top-level consts/imports in indexText', async () => {
+      const contextConfig = loadConfig({
+        projectRoot: '/test',
+        maxChunkTokens: 512,
+        minChunkLines: 1,
+      });
+      const contextChunker = new SemanticChunker(contextConfig);
+      await contextChunker.initialize();
+
+      const content = `
+import { a,
+  b } from 'x';
+
+const CFG = {
+  foo: 1,
+  bar: { baz: 2 },
+};
+
+export function f() {
+  return CFG.foo + a + b;
+}
+`.trim();
+
+      const chunks = await contextChunker.chunkFile(
+        '/test/file.ts',
+        'file.ts',
+        content,
+        'typescript'
+      );
+
+      expect(chunks.some(c => c.type === 'file_context')).toBe(true);
+
+      const fnChunk = chunks.find(c => c.name === 'f' && (c.type === 'export' || c.type === 'function'));
+      expect(fnChunk).toBeDefined();
+      expect(fnChunk?.code).toContain('function f');
+      expect(fnChunk?.code).not.toContain('const CFG');
+      expect(fnChunk?.indexText).toContain('import { a,');
+      expect(fnChunk?.indexText).toContain('const CFG = {');
+      expect(fnChunk?.indexText).toContain('foo: 1');
+    });
+  });
 });
 
 describe('SemanticChunker - Node Type Normalization', () => {

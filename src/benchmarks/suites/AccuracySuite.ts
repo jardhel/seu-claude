@@ -272,6 +272,16 @@ export class AccuracySuite implements IBenchmarkSuite {
     const avgPrecision = (defPrecision + callPrecision) / 2;
     const avgRecall = (defRecall + callRecall) / 2;
     const avgF1 = (defF1 + callF1) / 2;
+    const retrievedItems = this.uniqueInOrder([
+      ...foundDefinitions.map(
+        d => `def:${relative(codebasePath, d.filePath)}:${d.symbol.startLine}`
+      ),
+      ...foundCallSites.map(c => `call:${relative(codebasePath, c.filePath)}:${c.symbol.startLine}`),
+    ]);
+    const relevantItems = this.uniqueInOrder([
+      ...groundTruth.definitions.map(d => `def:${d.file}:${d.line}`),
+      ...groundTruth.callSites.map(c => `call:${c.file}:${c.line}`),
+    ]);
 
     metrics.push({ name: 'definition_precision', value: defPrecision, unit: 'ratio' });
     metrics.push({ name: 'definition_recall', value: defRecall, unit: 'ratio' });
@@ -292,6 +302,8 @@ export class AccuracySuite implements IBenchmarkSuite {
       precision: avgPrecision,
       recall: avgRecall,
       f1: avgF1,
+      retrievedItems,
+      relevantItems,
     };
   }
 
@@ -324,16 +336,14 @@ export class AccuracySuite implements IBenchmarkSuite {
       // Try to identify the calling function
       const node = graph.nodes.get(site.filePath);
       if (node) {
-        for (const symbol of node.symbols) {
-          if (
-            symbol.type !== 'call' &&
-            site.symbol.startLine >= symbol.startLine &&
-            site.symbol.startLine <= symbol.endLine
-          ) {
-            foundCallerNames.add(symbol.name);
-            break;
-          }
+        const enclosing = this.findMostSpecificEnclosingSymbol(site.symbol.startLine, node.symbols);
+        if (enclosing) {
+          foundCallerNames.add(this.formatSymbolName(enclosing));
+        } else {
+          foundCallerNames.add('module');
         }
+      } else {
+        foundCallerNames.add('module');
       }
     }
 
@@ -353,19 +363,22 @@ export class AccuracySuite implements IBenchmarkSuite {
         ? (2 * callerPrecision * callerRecall) / (callerPrecision + callerRecall)
         : 0;
 
-    // Get callees from our analysis (what the target calls)
+    // Get callees from our analysis (what the target symbol calls)
     let foundCallees: string[] = [];
     for (const def of definitions) {
       const node = graph.nodes.get(def.filePath);
       if (node) {
-        for (const symbol of node.symbols) {
-          if (symbol.type === 'call' && symbol.callee) {
-            foundCallees.push(symbol.callee);
-          }
-        }
+        const callsInTarget = node.symbols.filter(
+          symbol =>
+            symbol.type === 'call' &&
+            symbol.callee &&
+            symbol.startLine >= def.symbol.startLine &&
+            symbol.endLine <= def.symbol.endLine
+        );
+        foundCallees.push(...callsInTarget.map(symbol => symbol.callee!));
       }
     }
-    foundCallees = [...new Set(foundCallees)];
+    foundCallees = this.uniqueInOrder(foundCallees);
 
     const expectedCalleeNames = new Set(groundTruth.callees.map(c => c.name));
     const calleeTruePositives = foundCallees.filter(n => expectedCalleeNames.has(n)).length;
@@ -386,6 +399,14 @@ export class AccuracySuite implements IBenchmarkSuite {
     const avgPrecision = (callerPrecision + calleePrecision) / 2;
     const avgRecall = (callerRecall + calleeRecall) / 2;
     const avgF1 = (callerF1 + calleeF1) / 2;
+    const retrievedItems = this.uniqueInOrder([
+      ...[...foundCallerNames].map(name => `caller:${name}`),
+      ...foundCallees.map(name => `callee:${name}`),
+    ]);
+    const relevantItems = this.uniqueInOrder([
+      ...[...expectedCallerNames].map(name => `caller:${name}`),
+      ...[...expectedCalleeNames].map(name => `callee:${name}`),
+    ]);
 
     metrics.push({ name: 'caller_precision', value: callerPrecision, unit: 'ratio' });
     metrics.push({ name: 'caller_recall', value: callerRecall, unit: 'ratio' });
@@ -406,6 +427,8 @@ export class AccuracySuite implements IBenchmarkSuite {
       precision: avgPrecision,
       recall: avgRecall,
       f1: avgF1,
+      retrievedItems,
+      relevantItems,
     };
   }
 
@@ -425,6 +448,8 @@ export class AccuracySuite implements IBenchmarkSuite {
 
     // Check if resolution matches ground truth
     const correct = resolvedRelative === groundTruth.resolvedPath;
+    const retrievedItems = resolvedRelative ? [`import:${resolvedRelative}`] : [];
+    const relevantItems = groundTruth.resolvedPath ? [`import:${groundTruth.resolvedPath}`] : [];
 
     metrics.push({ name: 'resolution_correct', value: correct ? 1 : 0, unit: 'boolean' });
     metrics.push({ name: 'precision', value: correct ? 1 : 0, unit: 'ratio' });
@@ -436,6 +461,8 @@ export class AccuracySuite implements IBenchmarkSuite {
       expectedResolution: groundTruth.resolvedPath,
       actualResolution: resolvedRelative,
       correct,
+      retrievedItems,
+      relevantItems,
     };
   }
 
@@ -474,6 +501,58 @@ export class AccuracySuite implements IBenchmarkSuite {
     return { passed: true };
   }
 
+  private findMostSpecificEnclosingSymbol(
+    line: number,
+    symbols: Array<{
+      name: string;
+      type: 'function' | 'method' | 'class' | 'call';
+      startLine: number;
+      endLine: number;
+      parentClass?: string;
+    }>
+  ): { name: string; parentClass?: string } | null {
+    const candidates = symbols.filter(
+      symbol => symbol.type !== 'call' && line >= symbol.startLine && line <= symbol.endLine
+    );
+
+    if (candidates.length === 0) {
+      return null;
+    }
+
+    candidates.sort((a, b) => {
+      const aSpan = a.endLine - a.startLine;
+      const bSpan = b.endLine - b.startLine;
+      if (aSpan !== bSpan) {
+        return aSpan - bSpan;
+      }
+
+      const aPriority = a.type === 'method' || a.type === 'function' ? 0 : 1;
+      const bPriority = b.type === 'method' || b.type === 'function' ? 0 : 1;
+      return aPriority - bPriority;
+    });
+
+    const best = candidates[0];
+    return { name: best.name, parentClass: best.parentClass };
+  }
+
+  private formatSymbolName(symbol: { name: string; parentClass?: string }): string {
+    return symbol.parentClass ? `${symbol.parentClass}.${symbol.name}` : symbol.name;
+  }
+
+  private uniqueInOrder(items: string[]): string[] {
+    const seen = new Set<string>();
+    const unique: string[] = [];
+
+    for (const item of items) {
+      if (!seen.has(item)) {
+        seen.add(item);
+        unique.push(item);
+      }
+    }
+
+    return unique;
+  }
+
   /**
    * Run the complete suite
    */
@@ -489,14 +568,19 @@ export class AccuracySuite implements IBenchmarkSuite {
       testResults.push(result);
       collector.recordTestResult(result);
 
-      // Track IR metrics
-      const precision = result.metrics.find(
-        (m: MetricMeasurement) => m.name === 'precision'
-      )?.value;
-      const recall = result.metrics.find((m: MetricMeasurement) => m.name === 'recall')?.value;
-      if (precision !== undefined && recall !== undefined) {
-        irCollector.recordPrecisionAtK(1, precision);
-        irCollector.recordRecall(recall);
+      // Track IR metrics from retrieved/relevant items when available
+      const actual = result.actual as Record<string, unknown>;
+      const retrievedItems = actual.retrievedItems;
+      const relevantItems = actual.relevantItems;
+      if (
+        Array.isArray(retrievedItems) &&
+        Array.isArray(relevantItems) &&
+        relevantItems.length > 0
+      ) {
+        irCollector.evaluateQuery(
+          retrievedItems.filter((item): item is string => typeof item === 'string'),
+          new Set(relevantItems.filter((item): item is string => typeof item === 'string'))
+        );
       }
 
       // Clear caches between tests

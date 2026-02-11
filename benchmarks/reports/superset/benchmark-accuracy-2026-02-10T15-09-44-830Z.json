@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "title": "Benchmark Report: accuracy",
+    "timestamp": "2026-02-10T15:09:44.830Z",
+    "systemVersion": "seu-claude-v2"
+  },
+  "summary": {
+    "totalTests": 200,
+    "passed": 151,
+    "failed": 49,
+    "totalExecutionTimeMs": 3141
+  },
+  "metrics": [
+    {
+      "name": "latency_p50",
+      "value": 1,
+      "unit": "ms"
+    },
+    {
+      "name": "latency_p95",
+      "value": 56,
+      "unit": "ms"
+    },
+    {
+      "name": "latency_p99",
+      "value": 272,
+      "unit": "ms"
+    },
+    {
+      "name": "latency_mean",
+      "value": 15.525,
+      "unit": "ms",
+      "stdDev": 92.35626332306867
+    },
+    {
+      "name": "pass_rate",
+      "value": 0.755,
+      "unit": "ratio",
+      "sampleCount": 200
+    },
+    {
+      "name": "memory_mean",
+      "value": 0.017675132751464845,
+      "unit": "MB"
+    },
+    {
+      "name": "precision@1",
+      "value": 0.7933333333333333,
+      "unit": "ratio"
+    },
+    {
+      "name": "precision@3",
+      "value": 0.5755555555555555,
+      "unit": "ratio"
+    },
+    {
+      "name": "precision@5",
+      "value": 0.4573333333333335,
+      "unit": "ratio"
+    },
+    {
+      "name": "precision@10",
+      "value": 0.3180000000000002,
+      "unit": "ratio"
+    },
+    {
+      "name": "precision@20",
+      "value": 0.2093333333333334,
+      "unit": "ratio"
+    },
+    {
+      "name": "recall",
+      "value": 0.8111468253968254,
+      "unit": "ratio"
+    },
+    {
+      "name": "f1",
+      "value": 0.4568842327224168,
+      "unit": "ratio"
+    },
+    {
+      "name": "mrr",
+      "value": 0.82,
+      "unit": "ratio"
+    },
+    {
+      "name": "map",
+      "value": 0.7968903430761735,
+      "unit": "ratio"
+    },
+    {
+      "name": "ndcg",
+      "value": 0.8105606727557265,
+      "unit": "ratio"
+    }
+  ],
+  "latencyStats": {
+    "p50": 1,
+    "p75": 2,
+    "p90": 15,
+    "p95": 56,
+    "p99": 272,
+    "min": 0,
+    "max": 1219,
+    "mean": 15.525,
+    "stdDev": 92.35626332306867
+  },
+  "irMetrics": {
+    "precisionAtK": {
+      "1": 0.7933333333333333,
+      "3": 0.5755555555555555,
+      "5": 0.4573333333333335,
+      "10": 0.3180000000000002,
+      "20": 0.2093333333333334
+    },
+    "recall": 0.8111468253968254,
+    "f1": 0.4568842327224168,
+    "mrr": 0.82,
+    "map": 0.7968903430761735,
+    "ndcg": 0.8105606727557265
+  }
+}

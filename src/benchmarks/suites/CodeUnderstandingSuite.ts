@@ -12,6 +12,7 @@
  */
 
 import { readFile, readdir } from 'fs/promises';
+import { existsSync } from 'fs';
 import { join, extname } from 'path';
 import { RecursiveScout } from '../../core/usecases/RecursiveScout.js';
 import { TreeSitterAdapter } from '../../adapters/parsers/TreeSitterAdapter.js';
@@ -80,6 +81,7 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
    */
   async loadTestCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
     const testCases: BenchmarkTestCase[] = [];
+    const sourceRoot = this.resolveSourceRoot(datasetPath);
 
     // Load ground truth files
     const groundTruthDir = join(datasetPath, 'ground-truth');
@@ -104,7 +106,7 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
           description: lookup.description,
           input: {
             symbolName: lookup.symbolName,
-            entryPoints: lookup.entryPoints.map(p => join(datasetPath, 'source', p)),
+            entryPoints: lookup.entryPoints.map(p => join(sourceRoot, p)),
           },
           expected: {
             definitions: lookup.definitions,
@@ -140,7 +142,7 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
           description: cg.description,
           input: {
             targetSymbol: cg.targetSymbol,
-            entryPoints: cg.entryPoints.map(p => join(datasetPath, 'source', p)),
+            entryPoints: cg.entryPoints.map(p => join(sourceRoot, p)),
           },
           expected: {
             callers: cg.callers,
@@ -390,7 +392,7 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
    * Generate symbol lookup test cases from source code
    */
   private async generateSymbolLookupCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
-    const sourcePath = join(datasetPath, 'source');
+    const sourcePath = this.resolveSourceRoot(datasetPath);
     const testCases: BenchmarkTestCase[] = [];
 
     try {
@@ -437,7 +439,7 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
    * Generate call graph test cases from source code
    */
   private async generateCallGraphCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
-    const sourcePath = join(datasetPath, 'source');
+    const sourcePath = this.resolveSourceRoot(datasetPath);
     const testCases: BenchmarkTestCase[] = [];
 
     try {
@@ -507,5 +509,14 @@ export class CodeUnderstandingSuite implements IBenchmarkSuite {
     }
 
     return files;
+  }
+
+  /**
+   * Resolve source directory for benchmark inputs.
+   * Supports both dataset/source layout and direct repo paths.
+   */
+  private resolveSourceRoot(datasetPath: string): string {
+    const sourcePath = join(datasetPath, 'source');
+    return existsSync(sourcePath) ? sourcePath : datasetPath;
   }
 }

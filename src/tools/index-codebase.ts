@@ -516,7 +516,7 @@ export class IndexCodebase {
 
   private async embedAndStore(chunks: CodeChunk[]): Promise<void> {
     // Generate embeddings for all chunks
-    const texts = chunks.map(c => c.code);
+    const texts = chunks.map(c => c.indexText ?? c.code);
     const embeddings = await this.embedder.embedBatch(texts);
 
     // Combine chunks with their embeddings
@@ -534,7 +534,7 @@ export class IndexCodebase {
       const chunkId = this.getChunkId(chunk);
       this.bm25Engine.addDocument({
         id: chunkId,
-        text: chunk.code,
+        text: chunk.indexText ?? chunk.code,
         metadata: {
           filePath: chunk.filePath,
           relativePath: chunk.relativePath,
@@ -544,6 +544,8 @@ export class IndexCodebase {
           name: chunk.name,
           scope: chunk.scope,
           language: chunk.language,
+          // Used by keyword-only mode for displaying snippets
+          code: chunk.code,
         },
       });
 

@@ -1,0 +1,13 @@
+{
+  "name": "superset",
+  "version": "1.0.0",
+  "createdAt": "2026-02-10T15:09:41.604Z",
+  "sourceCodebase": "/home/edejonge/seu-claude/superset",
+  "sourceCommit": "76351ff12c4dbeffba62aa327a20abb063705500",
+  "totalFiles": 1805,
+  "totalLinesOfCode": 364372,
+  "languages": [
+    "python"
+  ],
+  "generatorVersion": "1.0.0"
+}

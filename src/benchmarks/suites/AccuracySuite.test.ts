@@ -256,6 +256,10 @@ export function calculate(x: number, y: number): number {
 
       // Should have IR metrics from accuracy calculations
       expect(result.irMetrics).toBeDefined();
+      expect((result.irMetrics?.f1 ?? 0)).toBeGreaterThan(0);
+      expect((result.irMetrics?.mrr ?? 0)).toBeGreaterThan(0);
+      expect((result.irMetrics?.map ?? 0)).toBeGreaterThan(0);
+      expect((result.irMetrics?.ndcg ?? 0)).toBeGreaterThan(0);
     }, 60000);
   });
 });

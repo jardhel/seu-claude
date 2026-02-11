@@ -13,6 +13,7 @@
  */
 
 import { readFile, readdir } from 'fs/promises';
+import { existsSync } from 'fs';
 import { join, extname } from 'path';
 import { RecursiveScout } from '../../core/usecases/RecursiveScout.js';
 import { TreeSitterAdapter } from '../../adapters/parsers/TreeSitterAdapter.js';
@@ -95,6 +96,7 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
    */
   async loadTestCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
     const testCases: BenchmarkTestCase[] = [];
+    const sourceRoot = this.resolveSourceRoot(datasetPath);
     const groundTruthDir = join(datasetPath, 'ground-truth');
 
     // Load import resolution test cases
@@ -116,8 +118,8 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
           id: `import:${test.id}`,
           description: test.description,
           input: {
-            sourcePath: join(datasetPath, 'source', test.sourcePath),
-            entryPoints: test.entryPoints.map(p => join(datasetPath, 'source', p)),
+            sourcePath: join(sourceRoot, test.sourcePath),
+            entryPoints: test.entryPoints.map(p => join(sourceRoot, p)),
           },
           expected: {
             resolvedImports: test.resolvedImports,
@@ -151,7 +153,7 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
           id: `circular:${test.id}`,
           description: test.description,
           input: {
-            entryPoints: test.entryPoints.map(p => join(datasetPath, 'source', p)),
+            entryPoints: test.entryPoints.map(p => join(sourceRoot, p)),
           },
           expected: {
             circularDeps: test.circularDeps,
@@ -187,7 +189,7 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
           id: `graph:${test.id}`,
           description: test.description,
           input: {
-            entryPoints: test.entryPoints.map(p => join(datasetPath, 'source', p)),
+            entryPoints: test.entryPoints.map(p => join(sourceRoot, p)),
           },
           expected: {
             totalNodes: test.totalNodes,
@@ -452,7 +454,7 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
   // === Auto-generation methods ===
 
   private async generateImportResolutionCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
-    const sourcePath = join(datasetPath, 'source');
+    const sourcePath = this.resolveSourceRoot(datasetPath);
     const testCases: BenchmarkTestCase[] = [];
 
     try {
@@ -485,7 +487,7 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
   }
 
   private async generateCircularDepCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
-    const sourcePath = join(datasetPath, 'source');
+    const sourcePath = this.resolveSourceRoot(datasetPath);
     const testCases: BenchmarkTestCase[] = [];
 
     try {
@@ -513,7 +515,7 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
   }
 
   private async generateGraphCompletenessCases(datasetPath: string): Promise<BenchmarkTestCase[]> {
-    const sourcePath = join(datasetPath, 'source');
+    const sourcePath = this.resolveSourceRoot(datasetPath);
     const testCases: BenchmarkTestCase[] = [];
 
     try {
@@ -564,5 +566,14 @@ export class DependencyAnalysisSuite implements IBenchmarkSuite {
 
     await walk(dir);
     return files;
+  }
+
+  /**
+   * Resolve source directory for benchmark inputs.
+   * Supports both dataset/source layout and direct repo paths.
+   */
+  private resolveSourceRoot(datasetPath: string): string {
+    const sourcePath = join(datasetPath, 'source');
+    return existsSync(sourcePath) ? sourcePath : datasetPath;
   }
 }

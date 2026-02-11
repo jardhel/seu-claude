@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "title": "Benchmark Report: scalability",
+    "timestamp": "2026-02-10T14:54:27.155Z",
+    "systemVersion": "seu-claude-v2"
+  },
+  "summary": {
+    "totalTests": 12,
+    "passed": 12,
+    "failed": 0,
+    "totalExecutionTimeMs": 342
+  },
+  "metrics": [
+    {
+      "name": "latency_p50",
+      "value": 3,
+      "unit": "ms"
+    },
+    {
+      "name": "latency_p95",
+      "value": 78,
+      "unit": "ms"
+    },
+    {
+      "name": "latency_p99",
+      "value": 78,
+      "unit": "ms"
+    },
+    {
+      "name": "latency_mean",
+      "value": 10.416666666666666,
+      "unit": "ms",
+      "stdDev": 20.479495165218847
+    },
+    {
+      "name": "pass_rate",
+      "value": 1,
+      "unit": "ratio",
+      "sampleCount": 12
+    },
+    {
+      "name": "memory_mean",
+      "value": 0.5590902964274088,
+      "unit": "MB"
+    },
+    {
+      "name": "recall",
+      "value": 0,
+      "unit": "ratio"
+    },
+    {
+      "name": "f1",
+      "value": 0,
+      "unit": "ratio"
+    },
+    {
+      "name": "mrr",
+      "value": 0,
+      "unit": "ratio"
+    },
+    {
+      "name": "map",
+      "value": 0,
+      "unit": "ratio"
+    },
+    {
+      "name": "ndcg",
+      "value": 0,
+      "unit": "ratio"
+    }
+  ],
+  "latencyStats": {
+    "p50": 3,
+    "p75": 5,
+    "p90": 9,
+    "p95": 78,
+    "p99": 78,
+    "min": 2,
+    "max": 78,
+    "mean": 10.416666666666666,
+    "stdDev": 20.479495165218847
+  }
+}
